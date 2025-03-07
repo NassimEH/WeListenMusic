@@ -1,11 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
-import { Search, User, Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, User, Menu, X, LogOut, Settings, Music, Heart, PlayCircle, UserRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,11 +19,29 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current && 
+        profileButtonRef.current &&
+        !profileMenuRef.current.contains(event.target as Node) &&
+        !profileButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <header 
       className={cn(
         'fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300 ease-spring',
-        isScrolled ? 'glass' : 'bg-transparent'
+        isScrolled ? 'glass backdrop-blur-md' : 'bg-transparent'
       )}
     >
       <div className="container max-w-7xl mx-auto">
@@ -33,7 +54,7 @@ const Header = () => {
                   <div className="w-1.5 h-1.5 bg-audio-light rounded-full"></div>
                 </div>
               </div>
-              <span className="animate-fade-in">AudioSphere</span>
+              <span className="animate-fade-in">WeListen</span>
             </a>
           </div>
 
@@ -43,13 +64,13 @@ const Header = () => {
               href="#discover" 
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
-              Discover
+              Découvrir
             </a>
             <a 
               href="#trending" 
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
-              Trending
+              Tendances
             </a>
             <a 
               href="#playlists" 
@@ -57,17 +78,74 @@ const Header = () => {
             >
               Playlists
             </a>
+            <a 
+              href="#authors" 
+              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Auteurs
+            </a>
           </nav>
 
           <div className="flex items-center space-x-4">
-            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors">
+            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass">
               <Search size={20} />
             </button>
-            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors">
-              <User size={20} />
-            </button>
+            <div className="relative">
+              <button 
+                ref={profileButtonRef}
+                className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
+                <User size={20} />
+              </button>
+              
+              {/* Profile Dropdown Menu */}
+              <div 
+                ref={profileMenuRef}
+                className={cn(
+                  "absolute right-0 top-full mt-2 glass border border-white/10 rounded-lg shadow-lg overflow-hidden transition-all duration-300 w-60 z-50",
+                  isProfileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2"
+                )}
+              >
+                <div className="p-4 border-b border-white/10">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-audio-accent/20 flex items-center justify-center mr-3">
+                      <UserRound size={20} className="text-audio-accent" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">Utilisateur</h4>
+                      <p className="text-sm text-audio-light/70">utilisateur@example.com</p>
+                    </div>
+                  </div>
+                </div>
+                <nav className="py-2">
+                  <a href="#profile" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
+                    <UserRound size={18} />
+                    <span>Profil</span>
+                  </a>
+                  <a href="#favorites" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
+                    <Heart size={18} />
+                    <span>Favoris</span>
+                  </a>
+                  <a href="#playlists" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
+                    <PlayCircle size={18} />
+                    <span>Mes playlists</span>
+                  </a>
+                  <a href="#settings" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
+                    <Settings size={18} />
+                    <span>Paramètres</span>
+                  </a>
+                  <div className="border-t border-white/10 mt-2 pt-2">
+                    <a href="#logout" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors text-red-400">
+                      <LogOut size={18} />
+                      <span>Déconnexion</span>
+                    </a>
+                  </div>
+                </nav>
+              </div>
+            </div>
             <button 
-              className="md:hidden p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors"
+              className="md:hidden p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -89,14 +167,14 @@ const Header = () => {
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
             onClick={() => setIsMenuOpen(false)}
           >
-            Discover
+            Découvrir
           </a>
           <a 
             href="#trending" 
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
             onClick={() => setIsMenuOpen(false)}
           >
-            Trending
+            Tendances
           </a>
           <a 
             href="#playlists" 
@@ -104,6 +182,13 @@ const Header = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             Playlists
+          </a>
+          <a 
+            href="#authors" 
+            className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Auteurs
           </a>
         </nav>
       </div>

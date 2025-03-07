@@ -6,13 +6,16 @@ interface PageTransitionProps {
   children: ReactNode;
 }
 
-// Nous devons simuler framer-motion car nous ne pouvons pas l'installer
-// En production réelle, vous devriez installer framer-motion
 const PageTransition = ({ children }: PageTransitionProps) => {
   return (
-    <div className="animate-fade-in">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

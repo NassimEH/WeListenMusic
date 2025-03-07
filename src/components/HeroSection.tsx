@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Play, Headphones } from 'lucide-react';
+import StarBackground from './StarBackground';
 
 const HeroSection = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -79,6 +80,9 @@ const HeroSection = () => {
       {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-radial from-audio-dark via-audio-dark to-black opacity-90 z-0"></div>
       
+      {/* Star Background */}
+      <StarBackground />
+      
       {/* Particle background */}
       <canvas 
         ref={canvasRef} 
@@ -89,24 +93,24 @@ const HeroSection = () => {
       <div className="container relative z-20 px-6 py-20 mt-16 md:mt-0">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
           <div className="inline-block mb-4">
-            <span className="px-3 py-1 text-xs font-medium rounded-full glass-accent text-audio-accent">
+            <span className="px-3 py-1 text-xs font-medium rounded-full glass-accent text-audio-accent inline-block">
               Nouvelle expérience audio
             </span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tighter animate-slide-down">
-            <span className="block">Explorez</span>
-            <span className="bg-clip-text text-transparent bg-gradient-audio">le monde sonore</span>
+            <span className="block">Plongez dans</span>
+            <span className="bg-clip-text text-transparent bg-gradient-audio">l'univers musical</span>
           </h1>
           
           <p className="text-lg md:text-xl text-audio-light/80 mb-10 animate-fade-in [animation-delay:300ms] text-balance">
-            Découvrez une nouvelle façon d'écouter de la musique avec une expérience immersive et personnalisée qui vous transporte dans l'univers de vos artistes préférés.
+            WeListen vous propose une expérience d'écoute unique et immersive, conçue pour vous faire découvrir de nouveaux artistes et redécouvrir vos favoris.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in [animation-delay:600ms]">
             <button className="px-8 py-4 bg-gradient-audio rounded-full font-medium hover-scale text-white flex items-center justify-center gap-2 shadow-neon">
               <Play size={20} />
-              Commencer
+              Commencer l'écoute
             </button>
             <button className="px-8 py-4 glass rounded-full font-medium hover-scale flex items-center justify-center gap-2">
               <Headphones size={20} />

@@ -5,6 +5,7 @@ import HeroSection from '@/components/HeroSection';
 import AlbumGrid from '@/components/AlbumGrid';
 import AudioPlayer from '@/components/AudioPlayer';
 import PageTransition from '@/components/PageTransition';
+import AuthorSection from '@/components/AuthorSection';
 
 const Index = () => {
   // Un effet pour ajouter une classe dark au body
@@ -70,6 +71,9 @@ const Index = () => {
             </div>
           </section>
           
+          {/* Authors Section */}
+          <AuthorSection />
+          
           {/* Newsletter */}
           <section className="py-20 px-6 glass border-t border-white/5">
             <div className="container max-w-7xl mx-auto text-center">
@@ -102,7 +106,7 @@ const Index = () => {
                     <div className="w-1.5 h-1.5 bg-audio-light rounded-full"></div>
                   </div>
                 </div>
-                <span>AudioSphere</span>
+                <span>WeListen</span>
               </div>
               
               <div className="flex gap-6 text-audio-light/70">
@@ -112,7 +116,7 @@ const Index = () => {
               </div>
               
               <p className="text-audio-light/50 text-sm">
-                © 2023 AudioSphere. Tous droits réservés.
+                © 2023 WeListen. Tous droits réservés.
               </p>
             </div>
           </div>
