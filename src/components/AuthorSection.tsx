@@ -231,8 +231,8 @@ const AuthorSection = () => {
           <Author 
             name="Nassim"
             role="Développeur Frontend & UI Designer"
-            image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1024&auto=format&fit=crop"
-            description="Nassim est un développeur frontend et UI designer passionné par la création d'interfaces utilisateur modernes et immersives. Il a consacré des centaines d'heures à perfectionner l'expérience utilisateur de WeListen, en s'assurant que chaque animation et interaction soit fluide et intuitive. Son approche orientée détail et son souci constant d'innovation ont permis de créer une plateforme à la fois esthétique et fonctionnelle."
+            image="https://images.steamusercontent.com/ugc/914672103686079071/3D94A72C811C97A8F17C0B1B57C926CBF073CF0C/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"
+            description="Dites que vous aimez notre site web svp."
             github="https://github.com/nassim"
             linkedin="https://linkedin.com/in/nassim"
             twitter="https://twitter.com/nassim"
@@ -241,9 +241,9 @@ const AuthorSection = () => {
           
           <Author 
             name="Chadi"
-            role="Développeur Backend & Architecte Son"
-            image="https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=1024&auto=format&fit=crop"
-            description="Chadi est l'architecte technique derrière WeListen. Spécialisé dans le développement backend et les technologies audio, il a conçu l'infrastructure robuste qui permet à la plateforme de diffuser un son de haute qualité avec une latence minimale. Sa passion pour la musique et la technologie l'a poussé à créer des algorithmes de recommandation innovants qui aident les utilisateurs à découvrir de nouveaux artistes et genres musicaux. Son expertise en optimisation de flux audio garantit une expérience d'écoute exceptionnelle."
+            role="Développeur Backend & Architecte"
+            image="https://benkei-studio.com/cdn/shop/articles/gto-onizuka-moto.jpg?v=1729586029"
+            description="Chadi Manglon."
             github="https://github.com/chadi"
             linkedin="https://linkedin.com/in/chadi"
             twitter="https://twitter.com/chadi"

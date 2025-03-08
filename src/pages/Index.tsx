@@ -74,7 +74,7 @@ const Index = () => {
                 <div className="md:w-1/2 flex justify-end">
                   <div className="relative w-full max-w-md">
                     <img 
-                      src="https://images.unsplash.com/photo-1501608593477-a5315893535c?q=80&w=500&auto=format&fit=crop" 
+                      src="https://img.lemde.fr/2021/03/05/1541/0/3648/1820/1440/720/60/0/99c9700_792435352-ultra-selection-raw17.jpg" 
                       alt="Booba" 
                       className="rounded-lg shadow-lg w-full object-cover aspect-square md:aspect-[3/4]"
                     />
