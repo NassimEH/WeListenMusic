@@ -7,8 +7,10 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +38,19 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  const toggleSearch = () => {
+    const audio = new Audio('/sounds/pop.mp3');
+    audio.volume = 0.2;
+    audio.play();
+    setIsSearchOpen(!isSearchOpen);
+  };
 
   const scrollToSection = (sectionId: string) => {
     setIsMenuOpen(false);
@@ -86,6 +101,16 @@ const Header = () => {
               Découvrir
             </a>
             <a 
+              href="#artists" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('artists');
+              }}
+              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Nos Artistes
+            </a>
+            <a 
               href="#trending" 
               onClick={(e) => {
                 e.preventDefault();
@@ -118,9 +143,43 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale">
-              <Search size={20} />
-            </button>
+            <div className="relative">
+              <button 
+                className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale"
+                onClick={toggleSearch}
+                aria-label="Search"
+              >
+                {isSearchOpen ? <X size={20} /> : <Search size={20} />}
+              </button>
+              
+              {/* Animated Search Bar */}
+              <div 
+                className={cn(
+                  "absolute right-0 top-full mt-2 overflow-hidden transition-all duration-500 ease-spring",
+                  isSearchOpen 
+                    ? "w-72 opacity-100 translate-y-0 scale-100" 
+                    : "w-0 opacity-0 -translate-y-2 scale-95"
+                )}
+              >
+                <div className="relative glass border border-white/10 rounded-full shadow-lg overflow-hidden">
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Rechercher..."
+                    className="w-full bg-transparent px-5 py-3 pr-10 focus:outline-none text-audio-light"
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-audio-light/70">
+                    <Search size={16} />
+                  </div>
+                  
+                  {/* Animated background effect */}
+                  <div className="absolute inset-0 -z-10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/10 via-transparent to-purple-500/10 animate-spin-slow"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div className="relative">
               <button 
                 ref={profileButtonRef}
@@ -202,6 +261,16 @@ const Header = () => {
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
           >
             Découvrir
+          </a>
+          <a 
+            href="#artists" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('artists');
+            }}
+            className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
+          >
+            Nos Artistes
           </a>
           <a 
             href="#trending" 
