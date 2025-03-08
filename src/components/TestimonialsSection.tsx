@@ -134,9 +134,9 @@ const TestimonialsSection = () => {
           <Testimonial 
             name="Emilie Melis" 
             role="Auditrice passionnée"
-            image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop"
+            image="https://media.licdn.com/dms/image/v2/D4E03AQFdclJ5pLKQmA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1715625357073?e=1746662400&v=beta&t=6spDfNVuKQ6Q2oXY6n6TLIWmvaltH0kKkLcIS6smaOk"
             rating={5}
-            content="L'interface est incroyablement fluide et intuitive. J'adore découvrir de nouveaux artistes grâce aux recommandations personnalisées. La qualité audio est exceptionnelle !"
+            content="Le site est super beau, et Nassim l'un de ses créateurs l'est tout autant, il est trop beau et tout... Par contre y'a pas Seventeen !"
             className="md:translate-y-8"
           />
           <Testimonial 
@@ -144,7 +144,7 @@ const TestimonialsSection = () => {
             role="Productrice de musique"
             image="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop"
             rating={5}
-            content="En tant que productrice, WeListen me permet de suivre les tendances actuelles et de m'inspirer. La diversité des genres est impressionnante et l'expérience d'écoute est incomparable."
+            content="En tant que productrice, WeListen me permet de suivre les tendances actuelles et de m'inspirer. Nassim est vraiment trop beau j'en ai envie."
           />
           <Testimonial 
             name="Lucas Dréano" 
