@@ -283,9 +283,9 @@ const TestimonialsSection = () => {
             <Testimonial 
               name="Emilie Melis" 
               role="Auditrice passionnée"
-              image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop"
+              image="https://media.licdn.com/dms/image/v2/D4E03AQFdclJ5pLKQmA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1715625357073?e=1746662400&v=beta&t=6spDfNVuKQ6Q2oXY6n6TLIWmvaltH0kKkLcIS6smaOk"
               rating={5}
-              content="L'interface est incroyablement fluide et intuitive. J'adore découvrir de nouveaux artistes grâce aux recommandations personnalisées. La qualité audio est exceptionnelle et les playlists générées correspondent toujours parfaitement à mes goûts musicaux. C'est vraiment une expérience unique qui a transformé ma façon d'écouter de la musique au quotidien."
+              content="Le site je m'en fous par contre Nassim est grave beau et musclé. Ah si, pourquoi y'a pas Seventeen ?"
               className="md:translate-y-8"
             />
           </motion.div>
@@ -299,9 +299,9 @@ const TestimonialsSection = () => {
             <Testimonial 
               name="Rebecca Ringuet" 
               role="Productrice de musique"
-              image="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop"
+              image="https://media.licdn.com/dms/image/v2/D4D03AQEl5s2vc0UxlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1714584081558?e=1746662400&v=beta&t=akvPTf0s1wthmZa1C1nMWH6gLRZSXLYi_LWKW3mFKGU"
               rating={5}
-              content="En tant que productrice, WeListen me permet de suivre les tendances actuelles et de m'inspirer. La diversité des genres est impressionnante et l'expérience d'écoute est incomparable. Les outils d'analyse et les statistiques d'écoute m'aident à comprendre ce qui fonctionne auprès du public et à adapter mes productions en conséquence. C'est devenu un outil indispensable dans mon processus créatif."
+              content="En tant que productrice, WeListen me permet de suivre les tendances actuelles et de m'inspirer. J'ai déjà beaucoup miaulé mais Nassim est vraiment beau et séduisant pour conclure..."
             />
           </motion.div>
           
@@ -314,9 +314,9 @@ const TestimonialsSection = () => {
             <Testimonial 
               name="Lucas Dréano" 
               role="DJ & Musicien"
-              image="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop"
+              image="https://media.licdn.com/dms/image/v2/D4E03AQGuGYFOiJgiMQ/profile-displayphoto-shrink_200_200/B4EZSW.y8BHgAY-/0/1737699832455?e=1746662400&v=beta&t=vu6fCpV8zqUt3KYqMtyO10tw1ESnP7W3Usyyp2DgBho"
               rating={4}
-              content="WeListen a révolutionné ma façon de préparer mes sets. L'interface est magnifique et l'algorithme de recommandation est incroyablement précis. Mes playlists n'ont jamais été aussi bonnes ! La fonctionnalité de transition automatique entre les morceaux est particulièrement utile pour mes répétitions, et la qualité sonore impeccable me permet de juger précisément comment les titres s'enchaîneront lors de mes performances live."
+              content="Oui d'accord où sont les femmes et l'alcool ?"
               className="md:translate-y-8"
             />
           </motion.div>
