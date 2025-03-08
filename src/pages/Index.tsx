@@ -7,6 +7,7 @@ import AudioPlayer from '@/components/AudioPlayer';
 import PageTransition from '@/components/PageTransition';
 import ArtistsSection from '@/components/ArtistsSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import AuthorSection from '@/components/AuthorSection';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -17,6 +18,24 @@ const Index = () => {
     return () => {
       document.documentElement.classList.remove('dark');
     };
+  }, []);
+
+  // Précharger les sons
+  useEffect(() => {
+    // Précharger les fichiers audio pour une meilleure expérience utilisateur
+    const audioFiles = [
+      '/sounds/click.mp3',
+      '/sounds/hover.mp3',
+      '/sounds/pop.mp3',
+      '/sounds/swoosh.mp3'
+    ];
+    
+    audioFiles.forEach(file => {
+      const audio = new Audio();
+      audio.src = file;
+      // Just load it, don't play
+      audio.load();
+    });
   }, []);
 
   return (
@@ -82,6 +101,9 @@ const Index = () => {
           
           {/* Testimonials */}
           <TestimonialsSection />
+          
+          {/* Authors Section */}
+          <AuthorSection />
           
           {/* Newsletter */}
           <section id="newsletter" className="py-20 px-6 glass border-t border-white/5 relative overflow-hidden">
