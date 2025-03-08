@@ -152,18 +152,9 @@ const Footer = () => {
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-audio-light/50 text-sm">
-            © 2023 WeListen. Tous droits réservés.
+            © 2025 WeListen. Tous droits réservés.
+            Étudiants de Télécom SudParis, promotion LIMA
           </p>
-          
-          <div className="flex items-center gap-1">
-            <span className="text-sm text-audio-light/50">Fait avec</span>
-            <Heart size={14} className="text-red-500 fill-red-500 animate-pulse-soft" />
-            <span className="text-sm text-audio-light/50">par</span>
-            <a href="#" className="text-audio-light/70 hover:text-audio-light transition-colors text-sm flex items-center gap-1">
-              Devs Passionnés
-              <ExternalLink size={12} />
-            </a>
-          </div>
           
           <div className="flex gap-6 text-audio-light/70 text-sm">
             <a href="#" className="hover:text-audio-light transition-colors">FAQ</a>

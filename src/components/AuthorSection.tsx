@@ -233,8 +233,8 @@ const AuthorSection = () => {
             role="Développeur Frontend & UI Designer"
             image="https://images.steamusercontent.com/ugc/914672103686079071/3D94A72C811C97A8F17C0B1B57C926CBF073CF0C/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"
             description="Dites que vous aimez notre site web svp."
-            github="https://github.com/nassim"
-            linkedin="https://linkedin.com/in/nassim"
+            github="https://github.com/NassimEH"
+            linkedin="https://www.linkedin.com/in/nassim-elhaddad/"
             twitter="https://twitter.com/nassim"
             email="nassim@welisten.com"
           />
