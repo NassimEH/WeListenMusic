@@ -37,6 +37,14 @@ const Header = () => {
     };
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    setIsMenuOpen(false);
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header 
       className={cn(
@@ -47,7 +55,14 @@ const Header = () => {
       <div className="container max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <a href="/" className="text-audio-light font-bold text-xl flex items-center gap-2">
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} 
+              className="text-audio-light font-bold text-xl flex items-center gap-2"
+            >
               <div className="relative w-8 h-8">
                 <div className="absolute inset-0 bg-gradient-audio rounded-full animate-pulse-soft"></div>
                 <div className="absolute inset-1 bg-audio-dark rounded-full flex items-center justify-center">
@@ -62,38 +77,54 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <a 
               href="#discover" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('discover');
+              }}
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
               Découvrir
             </a>
             <a 
               href="#trending" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('trending');
+              }}
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
               Tendances
             </a>
             <a 
-              href="#playlists" 
+              href="#testimonials" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('testimonials');
+              }}
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
-              Playlists
+              Témoignages
             </a>
             <a 
-              href="#authors" 
+              href="#newsletter" 
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('newsletter');
+              }}
               className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
             >
-              Auteurs
+              Newsletter
             </a>
           </nav>
 
           <div className="flex items-center space-x-4">
-            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass">
+            <button className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale">
               <Search size={20} />
             </button>
             <div className="relative">
               <button 
                 ref={profileButtonRef}
-                className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass"
+                className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale"
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
                 <User size={20} />
@@ -164,31 +195,43 @@ const Header = () => {
         <nav className="flex flex-col space-y-4 px-6">
           <a 
             href="#discover" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('discover');
+            }}
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
           >
             Découvrir
           </a>
           <a 
             href="#trending" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('trending');
+            }}
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
           >
             Tendances
           </a>
           <a 
-            href="#playlists" 
+            href="#testimonials" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('testimonials');
+            }}
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
           >
-            Playlists
+            Témoignages
           </a>
           <a 
-            href="#authors" 
+            href="#newsletter" 
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('newsletter');
+            }}
             className="text-audio-light/80 hover:text-audio-light py-2 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
           >
-            Auteurs
+            Newsletter
           </a>
         </nav>
       </div>

@@ -14,7 +14,7 @@ const StarBackground = () => {
     // Set canvas dimensions
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 0.7; // 70% of the viewport height
+      canvas.height = window.innerHeight;  // Full viewport height for more presence
     };
 
     resizeCanvas();
@@ -29,23 +29,25 @@ const StarBackground = () => {
       velocity: number;
       alpha: number;
       rotation: number;
+      pulse: number;
     }[] = [];
 
-    // Create stars
+    // Create stars - more stars for more presence
     const createStars = () => {
-      const starCount = Math.floor(window.innerWidth / 8); // Responsive star count
+      const starCount = Math.floor(window.innerWidth / 4); // Double the stars
       
       for (let i = 0; i < starCount; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        const radius = Math.random() * 1.5;
-        const colors = ['#ffffff', '#f1f1f1', '#e1e1ff', '#d4f1f9', '#e1f6ff'];
+        const radius = Math.random() * 2.5; // Bigger stars
+        const colors = ['#ffffff', '#f1f1f1', '#e1e1ff', '#d4f1f9', '#e1f6ff', '#0EA5E9', '#38BDF8'];
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const velocity = Math.random() * 0.05;
-        const alpha = Math.random() * 0.8 + 0.2;
+        const velocity = Math.random() * 0.08;
+        const alpha = Math.random() * 0.9 + 0.3; // More opacity
         const rotation = Math.random() * Math.PI * 2;
+        const pulse = Math.random() * 0.1 + 0.05;
 
-        stars.push({ x, y, radius, color, velocity, alpha, rotation });
+        stars.push({ x, y, radius, color, velocity, alpha, rotation, pulse });
       }
     };
 
@@ -64,7 +66,10 @@ const StarBackground = () => {
         // Update star position
         star.y += star.velocity * deltaTime;
         star.rotation += 0.001 * deltaTime;
-        star.alpha = 0.2 + (Math.sin(timestamp * 0.001 + star.x) + 1) * 0.4;
+        
+        // Pulse effect
+        star.radius += Math.sin(timestamp * 0.001) * star.pulse;
+        star.alpha = 0.3 + (Math.sin(timestamp * 0.001 + star.x) + 1) * 0.5;
 
         // Reset star if it goes off screen
         if (star.y > canvas.height) {
@@ -98,11 +103,17 @@ const StarBackground = () => {
         }
         ctx.closePath();
         
-        // Fill with gradient
+        // Fill with gradient for more vibrant effect
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, star.radius * 2);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        gradient.addColorStop(0.5, star.color);
+        gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
         ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        // Add glow effect
+        ctx.shadowColor = star.color;
+        ctx.shadowBlur = 10;
         ctx.fill();
         
         ctx.restore();
@@ -122,7 +133,7 @@ const StarBackground = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute top-0 left-0 w-full h-[70vh] -z-10 opacity-60"
+      className="absolute top-0 left-0 w-full h-screen -z-10 opacity-80"
     />
   );
 };
