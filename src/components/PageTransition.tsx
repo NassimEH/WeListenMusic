@@ -1,197 +1,169 @@
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { playPopSound, playSwooshSound } from '@/utils/soundEffects';
+import { cn } from '@/lib/utils';
+import { useLocation } from 'react-router-dom';
 
 interface PageTransitionProps {
-  children: ReactNode;
+  children: React.ReactNode;
+  className?: string;
 }
 
-const PageTransition = ({ children }: PageTransitionProps) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [showLogo, setShowLogo] = useState(true);
-
+const PageTransition: React.FC<PageTransitionProps> = ({ 
+  children, 
+  className 
+}) => {
+  const location = useLocation();
+  const [isExiting, setIsExiting] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
+  
   useEffect(() => {
-    // Play sound when animation starts
-    playSwooshSound();
-    
-    // Small delay to ensure smooth animation
+    // Simulate loading time
     const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
+      setShowLoader(false);
+    }, 1200);
     
-    // Hide logo after animation
-    const logoTimer = setTimeout(() => {
-      setShowLogo(false);
-    }, 1500);
-    
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(logoTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
-
-  // Handle interaction with the logo
-  const handleLogoClick = () => {
-    playPopSound();
-    // Add a visual effect when clicking on the logo
-    const logoElement = document.querySelector('.logo-element');
-    if (logoElement) {
-      logoElement.classList.add('pulse-effect');
-      setTimeout(() => {
-        logoElement.classList.remove('pulse-effect');
-      }, 500);
+  
+  useEffect(() => {
+    // Reset scroll position when route changes
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  
+  // Play sound on page load
+  useEffect(() => {
+    if (!showLoader) {
+      try {
+        const audio = new Audio('/sounds/swoosh.mp3');
+        audio.volume = 0.3;
+        audio.play();
+      } catch (error) {
+        console.error('Could not play sound:', error);
+      }
+    }
+  }, [showLoader]);
+  
+  const pageVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1], // Spring-like easing
+        when: 'beforeChildren',
+        staggerChildren: 0.15,
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
+        when: 'afterChildren',
+        staggerChildren: 0.1,
+        staggerDirection: -1,
+      }
     }
   };
-
+  
+  const loaderVariants = {
+    hidden: { scale: 1.2, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
+      }
+    },
+    exit: { 
+      scale: 0.8, 
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
+      }
+    }
+  };
+  
+  const progressVariants = {
+    hidden: { width: '0%' },
+    visible: { 
+      width: '100%',
+      transition: {
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1],
+      }
+    }
+  };
+  
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ 
-        opacity: isVisible ? 1 : 0, 
-        y: isVisible ? 0 : 15 
-      }}
-      exit={{ opacity: 0, y: 15 }}
-      transition={{ 
-        duration: 0.6, 
-        ease: [0.22, 1, 0.36, 1],
-        staggerChildren: 0.2
-      }}
-    >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ 
-          delay: 0.3, 
-          duration: 0.8,
-          ease: [0.22, 1, 0.36, 1]
-        }}
-      >
-        {children}
-      </motion.div>
-      
-      {/* Initial page load animation overlay */}
-      <AnimatePresence>
-        {showLogo && (
+    <>
+      <AnimatePresence mode="wait">
+        {showLoader ? (
           <motion.div
-            className="fixed inset-0 z-50 bg-audio-dark pointer-events-none flex items-center justify-center"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1]
-            }}
-            onAnimationComplete={() => {
-              document.body.style.overflow = 'auto';
-            }}
+            key="loader"
+            className="fixed inset-0 flex flex-col items-center justify-center bg-audio-dark z-50"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={loaderVariants}
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 1.2, opacity: 0 }}
-              transition={{ 
-                duration: 1,
-                ease: [0.22, 1, 0.36, 1]
-              }}
-              className="text-4xl font-bold flex items-center gap-3 pointer-events-auto cursor-pointer logo-element"
-              onClick={handleLogoClick}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div className="relative w-14 h-14">
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-audio rounded-full"
-                  animate={{ 
-                    rotate: 360,
-                    boxShadow: [
-                      "0 0 15px rgba(14, 165, 233, 0.5)",
-                      "0 0 30px rgba(14, 165, 233, 0.7)",
-                      "0 0 15px rgba(14, 165, 233, 0.5)"
-                    ]
-                  }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div 
-                  className="absolute inset-2 bg-audio-dark rounded-full flex items-center justify-center"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <motion.div 
-                    className="w-2.5 h-2.5 bg-audio-light rounded-full"
-                    animate={{ 
-                      scale: [1, 1.5, 1],
-                      opacity: [0.8, 1, 0.8]
-                    }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                </motion.div>
+            <div className="relative w-16 h-16 mb-8">
+              <div className="absolute inset-0 bg-gradient-audio rounded-full animate-pulse-soft"></div>
+              <div className="absolute inset-2 bg-audio-dark rounded-full flex items-center justify-center">
+                <div className="w-2 h-2 bg-audio-light rounded-full"></div>
               </div>
-              <motion.span 
-                className="text-white tracking-tight"
-                animate={{ y: [0, -3, 0] }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  repeatType: "reverse", 
-                  ease: "easeInOut" 
-                }}
-              >
-                WeListen
-              </motion.span>
-            </motion.div>
-            
-            {/* Animated particles around the logo */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <motion.div 
-                  key={i}
-                  className="absolute w-1 h-1 bg-audio-accent rounded-full"
-                  style={{
-                    top: `${Math.random() * 100}%`,
-                    left: `${Math.random() * 100}%`,
-                  }}
-                  animate={{ 
-                    scale: [0, 1, 0],
-                    opacity: [0, 0.8, 0],
-                    x: [0, (Math.random() - 0.5) * 100],
-                    y: [0, (Math.random() - 0.5) * 100]
-                  }}
-                  transition={{ 
-                    duration: 2 + Math.random() * 2,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    delay: Math.random() * 2
-                  }}
-                />
-              ))}
             </div>
+            <h2 className="text-2xl font-bold mb-6">WeListen</h2>
+            <div className="w-48 h-1 bg-audio-surface/30 rounded-full overflow-hidden">
+              <motion.div 
+                className="h-full bg-gradient-audio rounded-full"
+                variants={progressVariants}
+              />
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={location.pathname}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={pageVariants}
+            className={cn("min-h-screen", className)}
+            onAnimationStart={() => setIsExiting(true)}
+            onAnimationComplete={() => setIsExiting(false)}
+          >
+            {children}
           </motion.div>
         )}
       </AnimatePresence>
       
-      {/* Add a global styles for the pulse effect */}
-      <style jsx global>{`
-        .pulse-effect {
-          animation: pulse-animation 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
         
-        @keyframes pulse-animation {
-          0% {
-            transform: scale(1);
-            filter: brightness(1);
-          }
-          50% {
-            transform: scale(1.2);
-            filter: brightness(1.3);
-          }
-          100% {
-            transform: scale(1);
-            filter: brightness(1);
-          }
+        @keyframes pulse-soft {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
+        }
+        
+        .glass {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
       `}</style>
-    </motion.div>
+    </>
   );
 };
 

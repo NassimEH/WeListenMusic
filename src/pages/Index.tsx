@@ -44,14 +44,24 @@ const Index = () => {
         <Header />
         <main>
           <HeroSection />
-          <ArtistsSection />
-          <AlbumGrid />
+          
+          {/* Artists Section with subtle gradient background */}
+          <section id="artists" className="relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0A0A0B] via-[#0c1015] to-[#0A0A0B] opacity-90"></div>
+            <ArtistsSection />
+          </section>
+          
+          {/* Albums Section with subtle gradient background */}
+          <section id="trending" className="relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0A0A0B] via-[#0f1015] to-[#0A0A0B] opacity-90"></div>
+            <AlbumGrid />
+          </section>
           
           {/* Featured Section */}
-          <section className="relative py-20 px-6 overflow-hidden">
+          <section id="discover" className="relative py-20 px-6 overflow-hidden">
             <div className="absolute inset-0 -z-10">
               <div 
-                className="absolute inset-0 bg-gradient-to-r from-audio-dark via-audio-dark/95 to-audio-dark"
+                className="absolute inset-0 bg-gradient-to-r from-audio-dark via-[#0e1622] to-audio-dark"
               ></div>
               <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1501608593477-a5315893535c?q=80&w=1080&auto=format&fit=crop')] bg-cover bg-center opacity-30"></div>
             </div>
@@ -99,14 +109,21 @@ const Index = () => {
             </div>
           </section>
           
-          {/* Testimonials */}
-          <TestimonialsSection />
+          {/* Testimonials with subtle gradient background */}
+          <section id="testimonials" className="relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0A0A0B] via-[#0e1322] to-[#0A0A0B] opacity-90"></div>
+            <TestimonialsSection />
+          </section>
           
-          {/* Authors Section */}
-          <AuthorSection />
+          {/* Authors Section with subtle gradient background */}
+          <section className="relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0A0A0B] via-[#12101e] to-[#0A0A0B] opacity-90"></div>
+            <AuthorSection />
+          </section>
           
-          {/* Newsletter */}
+          {/* Newsletter with subtle gradient background */}
           <section id="newsletter" className="py-20 px-6 glass border-t border-white/5 relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0A0A0B] via-[#0e1018] to-[#0A0A0B] opacity-80"></div>
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-0 left-0 w-full h-full">
                 {Array.from({ length: 20 }).map((_, i) => (
