@@ -153,7 +153,7 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-audio-light/50 text-sm">
             © 2025 WeListen. Tous droits réservés.
-            Étudiants de Télécom SudParis, promotion LIMA
+            Étudiants de Télécom SudParis, promotion LIMA 2024/2025
           </p>
           
           <div className="flex gap-6 text-audio-light/70 text-sm">
