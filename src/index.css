@@ -101,15 +101,37 @@
   h3 {
     @apply text-2xl md:text-4xl;
   }
+  
+  /* Améliorer les transitions entre les pages */
+  a, button {
+    @apply transition-all duration-300;
+  }
+  
+  /* Animation d'entrée pour les nouvelles pages */
+  .page-enter {
+    @apply animate-fade-in;
+  }
 }
 
 @layer components {
   .glass {
-    @apply bg-audio-surface backdrop-blur-md border border-white/10 shadow-glass;
+    @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-glass;
   }
   
   .glass-accent {
     @apply bg-audio-surface-accent backdrop-blur-md border border-audio-accent/20 shadow-glass;
+  }
+  
+  .glass-pink {
+    @apply bg-black/30 backdrop-blur-md border border-audio-synthwave-pink/20 shadow-neon-pink;
+  }
+  
+  .glass-purple {
+    @apply bg-black/30 backdrop-blur-md border border-audio-synthwave-purple/20 shadow-neon-purple;
+  }
+  
+  .glass-blue {
+    @apply bg-black/30 backdrop-blur-md border border-audio-synthwave-blue/20 shadow-neon-blue;
   }
 
   .hover-scale {
@@ -118,6 +140,36 @@
 
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Nouvelles classes pour les animations */
+  .glow-hover {
+    @apply transition-all duration-500;
+  }
+  
+  .glow-hover:hover {
+    @apply shadow-neon-pink;
+    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.5));
+  }
+  
+  .glow-purple-hover:hover {
+    @apply shadow-neon-purple;
+    filter: drop-shadow(0 0 8px rgba(155, 135, 245, 0.5));
+  }
+  
+  .glow-blue-hover:hover {
+    @apply shadow-neon-blue;
+    filter: drop-shadow(0 0 8px rgba(51, 195, 240, 0.5));
+  }
+  
+  /* Animation pour les boutons */
+  .btn-synthwave {
+    @apply bg-gradient-synthwave text-white rounded-lg px-4 py-2 hover:shadow-neon-pink transition-all duration-300;
+  }
+  
+  /* Coins arrondis prononcés pour le design synthwave */
+  .rounded-synthwave {
+    @apply rounded-xl;
   }
 }
 
@@ -148,4 +200,27 @@ html {
 /* Prevent blue highlight on mobile tap */
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Transition entre les pages */
+.page-transition-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 300ms, transform 300ms;
 }

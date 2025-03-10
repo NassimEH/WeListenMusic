@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
@@ -6,6 +5,11 @@ import { Plus, Music2, Heart, ChevronRight, Zap, Sparkles, Headphones, Play, Clo
 import { playClickSound, playHoverSound, playSynthBlip } from '@/utils/soundEffects';
 import SynthwaveBackground from '@/components/SynthwaveBackground';
 import { cn } from '@/lib/utils';
+import BackButton from '@/components/ui/back-button';
+import BackgroundNotification from '@/components/ui/background-notification';
+import FloatingAddButton from '@/components/ui/floating-add-button';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const ConsumerDashboard = () => {
   const { playlists, addPlaylist, likedSongs } = useApp();
@@ -31,6 +35,7 @@ const ConsumerDashboard = () => {
       setNewPlaylistName('');
       setShowCreatePlaylist(false);
       playClickSound();
+      toast.success("Playlist créée avec succès !");
     }
   };
 
@@ -40,28 +45,28 @@ const ConsumerDashboard = () => {
       name: 'Hits du moment',
       description: 'Les titres les plus populaires actuellement',
       cover: 'https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1974&auto=format&fit=crop',
-      songs: [] // Add empty songs array to match Playlist type
+      songs: []
     },
     {
       id: '2',
       name: 'Rap FR',
       description: 'Le meilleur du rap français',
       cover: 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?q=80&w=1972&auto=format&fit=crop',
-      songs: [] // Add empty songs array to match Playlist type
+      songs: []
     },
     {
       id: '3',
       name: 'Classics',
       description: 'Les titres qui ont marqué l\'histoire',
       cover: 'https://images.unsplash.com/photo-1461784180009-27c171c6aed7?q=80&w=2070&auto=format&fit=crop',
-      songs: [] // Add empty songs array to match Playlist type
+      songs: []
     },
     {
       id: '4',
       name: 'Chill',
       description: 'Pour se détendre',
       cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2070&auto=format&fit=crop',
-      songs: [] // Add empty songs array to match Playlist type
+      songs: []
     },
   ];
 
@@ -97,18 +102,24 @@ const ConsumerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-audio-dark py-12 relative">
+    <div className="min-h-screen bg-audio-dark py-8 relative">
       <SynthwaveBackground variant="grid" />
+      <BackgroundNotification interval={20} variant="info" />
       
       <div className="container max-w-7xl mx-auto px-6">
-        <motion.h1
-          className="text-3xl font-bold text-transparent bg-gradient-synthwave bg-clip-text mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Votre espace
-        </motion.h1>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <BackButton to="/app" variant="synthwave" label="Retour à l'accueil" />
+            <motion.h1
+              className="text-3xl font-bold text-transparent bg-gradient-synthwave bg-clip-text mt-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Votre espace musical
+            </motion.h1>
+          </div>
+        </div>
 
         {/* Featured Section */}
         <motion.section 
@@ -127,15 +138,18 @@ const ConsumerDashboard = () => {
             <div className="absolute inset-0 z-20 flex flex-col justify-center p-8">
               <h2 className="text-3xl font-bold mb-2 text-white">Découvertes de la semaine</h2>
               <p className="text-audio-light/80 mb-4 max-w-md">Nous avons sélectionné de nouveaux titres basés sur vos goûts musicaux</p>
-              <motion.button 
-                className="flex items-center gap-2 bg-gradient-synthwave text-white rounded-full py-2 px-6 w-fit shadow-neon-pink hover:shadow-neon-purple transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => playClickSound()}
+              <Button 
+                variant="synthwave"
+                size="lg"
+                className="w-fit"
+                onClick={() => {
+                  playClickSound();
+                  toast.info("Lecture des découvertes...");
+                }}
               >
                 <Play size={16} />
                 Écouter maintenant
-              </motion.button>
+              </Button>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent z-0"></div>
           </div>
@@ -145,8 +159,9 @@ const ConsumerDashboard = () => {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold text-transparent bg-gradient-synthwave bg-clip-text">Playlists</h2>
-            <button
-              className="text-audio-synthwave-pink hover:text-audio-synthwave-purple flex items-center gap-1 transition-colors"
+            <Button
+              variant="synthwave-ghost"
+              size="sm"
               onClick={() => {
                 setShowCreatePlaylist(true);
                 playClickSound();
@@ -155,12 +170,12 @@ const ConsumerDashboard = () => {
             >
               <Plus size={16} />
               Créer
-            </button>
+            </Button>
           </div>
 
           {showCreatePlaylist && (
             <motion.div 
-              className="mb-4 bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-audio-synthwave-purple/20"
+              className="mb-4 glass p-4 rounded-lg"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -173,12 +188,14 @@ const ConsumerDashboard = () => {
                 onChange={(e) => setNewPlaylistName(e.target.value)}
               />
               <div className="flex justify-end mt-2">
-                <button
-                  className="bg-gradient-synthwave hover:shadow-neon-pink text-white rounded-lg py-2 px-4 transition-all duration-300"
+                <Button
+                  variant="synthwave"
                   onClick={handleCreatePlaylist}
+                  className="gap-2"
                 >
+                  <Plus size={16} />
                   Valider
-                </button>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -192,7 +209,7 @@ const ConsumerDashboard = () => {
             {playlists.map((playlist) => (
               <motion.div
                 key={playlist.id}
-                className="bg-black/40 backdrop-blur-sm rounded-lg p-4 border border-white/5 overflow-hidden group relative"
+                className="glass rounded-lg p-4 overflow-hidden group relative"
                 variants={itemVariants}
                 whileHover={{ 
                   y: -5,
@@ -212,7 +229,10 @@ const ConsumerDashboard = () => {
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button 
                       className="w-10 h-10 rounded-full bg-audio-synthwave-pink/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-y-4 group-hover:translate-y-0 transform"
-                      onClick={() => playClickSound()}
+                      onClick={() => {
+                        playClickSound();
+                        toast.info(`Lecture de "${playlist.name}"`);
+                      }}
                     >
                       <Play size={18} fill="white" />
                     </button>
@@ -246,7 +266,7 @@ const ConsumerDashboard = () => {
             {popularPlaylists.map((playlist) => (
               <motion.div
                 key={playlist.id}
-                className="bg-black/40 backdrop-blur-sm rounded-lg p-4 border border-white/5 overflow-hidden group relative"
+                className="glass rounded-lg p-4 border border-white/5 overflow-hidden group relative"
                 variants={itemVariants}
                 whileHover={{ 
                   y: -5,
@@ -352,6 +372,14 @@ const ConsumerDashboard = () => {
           )}
         </section>
       </div>
+      
+      <FloatingAddButton 
+        onClick={() => {
+          setShowCreatePlaylist(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }} 
+        label="Nouvelle playlist"
+      />
     </div>
   );
 };
