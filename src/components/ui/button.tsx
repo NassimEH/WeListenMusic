@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Nouvelles variantes synthwave
+        // Synthwave variants
         synthwave: "bg-gradient-synthwave text-white hover:shadow-neon-pink transition-all duration-300",
         "synthwave-outline": "bg-transparent border border-audio-synthwave-pink/30 text-audio-synthwave-pink hover:bg-audio-synthwave-pink/10 hover:border-audio-synthwave-pink/50 transition-all duration-300",
         "synthwave-ghost": "bg-transparent text-audio-synthwave-pink hover:bg-audio-synthwave-pink/10 transition-all duration-300",
@@ -27,6 +27,8 @@ const buttonVariants = cva(
         "synthwave-blue": "bg-audio-synthwave-blue/90 text-white hover:bg-audio-synthwave-blue hover:shadow-neon-blue transition-all duration-300",
         "synthwave-glow": "glass bg-black/40 text-white border border-white/10 hover:border-audio-synthwave-pink/50 hover:shadow-neon-pink transition-all duration-300",
         "glass": "bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 transition-all duration-300",
+        "glass-hover": "bg-black/40 backdrop-blur-md border border-white/10 text-white hover:border-audio-synthwave-pink/30 hover:bg-black/50 transition-all duration-300",
+        "dark-glass": "bg-black/60 backdrop-blur-md border border-white/5 text-white hover:bg-black/70 hover:border-white/10 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",

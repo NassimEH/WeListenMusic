@@ -8,9 +8,10 @@ import { playSoundEffect } from "@/utils/soundEffects";
 interface FloatingAddButtonProps {
   onClick: () => void;
   label?: string;
-  position?: "bottom-right" | "bottom-center";
+  position?: "bottom-right" | "bottom-center" | "top-right";
   className?: string;
   icon?: React.ReactNode;
+  variant?: "default" | "glass" | "minimal";
 }
 
 const FloatingAddButton: React.FC<FloatingAddButtonProps> = ({
@@ -18,11 +19,19 @@ const FloatingAddButton: React.FC<FloatingAddButtonProps> = ({
   label = "Ajouter",
   position = "bottom-right",
   className,
-  icon = <Plus />
+  icon = <Plus />,
+  variant = "default"
 }) => {
   const positionClasses = {
     "bottom-right": "bottom-6 right-6",
-    "bottom-center": "bottom-6 left-1/2 -translate-x-1/2"
+    "bottom-center": "bottom-6 left-1/2 -translate-x-1/2",
+    "top-right": "top-6 right-6"
+  };
+
+  const variantClasses = {
+    "default": "bg-gradient-synthwave text-white shadow-neon-pink hover:shadow-neon-purple",
+    "glass": "glass text-white border border-white/10 hover:border-audio-synthwave-pink/50",
+    "minimal": "bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:bg-black/60"
   };
 
   const handleClick = () => {
@@ -34,7 +43,8 @@ const FloatingAddButton: React.FC<FloatingAddButtonProps> = ({
     <motion.button
       onClick={handleClick}
       className={cn(
-        "fixed z-30 flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-synthwave text-white shadow-neon-pink hover:shadow-neon-purple transition-all duration-300",
+        "fixed z-30 flex items-center gap-2 px-4 py-3 rounded-full transition-all duration-300",
+        variantClasses[variant],
         positionClasses[position],
         className
       )}

@@ -142,7 +142,7 @@
     text-wrap: balance;
   }
   
-  /* Nouvelles classes pour les animations */
+  /* Classes pour les animations */
   .glow-hover {
     @apply transition-all duration-500;
   }
@@ -170,6 +170,31 @@
   /* Coins arrondis prononcés pour le design synthwave */
   .rounded-synthwave {
     @apply rounded-xl;
+  }
+
+  /* Card styles */
+  .card-synthwave {
+    @apply glass rounded-lg overflow-hidden border border-white/5 transition-all duration-300;
+  }
+  
+  .card-synthwave:hover {
+    @apply border-audio-synthwave-pink/30 shadow-neon-pink;
+  }
+  
+  .card-synthwave-purple {
+    @apply glass rounded-lg overflow-hidden border border-white/5 transition-all duration-300;
+  }
+  
+  .card-synthwave-purple:hover {
+    @apply border-audio-synthwave-purple/30 shadow-neon-purple;
+  }
+  
+  .card-synthwave-blue {
+    @apply glass rounded-lg overflow-hidden border border-white/5 transition-all duration-300;
+  }
+  
+  .card-synthwave-blue:hover {
+    @apply border-audio-synthwave-blue/30 shadow-neon-blue;
   }
 }
 

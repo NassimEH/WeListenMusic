@@ -9,8 +9,9 @@ import { playSoundEffect } from "@/utils/soundEffects";
 interface BackButtonProps {
   to?: string;
   label?: string;
-  variant?: "default" | "minimal" | "synthwave";
+  variant?: "default" | "minimal" | "synthwave" | "glass" | "transparent";
   className?: string;
+  absolute?: boolean;
 }
 
 const BackButton = ({
@@ -18,6 +19,7 @@ const BackButton = ({
   label = "Retour",
   variant = "default",
   className,
+  absolute = false,
 }: BackButtonProps) => {
   const navigate = useNavigate();
 
@@ -33,7 +35,9 @@ const BackButton = ({
   const buttonStyles = {
     default: "bg-black/40 backdrop-blur-md text-white hover:bg-black/60 border border-white/10 px-4 py-2 rounded-lg",
     minimal: "text-white/80 hover:text-white",
-    synthwave: "bg-gradient-synthwave hover:shadow-neon-pink text-white px-4 py-2 rounded-lg"
+    synthwave: "bg-gradient-synthwave hover:shadow-neon-pink text-white px-4 py-2 rounded-lg",
+    glass: "glass text-white hover:border-audio-synthwave-pink/50 px-4 py-2 rounded-lg",
+    transparent: "text-white/70 hover:text-audio-synthwave-pink transition-colors"
   };
 
   return (
@@ -42,6 +46,7 @@ const BackButton = ({
       className={cn(
         "flex items-center gap-2 transition-all duration-300",
         buttonStyles[variant],
+        absolute && "absolute top-6 left-6 z-20",
         className
       )}
       whileHover={{ x: -5 }}
