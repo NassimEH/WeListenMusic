@@ -242,7 +242,7 @@ const AuthorSection = () => {
           <Author 
             name="Chadi"
             role="Développeur Backend & Architecte"
-            image="https://benkei-studio.com/cdn/shop/articles/gto-onizuka-moto.jpg?v=1729586029"
+            image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZP4LeV6ZX01hBjpwADgwjdiFb_4ne0x1vlA&s"
             description="Chadi Manglon."
             github="https://github.com/chadi"
             linkedin="https://linkedin.com/in/chadi"
