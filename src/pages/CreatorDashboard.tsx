@@ -1,76 +1,41 @@
 
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import AppLayout from '@/components/app/AppLayout';
-import { cn } from '@/lib/utils';
-import { PlusCircle, Users, Play, BarChart2, Headphones, Clock, ArrowUpRight, Upload, Music } from 'lucide-react';
-import { playSoundEffect } from '@/utils/soundEffects';
 import { motion } from 'framer-motion';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Upload, BarChart, Users, TrendingUp, Clock, Plus, ArrowUpRight, Music, Play } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
+import { playSoundEffect } from '@/utils/soundEffects';
 
-// Mock data for charts
-const listeningData = [
-  { name: 'Jan', streams: 1200 },
-  { name: 'Fév', streams: 1900 },
-  { name: 'Mar', streams: 3000 },
-  { name: 'Avr', streams: 2780 },
-  { name: 'Mai', streams: 4890 },
-  { name: 'Juin', streams: 3390 },
-  { name: 'Juil', streams: 4490 },
+// Mock data for stats
+const stats = [
+  { title: 'Écoutes totales', value: '24.5K', change: '+12%', trend: 'up' },
+  { title: 'Nouveaux auditeurs', value: '1.2K', change: '+8%', trend: 'up' },
+  { title: 'Revenus', value: '€560', change: '+15%', trend: 'up' },
+  { title: 'Abonnés', value: '3.8K', change: '+5%', trend: 'up' },
 ];
 
-// Mock tracks data
-const yourTracks = [
-  { id: '1', title: 'Dream On', plays: 12567, duration: '3:45', date: '12 juin 2024', cover: 'https://images.unsplash.com/photo-1584048333538-90f8670661ab?q=80&w=300&auto=format&fit=crop' },
-  { id: '2', title: 'Higher Ground', plays: 8912, duration: '4:12', date: '23 mai 2024', cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300&auto=format&fit=crop' },
-  { id: '3', title: 'Stellar', plays: 5438, duration: '2:56', date: '5 avril 2024', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=300&auto=format&fit=crop' },
-];
-
-// Stats data
-const statsCards = [
-  { 
-    title: 'Auditeurs mensuels', 
-    value: '15.8k', 
-    change: '+12.7%', 
-    isPositive: true,
-    icon: Users,
-    color: 'from-blue-600 to-cyan-400'
-  },
-  { 
-    title: 'Écoutes totales', 
-    value: '245.6k', 
-    change: '+8.1%', 
-    isPositive: true,
-    icon: Headphones,
-    color: 'from-purple-600 to-pink-400'
-  },
-  { 
-    title: 'Temps d\'écoute', 
-    value: '2 436h', 
-    change: '+5.3%', 
-    isPositive: true,
-    icon: Clock,
-    color: 'from-amber-500 to-orange-400'
-  },
-  { 
-    title: 'Revenus', 
-    value: '€1,280', 
-    change: '+22.4%', 
-    isPositive: true,
-    icon: BarChart2,
-    color: 'from-green-500 to-emerald-400'
-  },
+// Mock data for top tracks
+const topTracks = [
+  { id: '1', title: 'DKR', streams: '850K', duration: '3:15', cover: 'https://i1.sndcdn.com/artworks-000224127351-494034-t500x500.jpg' },
+  { id: '2', title: 'GIMS', streams: '720K', duration: '4:05', cover: 'https://i1.sndcdn.com/artworks-sLK6Oe4dvKWLvVLB-U8S6mg-t500x500.jpg' },
+  { id: '3', title: 'Longueur d\'avance', streams: '540K', duration: '2:55', cover: 'https://cdn.alza.cz/Foto/ImgGalery/Image/booba-ultra-cover.jpg' },
+  { id: '4', title: 'Pitbull', streams: '480K', duration: '3:45', cover: 'https://pbs.twimg.com/media/D9XTKcYWwAEAA0W.jpg' },
 ];
 
 const CreatorDashboard = () => {
-  // Animation variants for staggered animations
+  const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
+  
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
   
   const item = {
@@ -78,246 +43,286 @@ const CreatorDashboard = () => {
     show: { opacity: 1, y: 0 }
   };
   
-  useEffect(() => {
-    // Scroll to top when component mounts
-    window.scrollTo(0, 0);
-  }, []);
+  const handleTrackHover = (id: string | null) => {
+    if (id !== hoveredTrack) {
+      playSoundEffect('hover', 0.1);
+    }
+    setHoveredTrack(id);
+  };
   
   return (
-    <AppLayout headerTitle="Tableau de bord" isCreator>
-      <div className="pb-24">
-        {/* Greeting */}
-        <motion.div 
+    <AppLayout headerTitle="Dashboard Créateur" isCreator>
+      {/* Welcome section */}
+      <section className="mb-8 pt-6">
+        <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="pt-6 pb-8"
+          className="text-3xl font-bold mb-1"
         >
-          <h1 className="text-3xl font-bold">Bonjour, Créateur</h1>
-          <p className="text-audio-light/70 mt-1">Voici un aperçu de votre activité musicale</p>
-        </motion.div>
-        
-        {/* Upload button */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="mb-8"
+          Salut, Créateur
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.2 } }}
+          className="text-audio-light/70"
         >
-          <button 
-            className="bg-gradient-to-r from-audio-accent to-purple-500 hover:from-audio-accent-light hover:to-purple-400 transition-all text-white px-6 py-4 rounded-xl font-medium flex items-center gap-2 shadow-neon hover-scale"
+          Bienvenue dans votre espace créateur
+        </motion.p>
+      </section>
+      
+      {/* Quick actions */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mb-10"
+      >
+        <div className="flex flex-wrap gap-4">
+          <Button 
+            className="bg-gradient-to-r from-audio-accent to-purple-500 hover:from-audio-accent hover:to-purple-600 gap-2"
             onClick={() => playSoundEffect('click')}
           >
-            <Upload size={20} />
-            Ajouter un nouveau morceau
-          </button>
-        </motion.div>
+            <Upload size={18} />
+            Télécharger un titre
+          </Button>
+          <Button 
+            variant="outline" 
+            className="border-white/10 hover:bg-audio-surface/30 gap-2"
+            onClick={() => playSoundEffect('click')}
+          >
+            <BarChart size={18} />
+            Voir les statistiques
+          </Button>
+          <Button 
+            variant="outline" 
+            className="border-white/10 hover:bg-audio-surface/30 gap-2"
+            onClick={() => playSoundEffect('click')}
+          >
+            <Users size={18} />
+            Gérer la communauté
+          </Button>
+        </div>
+      </motion.section>
+      
+      {/* Stats overview */}
+      <section className="mb-10">
+        <h2 className="text-xl font-bold mb-4">Aperçu des statistiques</h2>
         
-        {/* Stats cards */}
-        <motion.section 
+        <motion.div 
+          variants={container}
           initial="hidden"
           animate="show"
-          variants={container}
-          className="mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
         >
-          {statsCards.map((stat, index) => (
-            <motion.div
-              key={index}
-              variants={item}
-              className="bg-audio-surface/20 backdrop-blur-sm rounded-xl p-6 hover:bg-audio-surface/40 transition-all hover-scale"
-              onClick={() => playSoundEffect('hover')}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div className={cn(
-                  "w-12 h-12 rounded-full flex items-center justify-center",
-                  `bg-gradient-to-r ${stat.color}`
-                )}>
-                  <stat.icon size={24} className="text-white" />
-                </div>
-                <span className={cn(
-                  "text-sm px-2 py-1 rounded-full flex items-center gap-1", 
-                  stat.isPositive ? "text-green-400 bg-green-400/10" : "text-red-400 bg-red-400/10"
-                )}>
-                  {stat.change}
-                  <ArrowUpRight size={14} className={stat.isPositive ? "" : "rotate-180"} />
-                </span>
-              </div>
-              <h3 className="text-audio-light/70 text-sm mb-1">{stat.title}</h3>
-              <p className="text-2xl font-bold">{stat.value}</p>
+          {stats.map((stat, index) => (
+            <motion.div key={index} variants={item}>
+              <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+                <CardHeader className="pb-2">
+                  <CardDescription className="text-audio-light/70">{stat.title}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-baseline">
+                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <div className={cn(
+                      "text-sm flex items-center",
+                      stat.trend === 'up' ? 'text-green-400' : 'text-red-400'
+                    )}>
+                      {stat.change}
+                      <TrendingUp size={14} className="ml-1" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
-        </motion.section>
-        
-        {/* Listening stats chart */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mb-10"
-        >
-          <div className="bg-audio-surface/20 backdrop-blur-sm rounded-xl p-6">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-xl font-bold">Écoutes mensuelles</h2>
-                <p className="text-audio-light/70 text-sm">Suivi de vos auditeurs sur les derniers mois</p>
-              </div>
-              <div className="flex gap-2">
-                <button 
-                  className="px-3 py-1.5 text-sm rounded-lg bg-audio-surface/50 hover:bg-audio-surface/80 transition-colors"
-                  onClick={() => playSoundEffect('hover')}
-                >
-                  7 jours
-                </button>
-                <button 
-                  className="px-3 py-1.5 text-sm rounded-lg bg-audio-accent text-white"
-                  onClick={() => playSoundEffect('hover')}
-                >
-                  Mois
-                </button>
-                <button 
-                  className="px-3 py-1.5 text-sm rounded-lg bg-audio-surface/50 hover:bg-audio-surface/80 transition-colors"
-                  onClick={() => playSoundEffect('hover')}
-                >
-                  Année
-                </button>
-              </div>
-            </div>
-            
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={listeningData}>
-                  <defs>
-                    <linearGradient id="streamGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.8}/>
-                      <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0.2}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
-                  <XAxis 
-                    dataKey="name" 
-                    axisLine={false} 
-                    tickLine={false}
-                    tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
-                  />
-                  <YAxis 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                      borderRadius: '0.5rem',
-                      borderColor: 'rgba(255,255,255,0.1)',
-                      color: 'white'
-                    }}
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                  />
-                  <Bar 
-                    dataKey="streams" 
-                    fill="url(#streamGradient)" 
-                    radius={[4, 4, 0, 0]}
-                    barSize={40}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </motion.section>
-        
-        {/* Your tracks */}
-        <motion.section 
-          initial="hidden"
-          animate="show"
-          variants={container}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold">Vos titres récents</h2>
-            <a 
-              href="#" 
-              className="text-audio-light/60 hover:text-audio-light text-sm transition-colors flex items-center gap-1"
-              onClick={() => playSoundEffect('hover')}
-            >
-              <span>Voir tous vos titres</span>
-              <ArrowUpRight size={14} />
-            </a>
-          </div>
-          
-          <motion.div
-            variants={item}
-            className="bg-audio-surface/20 backdrop-blur-sm rounded-xl overflow-hidden"
+        </motion.div>
+      </section>
+      
+      {/* Top tracks */}
+      <section className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Titres populaires</h2>
+          <a 
+            href="#" 
+            className="text-sm text-audio-light/70 hover:text-audio-light flex items-center gap-1"
+            onClick={() => playSoundEffect('hover')}
           >
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[800px]">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="px-6 py-4 text-left text-xs text-audio-light/60 font-medium">#</th>
-                    <th className="px-6 py-4 text-left text-xs text-audio-light/60 font-medium">TITRE</th>
-                    <th className="px-6 py-4 text-left text-xs text-audio-light/60 font-medium">ÉCOUTES</th>
-                    <th className="px-6 py-4 text-left text-xs text-audio-light/60 font-medium">DURÉE</th>
-                    <th className="px-6 py-4 text-left text-xs text-audio-light/60 font-medium">DATE</th>
-                    <th className="px-6 py-4 text-right text-xs text-audio-light/60 font-medium">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {yourTracks.map((track, index) => (
-                    <tr 
-                      key={track.id} 
-                      className="hover:bg-audio-surface/30 transition-colors group cursor-pointer"
-                      onClick={() => playSoundEffect('hover')}
-                    >
-                      <td className="px-6 py-4 text-audio-light/60">{index + 1}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="relative w-10 h-10 rounded overflow-hidden">
-                            <img 
-                              src={track.cover} 
-                              alt={track.title}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                              <Play size={16} className="text-white" />
-                            </div>
-                          </div>
-                          <span className="font-medium">{track.title}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-audio-light/80">{track.plays.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-audio-light/80">{track.duration}</td>
-                      <td className="px-6 py-4 text-audio-light/80">{track.date}</td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button 
-                            className="p-1.5 rounded-full hover:bg-audio-surface/50 transition-colors"
-                            aria-label="Edit"
-                          >
-                            <Music size={16} className="text-audio-light/60" />
-                          </button>
-                          <button 
-                            className="p-1.5 rounded-full hover:bg-audio-surface/50 transition-colors"
-                            aria-label="Stats"
-                          >
-                            <BarChart2 size={16} className="text-audio-light/60" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            Voir tout <ArrowUpRight size={14} />
+          </a>
+        </div>
+        
+        <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {topTracks.map((track) => (
+                <div 
+                  key={track.id}
+                  className="flex items-center justify-between hover:bg-audio-surface/30 p-3 rounded-lg transition-colors cursor-pointer"
+                  onMouseEnter={() => handleTrackHover(track.id)}
+                  onMouseLeave={() => handleTrackHover(null)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <img 
+                        src={track.cover} 
+                        alt={track.title} 
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                      {hoveredTrack === track.id ? (
+                        <button 
+                          className="absolute inset-0 flex items-center justify-center bg-black/40"
+                          onClick={() => playSoundEffect('click')}
+                        >
+                          <Play size={20} className="text-white" />
+                        </button>
+                      ) : null}
+                    </div>
+                    <div>
+                      <h3 className="font-medium">{track.title}</h3>
+                      <p className="text-sm text-audio-light/70">{track.streams} streams</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-8">
+                    <div className="w-32">
+                      <Progress value={80} className="h-1 bg-audio-surface/30" />
+                    </div>
+                    <span className="text-sm text-audio-light/70">{track.duration}</span>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="px-6 py-4 border-t border-white/10 flex justify-center">
-              <button 
-                className="text-audio-accent hover:text-audio-accent-light transition-colors flex items-center gap-1"
-                onClick={() => playSoundEffect('click')}
-              >
-                <PlusCircle size={16} />
-                <span>Ajouter un nouveau titre</span>
-              </button>
-            </div>
-          </motion.div>
-        </motion.section>
-      </div>
+          </CardContent>
+        </Card>
+      </section>
+      
+      {/* Audience metrics */}
+      <section className="mb-10">
+        <h2 className="text-xl font-bold mb-4">Métriques d'audience</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-lg">Répartition par pays</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[
+                  { country: 'France', percentage: 65 },
+                  { country: 'Belgique', percentage: 15 },
+                  { country: 'Canada', percentage: 10 },
+                  { country: 'Suisse', percentage: 5 },
+                  { country: 'Autres', percentage: 5 },
+                ].map((item, index) => (
+                  <div key={index} className="space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span>{item.country}</span>
+                      <span>{item.percentage}%</span>
+                    </div>
+                    <Progress value={item.percentage} className="h-1 bg-audio-surface/30" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-lg">Données démographiques</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Âge</span>
+                  </div>
+                  <div className="grid grid-cols-5 gap-1 text-xs">
+                    {[
+                      { age: '18-24', percentage: 35 },
+                      { age: '25-34', percentage: 40 },
+                      { age: '35-44', percentage: 15 },
+                      { age: '45-54', percentage: 7 },
+                      { age: '55+', percentage: 3 },
+                    ].map((item, index) => (
+                      <div key={index} className="flex flex-col items-center">
+                        <div className="h-24 w-full bg-audio-surface/30 rounded-t-sm relative">
+                          <div 
+                            className="absolute bottom-0 left-0 right-0 bg-gradient-audio rounded-t-sm"
+                            style={{ height: `${item.percentage}%` }}
+                          />
+                        </div>
+                        <span className="mt-1">{item.age}</span>
+                        <span className="text-audio-light/70">{item.percentage}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="pt-4">
+                  <div className="flex justify-between text-sm mb-3">
+                    <span>Genre</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-32 h-32 relative rounded-full overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-audio-accent to-purple-500" style={{ clipPath: 'polygon(0 0, 65% 0, 65% 100%, 0% 100%)' }}></div>
+                      <div className="absolute inset-0 bg-audio-surface/50" style={{ clipPath: 'polygon(65% 0, 100% 0, 100% 100%, 65% 100%)' }}></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Music size={40} className="text-audio-light/30" />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-r from-audio-accent to-purple-500"></div>
+                        <span>Hommes: 65%</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-audio-surface/50"></div>
+                        <span>Femmes: 35%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+      
+      {/* Recent activity */}
+      <section className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Activité récente</h2>
+          <a 
+            href="#" 
+            className="text-sm text-audio-light/70 hover:text-audio-light flex items-center gap-1"
+            onClick={() => playSoundEffect('hover')}
+          >
+            Voir tout <ArrowUpRight size={14} />
+          </a>
+        </div>
+        
+        <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+          <CardContent className="p-6">
+            <ul className="space-y-4">
+              {[
+                { icon: Clock, text: 'Vous avez uploadé <b>Freestyle #12</b>', time: 'Il y a 2 heures' },
+                { icon: Users, text: 'Vous avez gagné <b>120 nouveaux fans</b>', time: 'Hier' },
+                { icon: TrendingUp, text: '<b>DKR</b> a atteint <b>1 million</b> d\'écoutes', time: 'Il y a 3 jours' },
+                { icon: Plus, text: 'Votre titre a été ajouté à <b>25 playlists</b>', time: 'La semaine dernière' },
+              ].map((activity, index) => (
+                <li key={index} className="flex items-start gap-4">
+                  <div className="p-2 rounded-full bg-audio-accent/20">
+                    <activity.icon size={16} className="text-audio-accent" />
+                  </div>
+                  <div>
+                    <p className="text-sm" dangerouslySetInnerHTML={{ __html: activity.text }}></p>
+                    <p className="text-xs text-audio-light/60 mt-1">{activity.time}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </section>
     </AppLayout>
   );
 };
