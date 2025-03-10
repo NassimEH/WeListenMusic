@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useLocation } from 'react-router-dom';
+import { playSoundEffect, playSynthBlip } from '@/utils/soundEffects';
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -34,13 +35,15 @@ const PageTransition: React.FC<PageTransitionProps> = ({
   // Play sound on page load
   useEffect(() => {
     if (!showLoader) {
-      try {
-        const audio = new Audio('/sounds/swoosh.mp3');
-        audio.volume = 0.3;
-        audio.play();
-      } catch (error) {
-        console.error('Could not play sound:', error);
-      }
+      playSoundEffect('swoosh');
+      
+      // Play sequential blips for synthwave effect
+      const blipSequence = [100, 300, 600];
+      blipSequence.forEach((delay) => {
+        setTimeout(() => {
+          playSynthBlip();
+        }, delay);
+      });
     }
   }, [showLoader]);
   
@@ -62,6 +65,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({
     exit: {
       opacity: 0,
       y: -20,
+      filter: "hue-rotate(90deg)",
       transition: {
         duration: 0.5,
         ease: [0.16, 1, 0.3, 1],
@@ -85,6 +89,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({
     exit: { 
       scale: 0.8, 
       opacity: 0,
+      filter: "hue-rotate(90deg)",
       transition: {
         duration: 0.5,
         ease: [0.16, 1, 0.3, 1],
@@ -103,28 +108,63 @@ const PageTransition: React.FC<PageTransitionProps> = ({
     }
   };
   
+  // Synthwave grid animation for loader
+  const gridVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 0.3, 
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 1.2,
+      transition: { duration: 0.5, ease: "easeIn" }
+    }
+  };
+  
   return (
     <>
       <AnimatePresence mode="wait">
         {showLoader ? (
           <motion.div
             key="loader"
-            className="fixed inset-0 flex flex-col items-center justify-center bg-audio-dark z-50"
+            className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50"
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={loaderVariants}
           >
+            {/* Animated grid background */}
+            <motion.div 
+              className="absolute inset-0 bg-[size:50px_50px] bg-synthwave-grid opacity-30"
+              variants={gridVariants}
+              style={{
+                backgroundSize: "40px 40px",
+                backgroundPosition: "center",
+              }}
+            />
+            
+            {/* Synthwave sun */}
+            <motion.div 
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="w-72 h-72 rounded-full bg-gradient-radial from-audio-synthwave-pink via-audio-synthwave-purple to-transparent opacity-50"></div>
+            </motion.div>
+            
             <div className="relative w-16 h-16 mb-8">
-              <div className="absolute inset-0 bg-gradient-audio rounded-full animate-pulse-soft"></div>
-              <div className="absolute inset-2 bg-audio-dark rounded-full flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-synthwave rounded-full animate-pulse-soft shadow-neon-pink"></div>
+              <div className="absolute inset-2 bg-black rounded-full flex items-center justify-center">
                 <div className="w-2 h-2 bg-audio-light rounded-full"></div>
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-6">WeListen</h2>
+            <h2 className="text-2xl font-bold mb-6 text-transparent bg-gradient-synthwave bg-clip-text animate-hue-rotate">WeListen</h2>
             <div className="w-48 h-1 bg-audio-surface/30 rounded-full overflow-hidden">
               <motion.div 
-                className="h-full bg-gradient-audio rounded-full"
+                className="h-full bg-gradient-synthwave rounded-full"
                 variants={progressVariants}
               />
             </div>
@@ -154,6 +194,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({
         @keyframes pulse-soft {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.8; }
+        }
+        
+        @keyframes hue-rotate {
+          0% { filter: hue-rotate(0deg); }
+          100% { filter: hue-rotate(360deg); }
         }
         
         .glass {
