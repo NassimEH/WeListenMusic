@@ -17,3 +17,9 @@ export const playSoundEffect = (sound: 'click' | 'hover' | 'pop' | 'swoosh', vol
     console.log('Error with sound effect:', error);
   }
 };
+
+// Named convenience functions
+export const playClickSound = () => playSoundEffect('click');
+export const playHoverSound = () => playSoundEffect('hover');
+export const playPopSound = () => playSoundEffect('pop');
+export const playSwooshSound = () => playSoundEffect('swoosh');

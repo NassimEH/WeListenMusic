@@ -1,289 +1,175 @@
-
-import React, { useState } from 'react';
-import AppLayout from '@/components/app/AppLayout';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Plus, Clock, Heart, Disc, PlayCircle, MusicIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
-import { playSoundEffect } from '@/utils/soundEffects';
-
-// Mock data for featured artists
-const featuredArtists = [
-  { id: '1', name: 'Booba', image: 'https://img.lemde.fr/2021/03/05/1541/0/3648/1820/1440/720/60/0/99c9700_792435352-ultra-selection-raw17.jpg' },
-  { id: '2', name: 'Jul', image: 'https://images.ladepeche.fr/api/v1/images/view/60ad09448fe56f23a26b75b0/large/image.jpg?v=1' },
-  { id: '3', name: 'Damso', image: 'https://www.booska-p.com/wp-content/uploads/2023/09/damso-1-1000x600.jpg' },
-  { id: '4', name: 'PNL', image: 'https://images.bfmtv.com/cC9BtgR9GHKxHBKFwZLsQO-nXPA=/0x0:1024x576/1024x0/images/PNL-1278553.jpg' },
-  { id: '5', name: 'Ninho', image: 'https://images.universal-music.de/img/06_artist/ninho/2023/ninho-2023-1.jpg' },
-];
-
-// Mock data for new releases
-const newReleases = [
-  { id: '1', title: 'QALF', artist: 'Damso', cover: 'https://www.booska-p.com/wp-content/uploads/2020/09/damso-devoile-la-cover-et-la-tracklist-de-qalf-649.jpg' },
-  { id: '2', title: 'Ultra', artist: 'Booba', cover: 'https://img.lemde.fr/2021/03/05/1541/0/3648/1820/1440/720/60/0/99c9700_792435352-ultra-selection-raw17.jpg' },
-  { id: '3', title: 'Civilisation', artist: 'Orelsan', cover: 'https://images.universal-music.de/img/04_artists/orelsan/2021/191402191402orelsan-civilisation-cover.jpg' },
-  { id: '4', title: 'Jefe', artist: 'Ninho', cover: 'https://images.genius.com/bdb908d68bfdac7b22d8f3c76211b3e7.1000x1000x1.jpg' },
-  { id: '5', title: 'La Vie de Rêve', artist: 'PNL', cover: 'https://m.media-amazon.com/images/I/61ZJT9tKKBL._UF1000,1000_QL80_.jpg' },
-  { id: '6', title: 'BLO', artist: 'Alpha Wann', cover: 'https://images.genius.com/83800f6b8e11fe2bbc80e8535e2e5a29.1000x1000x1.jpg' },
-];
-
-// Mock data for your playlists
-const popularPlaylists = [
-  { id: '1', name: 'Hits Français', description: 'Les tubes du rap français', cover: 'https://i.scdn.co/image/ab67706f00000003fc8e155556b225e73582af6e' },
-  { id: '2', name: 'Chill Hip-Hop', description: 'Parfait pour se détendre', cover: 'https://i.scdn.co/image/ab67706f00000003ba5db46f4b838ef6027db656' },
-  { id: '3', name: 'Workout Mix', description: 'Boostez votre entraînement', cover: 'https://i.scdn.co/image/ab67706f000000034d26e829e0fe71546772aa74' },
-  { id: '4', name: 'Party', description: 'Pour faire la fête', cover: 'https://i.scdn.co/image/ab67706f00000003771dc6594904204f04fefdf6' },
-];
+import { Plus, Music2, Heart, ChevronRight } from 'lucide-react';
+import { playClickSound, playHoverSound } from '@/utils/soundEffects';
 
 const ConsumerDashboard = () => {
-  const { playlists } = useApp();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-  
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
-  
-  const handleItemHover = (id: string | null) => {
-    if (id !== hoveredItem) {
-      playSoundEffect('hover', 0.1);
+  const { playlists, addPlaylist, likedSongs } = useApp();
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
+
+  useEffect(() => {
+    document.title = 'WeListen - Votre espace';
+  }, []);
+
+  const handleCreatePlaylist = () => {
+    if (newPlaylistName.trim() !== '') {
+      const newPlaylist = {
+        id: Date.now().toString(),
+        name: newPlaylistName,
+        description: 'Nouvelle playlist',
+        cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1740&auto=format&fit=crop',
+        songs: []
+      };
+      addPlaylist(newPlaylist);
+      setNewPlaylistName('');
+      setShowCreatePlaylist(false);
+      playClickSound();
     }
-    setHoveredItem(id);
   };
-  
-  const handlePlayClick = () => {
-    playSoundEffect('click');
-  };
-  
+
+  const popularPlaylists = [
+    {
+      id: '1',
+      name: 'Hits du moment',
+      description: 'Les titres les plus populaires actuellement',
+      cover: 'https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1974&auto=format&fit=crop',
+      songs: [] // Add empty songs array to match Playlist type
+    },
+    {
+      id: '2',
+      name: 'Rap FR',
+      description: 'Le meilleur du rap français',
+      cover: 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?q=80&w=1972&auto=format&fit=crop',
+      songs: [] // Add empty songs array to match Playlist type
+    },
+    {
+      id: '3',
+      name: 'Classics',
+      description: 'Les titres qui ont marqué l\'histoire',
+      cover: 'https://images.unsplash.com/photo-1461784180009-27c171c6aed7?q=80&w=2070&auto=format&fit=crop',
+      songs: [] // Add empty songs array to match Playlist type
+    },
+    {
+      id: '4',
+      name: 'Chill',
+      description: 'Pour se détendre',
+      cover: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2070&auto=format&fit=crop',
+      songs: [] // Add empty songs array to match Playlist type
+    },
+  ];
+
   return (
-    <AppLayout headerTitle="Accueil">
-      {/* Welcome section */}
-      <section className="mb-8 pt-6">
-        <motion.h1 
+    <div className="min-h-screen bg-audio-dark py-12">
+      <div className="container max-w-7xl mx-auto px-6">
+        <motion.h1
+          className="text-3xl font-bold text-white mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-bold mb-1"
+          transition={{ duration: 0.5 }}
         >
-          Bonjour
+          Votre espace
         </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { delay: 0.2 } }}
-          className="text-audio-light/70"
-        >
-          Découvrez des nouveautés adaptées à vos goûts
-        </motion.p>
-      </section>
-      
-      {/* Recently played section */}
-      <section className="mb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">Écoutés récemment</h2>
-          <a 
-            href="#" 
-            className="text-sm text-audio-light/70 hover:text-audio-light"
-            onClick={() => playSoundEffect('hover')}
-          >
-            Voir tout
-          </a>
-        </div>
-        
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
-        >
-          {playlists.concat(popularPlaylists).slice(0, 6).map((playlist) => (
-            <motion.div 
-              key={playlist.id}
-              variants={item}
-              className="glass rounded-lg p-4 hover:bg-audio-surface/30 transition-all cursor-pointer group"
-              onMouseEnter={() => handleItemHover(playlist.id)}
-              onMouseLeave={() => handleItemHover(null)}
+
+        {/* Playlists Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-semibold text-white">Playlists</h2>
+            <button
+              className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors"
+              onClick={() => {
+                setShowCreatePlaylist(true);
+                playClickSound();
+              }}
+              onMouseEnter={() => playHoverSound()}
             >
-              <div className="relative mb-4">
-                <img 
-                  src={playlist.cover} 
-                  alt={playlist.name} 
-                  className="w-full aspect-square object-cover rounded-md shadow-md" 
-                />
-                <div className={cn(
-                  "absolute right-2 bottom-2 transform translate-y-4 opacity-0 transition-all duration-300",
-                  hoveredItem === playlist.id && "translate-y-0 opacity-100"
-                )}>
-                  <button 
-                    className="bg-audio-accent rounded-full w-10 h-10 flex items-center justify-center shadow-lg"
-                    onClick={handlePlayClick}
-                  >
-                    <Play size={20} className="text-white ml-1" />
-                  </button>
-                </div>
+              <Plus size={16} />
+              Créer
+            </button>
+          </div>
+
+          {showCreatePlaylist && (
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Nom de la playlist"
+                className="bg-audio-surface text-white rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-audio-accent"
+                value={newPlaylistName}
+                onChange={(e) => setNewPlaylistName(e.target.value)}
+              />
+              <div className="flex justify-end mt-2">
+                <button
+                  className="bg-audio-accent hover:bg-audio-accent-light text-white rounded-lg py-2 px-4 transition-colors"
+                  onClick={handleCreatePlaylist}
+                >
+                  Valider
+                </button>
               </div>
-              <h3 className="font-medium text-sm truncate">{playlist.name}</h3>
-              <p className="text-xs text-audio-light/70 truncate">{playlist.description}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-      
-      {/* New releases */}
-      <section className="mb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">Sorties récentes</h2>
-          <a 
-            href="#" 
-            className="text-sm text-audio-light/70 hover:text-audio-light"
-            onClick={() => playSoundEffect('hover')}
-          >
-            Voir tout
-          </a>
-        </div>
-        
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
-        >
-          {newReleases.map((album) => (
-            <motion.div 
-              key={album.id}
-              variants={item}
-              className="glass rounded-lg p-4 hover:bg-audio-surface/30 transition-all cursor-pointer group"
-              onMouseEnter={() => handleItemHover(album.id)}
-              onMouseLeave={() => handleItemHover(null)}
-            >
-              <div className="relative mb-4">
-                <img 
-                  src={album.cover} 
-                  alt={album.title} 
-                  className="w-full aspect-square object-cover rounded-md shadow-md" 
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {playlists.map((playlist) => (
+              <motion.div
+                key={playlist.id}
+                className="bg-audio-surface rounded-lg p-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={playlist.cover}
+                  alt={playlist.name}
+                  className="w-full h-32 object-cover rounded-lg mb-2"
                 />
-                <div className={cn(
-                  "absolute right-2 bottom-2 transform translate-y-4 opacity-0 transition-all duration-300",
-                  hoveredItem === album.id && "translate-y-0 opacity-100"
-                )}>
-                  <button 
-                    className="bg-audio-accent rounded-full w-10 h-10 flex items-center justify-center shadow-lg"
-                    onClick={handlePlayClick}
-                  >
-                    <Play size={20} className="text-white ml-1" />
-                  </button>
-                </div>
-              </div>
-              <h3 className="font-medium text-sm truncate">{album.title}</h3>
-              <p className="text-xs text-audio-light/70 truncate">Album • {album.artist}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-      
-      {/* Featured artists */}
-      <section className="mb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">Artistes populaires</h2>
-          <a 
-            href="#" 
-            className="text-sm text-audio-light/70 hover:text-audio-light"
-            onClick={() => playSoundEffect('hover')}
-          >
-            Voir tout
-          </a>
-        </div>
-        
-        <motion.div 
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="flex flex-wrap gap-6"
-        >
-          {featuredArtists.map((artist) => (
-            <motion.div 
-              key={artist.id}
-              variants={item}
-              className="text-center cursor-pointer group"
-              onMouseEnter={() => handleItemHover(`artist-${artist.id}`)}
-              onMouseLeave={() => handleItemHover(null)}
-            >
-              <div className="relative mb-3">
-                <div className="w-32 h-32 rounded-full overflow-hidden">
-                  <img 
-                    src={artist.image} 
-                    alt={artist.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                <h3 className="text-lg font-semibold text-white">{playlist.name}</h3>
+                <p className="text-audio-light/70 text-sm">{playlist.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Liked Songs Section */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-semibold text-white">
+              <Music2 size={24} className="inline-block mr-2 align-middle" />
+              Titres aimés
+            </h2>
+            <button className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors">
+              Voir tout <ChevronRight size={16} />
+            </button>
+          </div>
+
+          {likedSongs.length === 0 ? (
+            <p className="text-audio-light/70">Aucun titre aimé pour le moment.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {likedSongs.map((song) => (
+                <motion.div
+                  key={song.id}
+                  className="bg-audio-surface rounded-lg p-4 flex items-center gap-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={song.cover}
+                    alt={song.title}
+                    className="w-16 h-16 object-cover rounded-lg"
                   />
-                </div>
-                <div className={cn(
-                  "absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 transition-opacity",
-                  hoveredItem === `artist-${artist.id}` && "opacity-100"
-                )}>
-                  <button 
-                    className="bg-audio-accent rounded-full w-10 h-10 flex items-center justify-center shadow-lg"
-                    onClick={handlePlayClick}
-                  >
-                    <Play size={20} className="text-white ml-1" />
-                  </button>
-                </div>
-              </div>
-              <h3 className="font-medium text-sm">{artist.name}</h3>
-              <p className="text-xs text-audio-light/70">Artiste</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-      
-      {/* Quick links */}
-      <section className="mb-6">
-        <h2 className="text-xl font-bold mb-4">Raccourcis</h2>
-        <div className="flex flex-wrap gap-3">
-          <button 
-            className="px-4 py-2 glass rounded-full text-sm flex items-center gap-2 hover:bg-audio-surface/30 transition-colors"
-            onClick={() => playSoundEffect('click')}
-          >
-            <Heart size={16} />
-            <span>Titres likés</span>
-          </button>
-          <button 
-            className="px-4 py-2 glass rounded-full text-sm flex items-center gap-2 hover:bg-audio-surface/30 transition-colors"
-            onClick={() => playSoundEffect('click')}
-          >
-            <Clock size={16} />
-            <span>Récemment écoutés</span>
-          </button>
-          <button 
-            className="px-4 py-2 glass rounded-full text-sm flex items-center gap-2 hover:bg-audio-surface/30 transition-colors"
-            onClick={() => playSoundEffect('click')}
-          >
-            <Plus size={16} />
-            <span>Créer une playlist</span>
-          </button>
-          <button 
-            className="px-4 py-2 glass rounded-full text-sm flex items-center gap-2 hover:bg-audio-surface/30 transition-colors"
-            onClick={() => playSoundEffect('click')}
-          >
-            <Disc size={16} />
-            <span>Albums</span>
-          </button>
-          <button 
-            className="px-4 py-2 glass rounded-full text-sm flex items-center gap-2 hover:bg-audio-surface/30 transition-colors"
-            onClick={() => playSoundEffect('click')}
-          >
-            <MusicIcon size={16} />
-            <span>Podcasts</span>
-          </button>
-        </div>
-      </section>
-    </AppLayout>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">{song.title}</h3>
+                    <p className="text-audio-light/70 text-sm">{song.artist}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
   );
 };
 
