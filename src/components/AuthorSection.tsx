@@ -240,7 +240,7 @@ const AuthorSection = () => {
           />
           
           <Author 
-            name="Chadi"
+            name="Chadiii"
             role="Développeur Backend & Architecte"
             image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZP4LeV6ZX01hBjpwADgwjdiFb_4ne0x1vlA&s"
             description="Chadi Manglon."
