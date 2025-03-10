@@ -3,8 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Play, Headphones } from 'lucide-react';
 import StarBackground from './StarBackground';
+import { useNavigate } from 'react-router-dom';
+import { playSoundEffect } from '@/utils/soundEffects';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
@@ -75,6 +78,11 @@ const HeroSection = () => {
     };
   }, []);
 
+  const handleStartListening = () => {
+    playSoundEffect('click');
+    navigate('/app');
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background overlay */}
@@ -108,7 +116,10 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in [animation-delay:600ms]">
-            <button className="px-8 py-4 bg-gradient-audio rounded-full font-medium hover-scale text-white flex items-center justify-center gap-2 shadow-neon">
+            <button 
+              onClick={handleStartListening}
+              className="px-8 py-4 bg-gradient-audio rounded-full font-medium hover-scale text-white flex items-center justify-center gap-2 shadow-neon"
+            >
               <Play size={20} />
               Commencer l'écoute
             </button>
