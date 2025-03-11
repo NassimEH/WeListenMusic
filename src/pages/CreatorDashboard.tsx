@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, BarChart, Users, TrendingUp, Play, ArrowUpRight, Music, Calendar, Disc, X, Image, MusicIcon, CheckCircle2, Heart, Headphones, Album, List } from 'lucide-react';
+import { Upload, Play, ArrowUpRight, Music, Calendar, X, Image, MusicIcon, CheckCircle2, Album, List, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { playSoundEffect } from '@/utils/soundEffects';
@@ -10,6 +11,8 @@ import StarBackground from '@/components/StarBackground';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
 import ArtistBanner from '@/components/creator/ArtistBanner';
+import { useApp } from '@/contexts/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const CreatorDashboard = () => {
   const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
@@ -26,6 +29,13 @@ const CreatorDashboard = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
+  const { userRole, setUserRole } = useApp();
+  const navigate = useNavigate();
+  
+  const handleRoleSwitch = () => {
+    setUserRole('consumer');
+    navigate('/app/consumer');
+  };
   
   const container = {
     hidden: { opacity: 0 },
@@ -130,16 +140,43 @@ const CreatorDashboard = () => {
   
   return (
     <div className="min-h-screen overflow-x-hidden pb-20">
-      {/* Background elements */}
+      {/* Background elements with enhanced synthwave effect */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-audio-dark via-audio-dark/95 to-audio-dark"></div>
         <StarBackground intensity={0.3} speed={0.2} />
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-audio-accent/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 -right-32 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+        
+        {/* Enhanced Synthwave Background */}
+        <div className="absolute bottom-0 left-0 right-0 h-full pointer-events-none overflow-hidden">
+          {/* Horizontal neon lines */}
+          <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
+          <div className="absolute bottom-4 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent animate-pulse-soft" style={{animationDelay: '0.3s'}}></div>
+          <div className="absolute bottom-8 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/30 to-transparent animate-pulse-soft" style={{animationDelay: '0.6s'}}></div>
+          
+          {/* Vertical neon lines */}
+          <div className="absolute top-0 bottom-0 left-1/4 w-[1px] bg-gradient-to-b from-transparent via-purple-500/20 to-transparent animate-pulse-soft" style={{animationDelay: '0.9s'}}></div>
+          <div className="absolute top-0 bottom-0 right-1/4 w-[1px] bg-gradient-to-b from-transparent via-audio-accent/20 to-transparent animate-pulse-soft" style={{animationDelay: '1.2s'}}></div>
+          
+          {/* Glowing orbs */}
+          <div className="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full bg-purple-500/5 blur-3xl animate-pulse-soft"></div>
+          <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-audio-accent/5 blur-3xl animate-pulse-soft" style={{animationDelay: '0.8s'}}></div>
+          <div className="absolute top-1/2 left-1/3 w-32 h-32 rounded-full bg-indigo-500/5 blur-3xl animate-pulse-soft" style={{animationDelay: '1.5s'}}></div>
+        </div>
       </div>
       
       {/* Content */}
       <div className="max-w-6xl mx-auto relative pt-6">
+        {/* Switch to consumer role button */}
+        <div className="absolute top-0 right-6 z-10">
+          <Button
+            variant="outline"
+            size="pill"
+            className="border-audio-accent/40 text-audio-accent hover:bg-audio-accent/10"
+            onClick={handleRoleSwitch}
+          >
+            Passer côté auditeur
+          </Button>
+        </div>
+      
         {/* Artist Banner */}
         <ArtistBanner 
           name={artistInfo.name}
@@ -157,12 +194,6 @@ const CreatorDashboard = () => {
             <TabsTrigger value="uploads" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
               Vos titres
             </TabsTrigger>
-            <TabsTrigger value="audience" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
-              Audience
-            </TabsTrigger>
-            <TabsTrigger value="activity" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
-              Activité
-            </TabsTrigger>
           </TabsList>
 
           {/* Tab Content: Overview */}
@@ -174,11 +205,11 @@ const CreatorDashboard = () => {
               transition={{ delay: 0.3 }}
               className="mb-8"
             >
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap justify-center mb-8">
                 <Button 
                   variant="accent"
                   size="pill"
-                  className="gap-2"
+                  className="gap-2 px-6 py-2 shadow-glow"
                   onClick={() => {
                     setShowUploadForm(true);
                     playSoundEffect('click');
@@ -186,24 +217,6 @@ const CreatorDashboard = () => {
                 >
                   <Upload size={14} />
                   Télécharger un titre
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="pill"
-                  className="gap-2 text-audio-light/70"
-                  onClick={() => playSoundEffect('click')}
-                >
-                  <BarChart size={14} />
-                  Statistiques
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="pill"
-                  className="gap-2 text-audio-light/70"
-                  onClick={() => playSoundEffect('click')}
-                >
-                  <Users size={14} />
-                  Communauté
                 </Button>
               </div>
             </motion.section>
@@ -267,7 +280,7 @@ const CreatorDashboard = () => {
               </div>
             </motion.section>
             
-            {/* Top tracks - Fixed to remove gray background */}
+            {/* Top tracks - Fixed transparent background */}
             <section>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-xl font-medium">Titres populaires</h2>
@@ -280,7 +293,7 @@ const CreatorDashboard = () => {
                 </a>
               </div>
               
-              <Card className="backdrop-blur-sm border-white/5 bg-transparent">
+              <Card className="bg-transparent backdrop-blur-sm border-white/5">
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     {topTracks.map((track) => (
@@ -332,7 +345,7 @@ const CreatorDashboard = () => {
               <Button 
                 variant="accent"
                 size="pill"
-                className="gap-2"
+                className="gap-2 shadow-glow"
                 onClick={() => {
                   setShowUploadForm(true);
                   playSoundEffect('click');
@@ -384,38 +397,6 @@ const CreatorDashboard = () => {
               </Card>
             </div>
           </TabsContent>
-
-          {/* Tab content: Audience */}
-          <TabsContent value="audience" className="mt-6 px-6">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-medium">Votre audience</h2>
-            </div>
-            
-            <div className="p-8 rounded-lg backdrop-blur-sm border border-white/5 bg-transparent text-center">
-              <Users size={32} className="mx-auto mb-3 text-audio-light/30" />
-              <p className="text-audio-light/70 mb-2 text-sm">Voyez qui vous écoute et d'où vient votre audience</p>
-              <p className="text-audio-light/50 mb-4 text-xs">Les données d'audience sont mises à jour quotidiennement</p>
-              <Button variant="accent" size="pill">
-                Analyser mon audience
-              </Button>
-            </div>
-          </TabsContent>
-          
-          {/* Tab content: Activity */}
-          <TabsContent value="activity" className="mt-6 px-6">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-medium">Activité récente</h2>
-            </div>
-            
-            <div className="p-8 rounded-lg backdrop-blur-sm border border-white/5 bg-transparent text-center">
-              <Heart size={32} className="mx-auto mb-3 text-audio-light/30" />
-              <p className="text-audio-light/70 mb-2 text-sm">Voyez qui interagit avec votre musique</p>
-              <p className="text-audio-light/50 mb-4 text-xs">Likes, partages, commentaires et plus encore</p>
-              <Button variant="accent" size="pill">
-                Voir l'activité
-              </Button>
-            </div>
-          </TabsContent>
         </Tabs>
       </div>
 
@@ -428,7 +409,7 @@ const CreatorDashboard = () => {
           exit={{ opacity: 0 }}
         >
           <motion.div 
-            className="bg-transparent backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md overflow-hidden"
+            className="bg-transparent backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md overflow-hidden shadow-glow"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
@@ -480,23 +461,25 @@ const CreatorDashboard = () => {
                       
                       <div className="col-span-2 md:col-span-1">
                         <label className="block text-xs text-audio-light/70 mb-1">Genre *</label>
-                        <select
-                          name="genre"
-                          value={uploadFormData.genre}
-                          onChange={handleInputChange}
-                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 text-audio-light appearance-none"
-                          required
-                          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 0.5rem center", backgroundSize: "1rem" }}
-                        >
-                          <option value="" className="bg-audio-dark text-audio-light">Sélectionner</option>
-                          <option value="rap" className="bg-audio-dark text-audio-light">Rap</option>
-                          <option value="pop" className="bg-audio-dark text-audio-light">Pop</option>
-                          <option value="rock" className="bg-audio-dark text-audio-light">Rock</option>
-                          <option value="electronic" className="bg-audio-dark text-audio-light">Électronique</option>
-                          <option value="jazz" className="bg-audio-dark text-audio-light">Jazz</option>
-                          <option value="classical" className="bg-audio-dark text-audio-light">Classique</option>
-                          <option value="other" className="bg-audio-dark text-audio-light">Autre</option>
-                        </select>
+                        <div className="relative">
+                          <select
+                            name="genre"
+                            value={uploadFormData.genre}
+                            onChange={handleInputChange}
+                            className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 text-audio-light appearance-none"
+                            required
+                          >
+                            <option value="" className="bg-audio-dark text-audio-light">Sélectionner</option>
+                            <option value="rap" className="bg-audio-dark text-audio-light">Rap</option>
+                            <option value="pop" className="bg-audio-dark text-audio-light">Pop</option>
+                            <option value="rock" className="bg-audio-dark text-audio-light">Rock</option>
+                            <option value="electronic" className="bg-audio-dark text-audio-light">Électronique</option>
+                            <option value="jazz" className="bg-audio-dark text-audio-light">Jazz</option>
+                            <option value="classical" className="bg-audio-dark text-audio-light">Classique</option>
+                            <option value="other" className="bg-audio-dark text-audio-light">Autre</option>
+                          </select>
+                          <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-audio-light/50 pointer-events-none" />
+                        </div>
                       </div>
                     </div>
                     
@@ -595,7 +578,7 @@ const CreatorDashboard = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="text-xs rounded-full"
+                      className="text-xs rounded-full border-white/10 hover:bg-white/5"
                       onClick={() => setShowUploadForm(false)}
                     >
                       Annuler
@@ -604,7 +587,7 @@ const CreatorDashboard = () => {
                       type="submit"
                       variant="accent" 
                       size="sm"
-                      className="text-xs rounded-full"
+                      className="text-xs rounded-full shadow-glow"
                     >
                       Télécharger
                     </Button>
@@ -616,8 +599,8 @@ const CreatorDashboard = () => {
         </motion.div>
       )}
       
-      {/* Synthwave neon light effect - Enhanced */}
-      <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-40">
+      {/* Enhanced Synthwave neon light effect */}
+      <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-60">
         <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[300px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
         <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
         <div className="absolute bottom-3 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent animate-pulse-soft"></div>

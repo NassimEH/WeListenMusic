@@ -147,6 +147,18 @@
     @apply bg-audio-surface/20 border border-white/10 rounded-md text-xs px-3 py-1.5;
     @apply focus:outline-none focus:ring-1 focus:ring-audio-accent/30 focus:border-audio-accent/30;
   }
+
+  /* Shadow glow effect for Apple-inspired UI */
+  .shadow-glow {
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.1), 
+                0 0 20px rgba(33, 150, 243, 0.05);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .shadow-glow:hover {
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.2), 
+                0 0 30px rgba(33, 150, 243, 0.1);
+  }
 }
 
 /* Animations for Synthwave effects */
