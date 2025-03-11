@@ -1,48 +1,62 @@
 
-import React, { ReactNode } from 'react';
-import AppSidebar from './AppSidebar';
-import AppHeader from './AppHeader';
-import AppPlayer from './AppPlayer';
+import React from 'react';
+import Header from '../Header';
+import Footer from '../Footer';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
-import { cn } from '@/lib/utils';
 
 interface AppLayoutProps {
-  children: ReactNode;
-  headerTitle?: string;
-  isCreator?: boolean;
+  children: React.ReactNode;
 }
 
-const AppLayout = ({ children, headerTitle = 'WeListen', isCreator = false }: AppLayoutProps) => {
+const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
-  const { userRole, setUserRole } = useApp();
+  const { userRole } = useApp();
   
-  // Ensure user can't access unauthorized areas
-  React.useEffect(() => {
-    if (!userRole) {
-      navigate('/app');
-    } else if (isCreator && userRole !== 'creator') {
-      navigate('/app/consumer');
-    } else if (!isCreator && userRole !== 'consumer') {
+  const goBack = () => {
+    navigate(-1);
+  };
+  
+  const switchRole = () => {
+    if (userRole === 'consumer') {
       navigate('/app/creator');
+    } else if (userRole === 'creator') {
+      navigate('/app/consumer');
+    } else {
+      navigate('/app');
     }
-  }, [userRole, navigate, isCreator]);
+  };
   
   return (
-    <div className="min-h-screen flex flex-col bg-audio-dark text-audio-light">
-      <div className="flex flex-1 overflow-hidden">
-        <AppSidebar isCreator={isCreator} />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          <AppHeader title={headerTitle} isCreator={isCreator} />
-          <div className={cn(
-            "flex-1 overflow-y-auto p-6 pt-0",
-            "scrollbar-thin scrollbar-thumb-audio-surface scrollbar-track-transparent"
-          )}>
-            {children}
+    <div className="min-h-screen flex flex-col bg-audio-dark">
+      <Header />
+      
+      <main className="flex-grow pt-16">
+        <div className="container mx-auto px-6 relative">
+          {/* Navigation minimaliste */}
+          <div className="flex justify-between items-center py-4 mb-4">
+            <button 
+              onClick={goBack}
+              className="flex items-center gap-2 text-audio-light/70 hover:text-audio-light transition-colors group"
+            >
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-300" />
+              <span className="text-sm font-medium">Retour</span>
+            </button>
+            
+            <button 
+              onClick={switchRole}
+              className="text-sm text-audio-accent hover:text-audio-accent-light transition-colors"
+            >
+              {userRole === 'consumer' ? 'Passer en mode Créateur' : 'Passer en mode Auditeur'}
+            </button>
           </div>
-        </main>
-      </div>
-      <AppPlayer />
+          
+          {children}
+        </div>
+      </main>
+      
+      <Footer />
     </div>
   );
 };

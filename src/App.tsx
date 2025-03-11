@@ -10,6 +10,8 @@ import RoleSelection from "./pages/RoleSelection";
 import ConsumerDashboard from "./pages/ConsumerDashboard";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import { AppProvider } from "./contexts/AppContext";
+import PageTransition from "./components/PageTransition";
+import AppLayout from "./components/app/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -22,9 +24,9 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/app" element={<RoleSelection />} />
-            <Route path="/app/consumer" element={<ConsumerDashboard />} />
-            <Route path="/app/creator" element={<CreatorDashboard />} />
+            <Route path="/app" element={<PageTransition><RoleSelection /></PageTransition>} />
+            <Route path="/app/consumer" element={<PageTransition><AppLayout><ConsumerDashboard /></AppLayout></PageTransition>} />
+            <Route path="/app/creator" element={<PageTransition><AppLayout><CreatorDashboard /></AppLayout></PageTransition>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
