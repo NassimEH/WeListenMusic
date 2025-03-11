@@ -81,7 +81,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
               </Button>
               <Button 
                 size="sm"
-                className="bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-full"
+                className="bg-transparent border border-white/10 hover:bg-white/10 text-white rounded-full"
               >
                 <Heart size={16} className="mr-1" />
                 Suivre
@@ -92,7 +92,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
       </div>
       
       {/* Artist Bio */}
-      <div className="p-6 bg-audio-surface/20 backdrop-blur-sm rounded-b-xl border-t border-white/5">
+      <div className="p-6 bg-transparent backdrop-blur-sm rounded-b-xl border-t border-white/5">
         <div className="flex justify-between items-start">
           <div className="max-w-2xl">
             <h3 className="text-sm font-medium text-audio-light/80 mb-2">À propos</h3>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
-import { Plus, Music2, Heart, ChevronRight, Play, Search, Disc, Clock, Calendar, HeadphonesIcon, Shuffle, LayoutList, Headphones, MusicIcon, Radio } from 'lucide-react';
+import { Plus, Music2, Heart, ChevronRight, Play, Search, Disc, Clock, Calendar, Shuffle, LayoutList, Headphones, MusicIcon, Sparkles, BookOpen, LightbulbIcon } from 'lucide-react';
 import { playSoundEffect } from '@/utils/soundEffects';
 import StarBackground from '@/components/StarBackground';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -77,6 +77,34 @@ const ConsumerDashboard = () => {
     { id: '5', title: 'Blinding Lights', artist: 'The Weeknd', album: 'After Hours', cover: 'https://upload.wikimedia.org/wikipedia/en/c/c1/The_Weeknd_-_After_Hours.png', duration: '3:20' },
   ];
 
+  // Music anecdotes to replace the radio sections
+  const musicAnecdotes = [
+    {
+      id: '1',
+      title: 'Le saviez-vous?',
+      content: 'Michael Jackson a breveté un système qui lui permettait de se pencher à 45 degrés dans le clip "Smooth Criminal".',
+      icon: <Sparkles size={24} className="text-purple-300" />
+    },
+    {
+      id: '2',
+      title: 'Anecdote musicale',
+      content: 'La chanson "Happy Birthday" a longtemps été protégée par copyright jusqu\'en 2016, générant environ 2 millions $ par an.',
+      icon: <BookOpen size={24} className="text-blue-300" />
+    },
+    {
+      id: '3',
+      title: 'Fait intéressant',
+      content: 'Les Beatles ont été refusés par Decca Records qui a déclaré "les groupes de guitare sont sur le déclin".',
+      icon: <LightbulbIcon size={24} className="text-yellow-300" />
+    },
+    {
+      id: '4',
+      title: 'Le saviez-vous?',
+      content: 'Le premier CD produit pour la vente commerciale était "The Visitors" d\'ABBA en 1982.',
+      icon: <Disc size={24} className="text-green-300" />
+    }
+  ];
+
   const handleTrackHover = (id: string | null) => {
     if (id !== hoveredTrack) {
       playSoundEffect('hover', 0.1);
@@ -121,8 +149,8 @@ const ConsumerDashboard = () => {
         >
           <div className="relative h-40 md:h-48">
             <div className="absolute inset-0">
-              <div className="w-full h-full bg-gradient-to-r from-purple-900/30 to-audio-accent/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-audio-dark via-audio-dark/50 to-transparent"></div>
+              <div className="w-full h-full bg-gradient-to-r from-purple-900/20 to-audio-accent/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-audio-dark via-audio-dark/30 to-transparent"></div>
             </div>
             
             <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -133,13 +161,13 @@ const ConsumerDashboard = () => {
                   
                   <div className="flex gap-3">
                     <Button 
-                      className="bg-audio-accent hover:bg-audio-accent-light text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3"
+                      className="border border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3 backdrop-blur-sm"
                     >
                       <Shuffle size={14} />
                       Lecture aléatoire
                     </Button>
                     <Button 
-                      className="bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3"
+                      className="bg-transparent border border-white/10 hover:bg-white/10 text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3 backdrop-blur-sm"
                     >
                       <LayoutList size={14} />
                       Mes playlists
@@ -163,14 +191,14 @@ const ConsumerDashboard = () => {
             <input 
               type="text" 
               placeholder="Rechercher des titres, albums ou artistes..." 
-              className="w-full py-2.5 pl-10 pr-4 bg-audio-surface/20 backdrop-blur-sm border border-white/5 rounded-full focus:outline-none focus:ring-1 focus:ring-audio-accent/50 text-sm"
+              className="w-full py-2.5 pl-10 pr-4 bg-transparent backdrop-blur-sm border border-white/10 rounded-full focus:outline-none focus:ring-1 focus:ring-audio-accent/50 text-sm"
             />
           </div>
         </motion.div>
 
         {/* Tabs navigation */}
         <Tabs defaultValue="discover" className="mb-8" onValueChange={setActiveTab}>
-          <TabsList className="bg-audio-surface/20 border border-white/5 backdrop-blur-sm p-1">
+          <TabsList className="bg-transparent border border-white/10 backdrop-blur-sm p-1">
             <TabsTrigger value="discover" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
               Découvrir
             </TabsTrigger>
@@ -222,7 +250,7 @@ const ConsumerDashboard = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button 
-                          className="w-12 h-12 rounded-full bg-audio-accent/90 flex items-center justify-center hover:bg-audio-accent transition-colors"
+                          className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-audio-accent/80 transition-colors"
                           onClick={() => playSoundEffect('click')}
                         >
                           <Play size={22} fill="white" className="text-white ml-1" />
@@ -251,13 +279,13 @@ const ConsumerDashboard = () => {
                 </button>
               </div>
               
-              <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+              <Card className="bg-transparent border-white/10 backdrop-blur-sm">
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     {recommendations.map((track) => (
                       <div 
                         key={track.id}
-                        className="flex items-center justify-between hover:bg-audio-surface/30 p-2 rounded-lg transition-colors cursor-pointer"
+                        className="flex items-center justify-between hover:bg-white/5 p-2 rounded-lg transition-colors cursor-pointer"
                         onMouseEnter={() => handleTrackHover(track.id)}
                         onMouseLeave={() => handleTrackHover(null)}
                       >
@@ -266,7 +294,7 @@ const ConsumerDashboard = () => {
                             <img 
                               src={track.cover} 
                               alt={track.title} 
-                              className="w-10 h-10 object-cover rounded"
+                              className="w-10 h-10 object-cover rounded-md"
                             />
                             {hoveredTrack === track.id ? (
                               <button 
@@ -295,56 +323,28 @@ const ConsumerDashboard = () => {
               </Card>
             </section>
 
-            {/* Internet Radio Section */}
+            {/* Anecdotes Section (replacing Radio Section) */}
             <section className="mt-8">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xl font-medium text-white">Radios thématiques</h2>
+                <h2 className="text-xl font-medium text-white">Le saviez-vous?</h2>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
-                  <div className="flex flex-col items-center">
-                    <Radio size={28} className="text-purple-300 mb-2" />
-                    <h3 className="text-white text-center mb-1 font-medium">Hits Pop</h3>
-                    <p className="text-xs text-audio-light/60 text-center mb-3">Les meilleurs hits pop du moment</p>
-                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
-                      Écouter
-                    </Button>
-                  </div>
-                </Card>
-                
-                <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
-                  <div className="flex flex-col items-center">
-                    <Radio size={28} className="text-blue-300 mb-2" />
-                    <h3 className="text-white text-center mb-1 font-medium">Hip-Hop</h3>
-                    <p className="text-xs text-audio-light/60 text-center mb-3">Le meilleur du rap et du hip-hop</p>
-                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
-                      Écouter
-                    </Button>
-                  </div>
-                </Card>
-                
-                <Card className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
-                  <div className="flex flex-col items-center">
-                    <Radio size={28} className="text-orange-300 mb-2" />
-                    <h3 className="text-white text-center mb-1 font-medium">Électro</h3>
-                    <p className="text-xs text-audio-light/60 text-center mb-3">Le son électronique du moment</p>
-                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
-                      Écouter
-                    </Button>
-                  </div>
-                </Card>
-                
-                <Card className="bg-gradient-to-br from-green-500/20 to-teal-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
-                  <div className="flex flex-col items-center">
-                    <Radio size={28} className="text-green-300 mb-2" />
-                    <h3 className="text-white text-center mb-1 font-medium">Ambiance</h3>
-                    <p className="text-xs text-audio-light/60 text-center mb-3">Pour se détendre et se concentrer</p>
-                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
-                      Écouter
-                    </Button>
-                  </div>
-                </Card>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {musicAnecdotes.map((anecdote) => (
+                  <Card key={anecdote.id} className="bg-transparent backdrop-blur-sm border border-white/10 overflow-hidden rounded-xl">
+                    <CardContent className="p-4">
+                      <div className="flex gap-4 items-start">
+                        <div className="p-2 rounded-full bg-black/20 backdrop-blur-md border border-white/10">
+                          {anecdote.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-white text-sm font-medium mb-1">{anecdote.title}</h3>
+                          <p className="text-xs text-audio-light/70 leading-relaxed">{anecdote.content}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </section>
           </TabsContent>
@@ -354,7 +354,7 @@ const ConsumerDashboard = () => {
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-medium text-white">Vos playlists</h2>
               <button
-                className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors text-sm border border-audio-accent/30 px-3 py-1 rounded-full hover:bg-audio-accent/10"
+                className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors text-sm border border-audio-accent/30 px-3 py-1 rounded-full hover:bg-audio-accent/10 backdrop-blur-sm"
                 onClick={() => {
                   setShowCreatePlaylist(true);
                   playSoundEffect('click');
@@ -368,7 +368,7 @@ const ConsumerDashboard = () => {
 
             {showCreatePlaylist && (
               <motion.div 
-                className="mb-6 p-5 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm"
+                className="mb-6 p-5 rounded-lg bg-transparent border border-white/10 backdrop-blur-sm"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
@@ -376,19 +376,19 @@ const ConsumerDashboard = () => {
                 <input
                   type="text"
                   placeholder="Nom de la playlist"
-                  className="bg-audio-surface/30 border border-white/10 text-white rounded-lg py-2 px-3 w-full focus:outline-none focus:ring-1 focus:ring-audio-accent/50 mb-4 text-sm"
+                  className="bg-white/5 border border-white/10 text-white rounded-lg py-2 px-3 w-full focus:outline-none focus:ring-1 focus:ring-audio-accent/50 mb-4 text-sm"
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
                 />
                 <div className="flex justify-end gap-3">
                   <button
-                    className="px-3 py-1.5 rounded-lg text-audio-light/80 hover:text-white transition-colors text-sm border border-white/10 hover:bg-white/10"
+                    className="px-3 py-1.5 rounded-lg text-audio-light/80 hover:text-white transition-colors text-sm border border-white/10 hover:bg-white/10 backdrop-blur-sm"
                     onClick={() => setShowCreatePlaylist(false)}
                   >
                     Annuler
                   </button>
                   <button
-                    className="px-3 py-1.5 bg-audio-accent hover:bg-audio-accent-light text-white rounded-lg transition-colors text-sm"
+                    className="px-3 py-1.5 bg-transparent border border-audio-accent/30 hover:bg-audio-accent/10 text-audio-accent hover:text-audio-accent-light rounded-lg transition-colors text-sm backdrop-blur-sm"
                     onClick={handleCreatePlaylist}
                   >
                     Créer
@@ -420,7 +420,7 @@ const ConsumerDashboard = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <button 
-                        className="w-12 h-12 rounded-full bg-audio-accent/90 flex items-center justify-center hover:bg-audio-accent transition-colors"
+                        className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-audio-accent/80 transition-colors"
                         onClick={() => playSoundEffect('click')}
                       >
                         <Play size={22} fill="white" className="text-white ml-1" />
@@ -444,7 +444,7 @@ const ConsumerDashboard = () => {
                 Titres aimés
               </h2>
               {likedSongs.length > 0 && (
-                <Button className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-xs py-1.5 h-8 px-3">
+                <Button className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-xs py-1.5 h-8 px-3 backdrop-blur-sm">
                   <Play size={14} />
                   Lecture
                 </Button>
@@ -452,11 +452,11 @@ const ConsumerDashboard = () => {
             </div>
 
             {likedSongs.length === 0 ? (
-              <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+              <div className="p-8 rounded-lg bg-transparent border border-white/10 backdrop-blur-sm text-center">
                 <Disc size={32} className="mx-auto mb-3 text-audio-light/30" />
                 <p className="text-audio-light/70 mb-4 text-sm">Vous n'avez pas encore de titres aimés.</p>
                 <button 
-                  className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm"
+                  className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm backdrop-blur-sm"
                   onClick={() => playSoundEffect('click')}
                 >
                   Découvrir des titres
@@ -473,7 +473,7 @@ const ConsumerDashboard = () => {
                   <motion.div
                     key={song.id}
                     variants={item}
-                    className="bg-audio-surface/20 border border-white/5 backdrop-blur-sm rounded-lg p-3 flex items-center gap-3 hover:bg-audio-surface/30 transition-colors group"
+                    className="bg-transparent border border-white/10 backdrop-blur-sm rounded-lg p-3 flex items-center gap-3 hover:bg-white/5 transition-colors group"
                     whileHover={{ x: 4, transition: { duration: 0.2 } }}
                   >
                     <div className="relative w-12 h-12 flex-shrink-0">
@@ -509,11 +509,11 @@ const ConsumerDashboard = () => {
               </h2>
             </div>
             
-            <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+            <div className="p-8 rounded-lg bg-transparent border border-white/10 backdrop-blur-sm text-center">
               <Headphones size={32} className="mx-auto mb-3 text-audio-light/30" />
               <p className="text-audio-light/70 mb-4 text-sm">Votre historique d'écoute apparaîtra ici.</p>
               <button 
-                className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm"
+                className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm backdrop-blur-sm"
                 onClick={() => playSoundEffect('click')}
               >
                 Commencer à écouter
