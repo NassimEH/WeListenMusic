@@ -25,6 +25,7 @@ const AppHeader = ({ title = 'WeListen', isCreator = false }: AppHeaderProps) =>
     playSoundEffect('pop');
     
     if (!showSearch) {
+      // Focus the input after animation completes
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 300);
