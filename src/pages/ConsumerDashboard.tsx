@@ -2,16 +2,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
-import { Plus, Music2, Heart, ChevronRight, Play, Search, Disc, Clock, Calendar, HeadphonesIcon } from 'lucide-react';
+import { Plus, Music2, Heart, ChevronRight, Play, Search, Disc, Clock, Calendar, HeadphonesIcon, Shuffle, LayoutList, Headphones, MusicIcon, Radio } from 'lucide-react';
 import { playSoundEffect } from '@/utils/soundEffects';
 import StarBackground from '@/components/StarBackground';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ConsumerDashboard = () => {
   const { playlists, addPlaylist, likedSongs } = useApp();
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [activeTab, setActiveTab] = useState("discover");
+  const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = 'WeListen - Votre espace';
@@ -64,6 +68,22 @@ const ConsumerDashboard = () => {
     },
   ];
 
+  // Recommendations
+  const recommendations = [
+    { id: '1', title: 'La vie est belle', artist: 'Indochine', album: 'Black City Parade', cover: 'https://i.scdn.co/image/ab67616d00001e0221c06dda61a41ca711dda12c', duration: '4:05' },
+    { id: '2', title: 'Jour 1', artist: 'Louane', album: 'Chambre 12', cover: 'https://upload.wikimedia.org/wikipedia/en/9/98/Louane_-_Chambre_12.png', duration: '3:32' },
+    { id: '3', title: 'Sapés comme jamais', artist: 'Maître Gims', album: 'Mon cœur avait raison', cover: 'https://i1.sndcdn.com/artworks-sLK6Oe4dvKWLvVLB-U8S6mg-t500x500.jpg', duration: '3:12' },
+    { id: '4', title: 'Djadja', artist: 'Aya Nakamura', album: 'Nakamura', cover: 'https://upload.wikimedia.org/wikipedia/en/a/a2/Aya_Nakamura_-_Nakamura.png', duration: '2:55' },
+    { id: '5', title: 'Blinding Lights', artist: 'The Weeknd', album: 'After Hours', cover: 'https://upload.wikimedia.org/wikipedia/en/c/c1/The_Weeknd_-_After_Hours.png', duration: '3:20' },
+  ];
+
+  const handleTrackHover = (id: string | null) => {
+    if (id !== hoveredTrack) {
+      playSoundEffect('hover', 0.1);
+    }
+    setHoveredTrack(id);
+  };
+
   // Animations variants
   const container = {
     hidden: { opacity: 0 },
@@ -85,32 +105,52 @@ const ConsumerDashboard = () => {
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-audio-dark via-audio-dark/95 to-audio-dark"></div>
-        <StarBackground intensity={0.4} speed={0.25} />
+        <StarBackground intensity={0.3} speed={0.2} />
         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-audio-accent/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 -right-32 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
       
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 relative pt-6">
-        <div className="mb-8">
-          <motion.h1
-            className="text-3xl font-medium text-white mb-2 bg-clip-text text-transparent bg-gradient-audio inline-block"
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            Votre espace musical
-          </motion.h1>
-          <motion.p 
-            className="text-audio-light/70 text-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-          >
-            Explorez vos playlists, découvrez de nouveaux titres et gérez votre bibliothèque
-          </motion.p>
-        </div>
-        
+      <div className="max-w-6xl mx-auto relative pt-6 px-6">
+        {/* User stats banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative mb-8 overflow-hidden rounded-xl"
+        >
+          <div className="relative h-40 md:h-48">
+            <div className="absolute inset-0">
+              <div className="w-full h-full bg-gradient-to-r from-purple-900/30 to-audio-accent/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-audio-dark via-audio-dark/50 to-transparent"></div>
+            </div>
+            
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <div className="flex flex-col md:flex-row gap-6 items-start md:items-end">
+                <div className="flex-1">
+                  <h1 className="text-2xl md:text-3xl font-bold text-audio-light mb-2">Bonjour, Utilisateur</h1>
+                  <p className="text-sm text-audio-light/70 mb-4">Découvrez de nouveaux titres adaptés à vos goûts</p>
+                  
+                  <div className="flex gap-3">
+                    <Button 
+                      className="bg-audio-accent hover:bg-audio-accent-light text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3"
+                    >
+                      <Shuffle size={14} />
+                      Lecture aléatoire
+                    </Button>
+                    <Button 
+                      className="bg-transparent border border-white/20 hover:bg-white/10 text-white rounded-full gap-2 text-xs py-1.5 h-8 px-3"
+                    >
+                      <LayoutList size={14} />
+                      Mes playlists
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Search bar */}
         <motion.div 
           className="mb-8"
@@ -197,6 +237,116 @@ const ConsumerDashboard = () => {
                 ))}
               </motion.div>
             </section>
+
+            {/* Recommendations Section */}
+            <section className="mt-8">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl font-medium text-white">Recommandations</h2>
+                <button 
+                  className="text-audio-accent hover:text-audio-accent-light transition-colors flex items-center gap-1 text-sm"
+                  onMouseEnter={() => playSoundEffect('hover')}
+                  onClick={() => playSoundEffect('click')}
+                >
+                  Rafraîchir <ChevronRight size={14} />
+                </button>
+              </div>
+              
+              <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+                <CardContent className="p-4">
+                  <div className="space-y-1">
+                    {recommendations.map((track) => (
+                      <div 
+                        key={track.id}
+                        className="flex items-center justify-between hover:bg-audio-surface/30 p-2 rounded-lg transition-colors cursor-pointer"
+                        onMouseEnter={() => handleTrackHover(track.id)}
+                        onMouseLeave={() => handleTrackHover(null)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="relative">
+                            <img 
+                              src={track.cover} 
+                              alt={track.title} 
+                              className="w-10 h-10 object-cover rounded"
+                            />
+                            {hoveredTrack === track.id ? (
+                              <button 
+                                className="absolute inset-0 flex items-center justify-center bg-black/40"
+                                onClick={() => playSoundEffect('click')}
+                              >
+                                <Play size={16} className="text-white" />
+                              </button>
+                            ) : null}
+                          </div>
+                          <div>
+                            <h3 className="font-medium text-sm">{track.title}</h3>
+                            <p className="text-xs text-audio-light/60">{track.artist}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <span className="text-xs text-audio-light/60">{track.duration}</span>
+                          <button className="text-audio-light/40 hover:text-audio-accent">
+                            <Heart size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Internet Radio Section */}
+            <section className="mt-8">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl font-medium text-white">Radios thématiques</h2>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Card className="bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
+                  <div className="flex flex-col items-center">
+                    <Radio size={28} className="text-purple-300 mb-2" />
+                    <h3 className="text-white text-center mb-1 font-medium">Hits Pop</h3>
+                    <p className="text-xs text-audio-light/60 text-center mb-3">Les meilleurs hits pop du moment</p>
+                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
+                      Écouter
+                    </Button>
+                  </div>
+                </Card>
+                
+                <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
+                  <div className="flex flex-col items-center">
+                    <Radio size={28} className="text-blue-300 mb-2" />
+                    <h3 className="text-white text-center mb-1 font-medium">Hip-Hop</h3>
+                    <p className="text-xs text-audio-light/60 text-center mb-3">Le meilleur du rap et du hip-hop</p>
+                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
+                      Écouter
+                    </Button>
+                  </div>
+                </Card>
+                
+                <Card className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
+                  <div className="flex flex-col items-center">
+                    <Radio size={28} className="text-orange-300 mb-2" />
+                    <h3 className="text-white text-center mb-1 font-medium">Électro</h3>
+                    <p className="text-xs text-audio-light/60 text-center mb-3">Le son électronique du moment</p>
+                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
+                      Écouter
+                    </Button>
+                  </div>
+                </Card>
+                
+                <Card className="bg-gradient-to-br from-green-500/20 to-teal-500/20 backdrop-blur-sm border-white/5 p-4 rounded-xl">
+                  <div className="flex flex-col items-center">
+                    <Radio size={28} className="text-green-300 mb-2" />
+                    <h3 className="text-white text-center mb-1 font-medium">Ambiance</h3>
+                    <p className="text-xs text-audio-light/60 text-center mb-3">Pour se détendre et se concentrer</p>
+                    <Button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs rounded-full py-1 h-7">
+                      Écouter
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            </section>
           </TabsContent>
 
           {/* Tab Content: Playlists */}
@@ -204,7 +354,7 @@ const ConsumerDashboard = () => {
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-medium text-white">Vos playlists</h2>
               <button
-                className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors text-sm"
+                className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 transition-colors text-sm border border-audio-accent/30 px-3 py-1 rounded-full hover:bg-audio-accent/10"
                 onClick={() => {
                   setShowCreatePlaylist(true);
                   playSoundEffect('click');
@@ -232,7 +382,7 @@ const ConsumerDashboard = () => {
                 />
                 <div className="flex justify-end gap-3">
                   <button
-                    className="px-3 py-1.5 rounded-lg text-audio-light/80 hover:text-white transition-colors text-sm"
+                    className="px-3 py-1.5 rounded-lg text-audio-light/80 hover:text-white transition-colors text-sm border border-white/10 hover:bg-white/10"
                     onClick={() => setShowCreatePlaylist(false)}
                   >
                     Annuler
@@ -293,6 +443,12 @@ const ConsumerDashboard = () => {
                 <Heart size={18} className="text-audio-accent" />
                 Titres aimés
               </h2>
+              {likedSongs.length > 0 && (
+                <Button className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-xs py-1.5 h-8 px-3">
+                  <Play size={14} />
+                  Lecture
+                </Button>
+              )}
             </div>
 
             {likedSongs.length === 0 ? (
@@ -300,7 +456,7 @@ const ConsumerDashboard = () => {
                 <Disc size={32} className="mx-auto mb-3 text-audio-light/30" />
                 <p className="text-audio-light/70 mb-4 text-sm">Vous n'avez pas encore de titres aimés.</p>
                 <button 
-                  className="px-5 py-2 bg-audio-accent hover:bg-audio-accent-light text-white rounded-full transition-colors text-sm"
+                  className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm"
                   onClick={() => playSoundEffect('click')}
                 >
                   Découvrir des titres
@@ -354,10 +510,10 @@ const ConsumerDashboard = () => {
             </div>
             
             <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
-              <HeadphonesIcon size={32} className="mx-auto mb-3 text-audio-light/30" />
+              <Headphones size={32} className="mx-auto mb-3 text-audio-light/30" />
               <p className="text-audio-light/70 mb-4 text-sm">Votre historique d'écoute apparaîtra ici.</p>
               <button 
-                className="px-5 py-2 bg-audio-accent hover:bg-audio-accent-light text-white rounded-full transition-colors text-sm"
+                className="px-5 py-2 bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full transition-colors text-sm"
                 onClick={() => playSoundEffect('click')}
               >
                 Commencer à écouter

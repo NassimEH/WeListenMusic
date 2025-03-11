@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
+import { motion } from 'framer-motion';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -35,22 +36,27 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       <main className="flex-grow pt-16">
         <div className="container mx-auto px-6 relative">
           {/* Navigation minimaliste */}
-          <div className="flex justify-between items-center py-4 mb-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex justify-between items-center py-4 mb-4"
+          >
             <button 
               onClick={goBack}
-              className="flex items-center gap-2 text-audio-light/70 hover:text-audio-light transition-colors group"
+              className="flex items-center gap-2 text-audio-light/70 hover:text-audio-light transition-colors group border border-white/10 rounded-full px-3 py-1.5 backdrop-blur-sm bg-white/5 hover:bg-white/10"
             >
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-300" />
-              <span className="text-sm font-medium">Retour</span>
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform duration-300" />
+              <span className="text-xs font-medium">Retour</span>
             </button>
             
             <button 
               onClick={switchRole}
-              className="text-sm text-audio-accent hover:text-audio-accent-light transition-colors"
+              className="text-xs border border-audio-accent/30 text-audio-accent hover:text-audio-accent-light hover:border-audio-accent/50 transition-colors rounded-full px-3 py-1.5 backdrop-blur-sm bg-audio-accent/5"
             >
               {userRole === 'consumer' ? 'Passer en mode Créateur' : 'Passer en mode Auditeur'}
             </button>
-          </div>
+          </motion.div>
           
           {children}
         </div>

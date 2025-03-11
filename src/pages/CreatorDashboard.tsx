@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, BarChart, Users, TrendingUp, Clock, Plus, ArrowUpRight, Music, Play, Calendar, Disc, X, Image, MusicIcon, CheckCircle2 } from 'lucide-react';
+import { Upload, BarChart, Users, TrendingUp, Play, ArrowUpRight, Music, Calendar, Disc, X, Image, MusicIcon, CheckCircle2, Heart, Headphones, Album, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -10,6 +10,7 @@ import { playSoundEffect } from '@/utils/soundEffects';
 import StarBackground from '@/components/StarBackground';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
+import ArtistBanner from '@/components/creator/ArtistBanner';
 
 const CreatorDashboard = () => {
   const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
@@ -19,6 +20,9 @@ const CreatorDashboard = () => {
     description: '',
     releaseDate: '',
     duration: '',
+    tags: '',
+    genre: '',
+    explicit: false
   });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -46,12 +50,21 @@ const CreatorDashboard = () => {
     setHoveredTrack(id);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setUploadFormData({
-      ...uploadFormData,
-      [name]: value
-    });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    
+    if (type === 'checkbox') {
+      const target = e.target as HTMLInputElement;
+      setUploadFormData({
+        ...uploadFormData,
+        [name]: target.checked
+      });
+    } else {
+      setUploadFormData({
+        ...uploadFormData,
+        [name]: value
+      });
+    }
   };
 
   const handleUpload = (e: React.FormEvent) => {
@@ -75,6 +88,9 @@ const CreatorDashboard = () => {
             description: '',
             releaseDate: '',
             duration: '',
+            tags: '',
+            genre: '',
+            explicit: false
           });
           toast({
             title: "Titre téléchargé avec succès",
@@ -83,6 +99,19 @@ const CreatorDashboard = () => {
         }, 500);
       }
     }, 100);
+  };
+  
+  // Informations de l'artiste
+  const artistInfo = {
+    name: "Your Artist Name",
+    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop",
+    bio: "Artiste indépendant explorant les frontières sonores entre l'électronique, le hip-hop et la musique ambiante. Basé à Paris, je cherche à créer des paysages sonores qui racontent des histoires.",
+    stats: {
+      followers: "3.5K",
+      tracks: 24,
+      albums: 3,
+      monthlyListeners: "8.2K"
+    }
   };
   
   // Mock data for top tracks
@@ -105,30 +134,20 @@ const CreatorDashboard = () => {
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-audio-dark via-audio-dark/95 to-audio-dark"></div>
-        <StarBackground intensity={0.4} speed={0.25} />
+        <StarBackground intensity={0.3} speed={0.2} />
         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-audio-accent/5 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 -right-32 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
       
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 relative pt-6">
-        {/* Welcome section */}
-        <section className="mb-8">
-          <motion.h1 
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-medium mb-2 bg-clip-text text-transparent bg-gradient-to-r from-audio-accent to-purple-500"
-          >
-            Espace Créateur
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { delay: 0.2 } }}
-            className="text-audio-light/70 text-sm"
-          >
-            Gérez votre contenu et suivez vos performances
-          </motion.p>
-        </section>
+      <div className="max-w-6xl mx-auto relative pt-6">
+        {/* Artist Banner */}
+        <ArtistBanner 
+          name={artistInfo.name}
+          image={artistInfo.image}
+          bio={artistInfo.bio}
+          stats={artistInfo.stats}
+        />
 
         {/* Tabs navigation */}
         <Tabs defaultValue="overview" className="mb-8">
@@ -148,7 +167,7 @@ const CreatorDashboard = () => {
           </TabsList>
 
           {/* Tab Content: Overview */}
-          <TabsContent value="overview" className="mt-6">
+          <TabsContent value="overview" className="mt-6 px-6">
             {/* Quick actions */}
             <motion.section 
               initial={{ opacity: 0, y: 15 }}
@@ -158,7 +177,7 @@ const CreatorDashboard = () => {
             >
               <div className="flex flex-wrap gap-3">
                 <Button 
-                  className="bg-gradient-to-r from-audio-accent to-purple-500 hover:from-audio-accent hover:to-purple-600 gap-2 text-sm py-2 h-auto"
+                  className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
                   onClick={() => {
                     setShowUploadForm(true);
                     playSoundEffect('click');
@@ -169,7 +188,7 @@ const CreatorDashboard = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-audio-surface/20 hover:bg-audio-surface/40 gap-2 text-sm py-2 h-auto"
+                  className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white rounded-full gap-2 text-sm py-2 h-auto text-audio-light/70"
                   onClick={() => playSoundEffect('click')}
                 >
                   <BarChart size={16} />
@@ -177,7 +196,7 @@ const CreatorDashboard = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-audio-surface/20 hover:bg-audio-surface/40 gap-2 text-sm py-2 h-auto"
+                  className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white rounded-full gap-2 text-sm py-2 h-auto text-audio-light/70"
                   onClick={() => playSoundEffect('click')}
                 >
                   <Users size={16} />
@@ -245,63 +264,6 @@ const CreatorDashboard = () => {
               </div>
             </motion.section>
             
-            {/* Quick stats section */}
-            <section className="mb-8">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xl font-medium">Performance</h2>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardDescription className="text-audio-light/60 text-xs">Écoutes (30j)</CardDescription>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-4">
-                    <div className="text-xl font-medium">24.5K</div>
-                    <div className="text-xs text-green-400 flex items-center mt-1">
-                      +12% <TrendingUp size={12} className="ml-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardDescription className="text-audio-light/60 text-xs">Nouveaux fans</CardDescription>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-4">
-                    <div className="text-xl font-medium">1.2K</div>
-                    <div className="text-xs text-green-400 flex items-center mt-1">
-                      +8% <TrendingUp size={12} className="ml-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardDescription className="text-audio-light/60 text-xs">Revenus</CardDescription>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-4">
-                    <div className="text-xl font-medium">€560</div>
-                    <div className="text-xs text-green-400 flex items-center mt-1">
-                      +15% <TrendingUp size={12} className="ml-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardDescription className="text-audio-light/60 text-xs">Abonnés</CardDescription>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-4">
-                    <div className="text-xl font-medium">3.8K</div>
-                    <div className="text-xs text-green-400 flex items-center mt-1">
-                      +5% <TrendingUp size={12} className="ml-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </section>
-            
             {/* Top tracks */}
             <section>
               <div className="flex items-center justify-between mb-5">
@@ -361,11 +323,11 @@ const CreatorDashboard = () => {
           </TabsContent>
 
           {/* Upload tab content - Empty state with upload functionality */}
-          <TabsContent value="uploads" className="mt-6">
+          <TabsContent value="uploads" className="mt-6 px-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-medium">Vos titres</h2>
               <Button 
-                className="bg-audio-accent hover:bg-audio-accent-light gap-2 text-sm py-1.5 h-auto px-3"
+                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-1.5 h-auto px-3"
                 onClick={() => {
                   setShowUploadForm(true);
                   playSoundEffect('click');
@@ -375,26 +337,100 @@ const CreatorDashboard = () => {
                 Télécharger
               </Button>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+                <Music size={32} className="text-audio-light/30 mb-2" />
+                <h3 className="text-base font-medium text-audio-light/70 mb-1">Musique</h3>
+                <p className="text-xs text-audio-light/50 text-center mb-4">Tous vos titres musicaux</p>
+                <Button 
+                  variant="outline" 
+                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                >
+                  Gérer
+                </Button>
+              </Card>
+              
+              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+                <Album size={32} className="text-audio-light/30 mb-2" />
+                <h3 className="text-base font-medium text-audio-light/70 mb-1">Albums</h3>
+                <p className="text-xs text-audio-light/50 text-center mb-4">Vos compilations et albums</p>
+                <Button 
+                  variant="outline" 
+                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                >
+                  Gérer
+                </Button>
+              </Card>
+              
+              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+                <List size={32} className="text-audio-light/30 mb-2" />
+                <h3 className="text-base font-medium text-audio-light/70 mb-1">Playlists</h3>
+                <p className="text-xs text-audio-light/50 text-center mb-4">Vos playlists personnalisées</p>
+                <Button 
+                  variant="outline" 
+                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                >
+                  Gérer
+                </Button>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Tab content: Audience */}
+          <TabsContent value="audience" className="mt-6 px-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-medium">Votre audience</h2>
+            </div>
+            
+            <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+              <Users size={32} className="mx-auto mb-3 text-audio-light/30" />
+              <p className="text-audio-light/70 mb-2 text-sm">Voyez qui vous écoute et d'où vient votre audience</p>
+              <p className="text-audio-light/50 mb-4 text-xs">Les données d'audience sont mises à jour quotidiennement</p>
+              <Button 
+                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
+              >
+                Analyser mon audience
+              </Button>
+            </div>
+          </TabsContent>
+          
+          {/* Tab content: Activity */}
+          <TabsContent value="activity" className="mt-6 px-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-medium">Activité récente</h2>
+            </div>
+            
+            <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+              <Heart size={32} className="mx-auto mb-3 text-audio-light/30" />
+              <p className="text-audio-light/70 mb-2 text-sm">Voyez qui interagit avec votre musique</p>
+              <p className="text-audio-light/50 mb-4 text-xs">Likes, partages, commentaires et plus encore</p>
+              <Button 
+                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
+              >
+                Voir l'activité
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* Upload Modal */}
+      {/* Upload Modal - Improved Apple-inspired design */}
       {showUploadForm && (
         <motion.div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div 
-            className="bg-audio-surface/90 backdrop-blur-md border border-white/10 rounded-lg w-full max-w-md"
+            className="bg-audio-surface/30 backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-xl"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
           >
             <div className="flex items-center justify-between p-4 border-b border-white/10">
-              <h3 className="font-medium">Télécharger un nouveau titre</h3>
+              <h3 className="font-medium text-audio-light">Télécharger un nouveau titre</h3>
               <button 
                 className="text-audio-light/60 hover:text-audio-light transition-colors"
                 onClick={() => setShowUploadForm(false)}
@@ -403,7 +439,7 @@ const CreatorDashboard = () => {
               </button>
             </div>
             
-            <form onSubmit={handleUpload} className="p-4">
+            <form onSubmit={handleUpload} className="p-5">
               {isUploading ? (
                 <div className="text-center py-8">
                   <div className="mb-6">
@@ -424,16 +460,38 @@ const CreatorDashboard = () => {
               ) : (
                 <>
                   <div className="space-y-4 mb-6">
-                    <div>
-                      <label className="block text-sm text-audio-light/70 mb-1">Titre *</label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={uploadFormData.title}
-                        onChange={handleInputChange}
-                        className="w-full bg-audio-surface/50 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
-                        required
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="col-span-2 md:col-span-1">
+                        <label className="block text-sm text-audio-light/70 mb-1">Titre *</label>
+                        <input
+                          type="text"
+                          name="title"
+                          value={uploadFormData.title}
+                          onChange={handleInputChange}
+                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="col-span-2 md:col-span-1">
+                        <label className="block text-sm text-audio-light/70 mb-1">Genre *</label>
+                        <select
+                          name="genre"
+                          value={uploadFormData.genre}
+                          onChange={handleInputChange}
+                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50 appearance-none"
+                          required
+                        >
+                          <option value="">Sélectionner un genre</option>
+                          <option value="rap">Rap</option>
+                          <option value="pop">Pop</option>
+                          <option value="rock">Rock</option>
+                          <option value="electronic">Électronique</option>
+                          <option value="jazz">Jazz</option>
+                          <option value="classical">Classique</option>
+                          <option value="other">Autre</option>
+                        </select>
+                      </div>
                     </div>
                     
                     <div>
@@ -442,7 +500,7 @@ const CreatorDashboard = () => {
                         name="description"
                         value={uploadFormData.description}
                         onChange={handleInputChange}
-                        className="w-full bg-audio-surface/50 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50 min-h-[80px]"
+                        className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50 min-h-[80px]"
                       />
                     </div>
                     
@@ -454,7 +512,7 @@ const CreatorDashboard = () => {
                           name="releaseDate"
                           value={uploadFormData.releaseDate}
                           onChange={handleInputChange}
-                          className="w-full bg-audio-surface/50 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                           required
                         />
                       </div>
@@ -467,53 +525,79 @@ const CreatorDashboard = () => {
                           value={uploadFormData.duration}
                           onChange={handleInputChange}
                           placeholder="Ex: 3:45"
-                          className="w-full bg-audio-surface/50 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                           required
                         />
                       </div>
                     </div>
                     
-                    <div className="space-y-2">
-                      <label className="block text-sm text-audio-light/70 mb-1">Fichier audio *</label>
-                      <div className="border-2 border-dashed border-white/10 rounded-lg p-6 text-center">
-                        <MusicIcon size={24} className="mx-auto mb-2 text-audio-light/40" />
-                        <p className="text-audio-light/60 text-sm mb-2">Glissez votre fichier audio ici ou</p>
-                        <button 
-                          type="button"
-                          className="px-3 py-1.5 bg-audio-accent/20 text-audio-accent rounded-lg text-sm hover:bg-audio-accent/30 transition-colors"
-                        >
-                          Parcourir
-                        </button>
-                      </div>
+                    <div>
+                      <label className="block text-sm text-audio-light/70 mb-1">Tags (séparés par des virgules)</label>
+                      <input
+                        type="text"
+                        name="tags"
+                        value={uploadFormData.tags}
+                        onChange={handleInputChange}
+                        placeholder="Ex: hip-hop, rap français, summer"
+                        className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                      />
                     </div>
                     
-                    <div className="space-y-2">
-                      <label className="block text-sm text-audio-light/70 mb-1">Image de couverture *</label>
-                      <div className="border-2 border-dashed border-white/10 rounded-lg p-6 text-center">
-                        <Image size={24} className="mx-auto mb-2 text-audio-light/40" />
-                        <p className="text-audio-light/60 text-sm mb-2">Glissez votre image ici ou</p>
-                        <button 
-                          type="button"
-                          className="px-3 py-1.5 bg-audio-accent/20 text-audio-accent rounded-lg text-sm hover:bg-audio-accent/30 transition-colors"
-                        >
-                          Parcourir
-                        </button>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="explicit"
+                        name="explicit"
+                        checked={uploadFormData.explicit}
+                        onChange={(e) => handleInputChange(e as any)}
+                        className="mr-2 h-4 w-4"
+                      />
+                      <label htmlFor="explicit" className="text-sm text-audio-light/70">Contenu explicite</label>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                      <div className="space-y-2">
+                        <label className="block text-sm text-audio-light/70 mb-1">Fichier audio *</label>
+                        <div className="border border-dashed border-white/10 rounded-lg p-6 text-center">
+                          <MusicIcon size={24} className="mx-auto mb-2 text-audio-light/40" />
+                          <p className="text-audio-light/60 text-xs mb-2">Glissez votre fichier audio ici ou</p>
+                          <button 
+                            type="button"
+                            className="px-3 py-1.5 border border-audio-accent/30 bg-transparent text-audio-accent rounded-lg text-xs hover:bg-audio-accent/10 transition-colors"
+                          >
+                            Parcourir
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm text-audio-light/70 mb-1">Image de couverture *</label>
+                        <div className="border border-dashed border-white/10 rounded-lg p-6 text-center">
+                          <Image size={24} className="mx-auto mb-2 text-audio-light/40" />
+                          <p className="text-audio-light/60 text-xs mb-2">Glissez votre image ici ou</p>
+                          <button 
+                            type="button"
+                            className="px-3 py-1.5 border border-audio-accent/30 bg-transparent text-audio-accent rounded-lg text-xs hover:bg-audio-accent/10 transition-colors"
+                          >
+                            Parcourir
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex justify-end gap-3 pt-2">
+                  <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
                     <Button
                       type="button"
                       variant="outline"
-                      className="border-white/10 hover:bg-audio-surface/50 text-sm py-1.5 h-auto px-3"
+                      className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white text-sm py-1.5 h-auto px-3 rounded-lg"
                       onClick={() => setShowUploadForm(false)}
                     >
                       Annuler
                     </Button>
                     <Button
                       type="submit"
-                      className="bg-audio-accent hover:bg-audio-accent-light text-sm py-1.5 h-auto px-3"
+                      className="bg-audio-accent hover:bg-audio-accent-light text-sm py-1.5 h-auto px-4 rounded-lg"
                     >
                       Télécharger
                     </Button>
