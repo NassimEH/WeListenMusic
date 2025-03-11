@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -89,6 +88,14 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           {children}
         </div>
       </main>
+      
+      {/* Synthetic neon light effect */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[500px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
+        <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
+        <div className="absolute bottom-3 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent animate-pulse-soft"></div>
+        <div className="absolute bottom-6 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/20 to-transparent animate-pulse-soft"></div>
+      </div>
       
       {/* Elegant sidebar with Apple-inspired design */}
       <AnimatePresence>
