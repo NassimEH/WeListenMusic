@@ -4,10 +4,12 @@ import { cn } from '@/lib/utils';
 import { Play, Headphones } from 'lucide-react';
 import StarBackground from './StarBackground';
 import { useNavigate } from 'react-router-dom';
+import { useApp } from '@/contexts/AppContext';
 import { playSoundEffect } from '@/utils/soundEffects';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { userRole, setUserRole } = useApp();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
@@ -80,6 +82,8 @@ const HeroSection = () => {
 
   const handleStartListening = () => {
     playSoundEffect('click');
+    // Reset user role when navigating to role selection
+    setUserRole(null);
     navigate('/app');
   };
 

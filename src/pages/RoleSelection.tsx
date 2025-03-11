@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { Music, Mic2 } from 'lucide-react';
+import { Music, Mic2, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import StarBackground from '@/components/StarBackground';
 import { playSoundEffect } from '@/utils/soundEffects';
@@ -26,6 +26,11 @@ const RoleSelection = () => {
     navigate(`/app/${role}`);
   };
 
+  const handleBack = () => {
+    playSoundEffect('click');
+    navigate('/');
+  };
+
   return (
     <div className="relative min-h-screen bg-audio-dark flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-radial from-audio-dark via-audio-dark to-black opacity-90 z-0"></div>
@@ -34,6 +39,18 @@ const RoleSelection = () => {
       
       <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-audio-accent/10 rounded-full blur-3xl"></div>
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="absolute top-6 left-6 text-audio-light/70 hover:text-white flex items-center gap-2 z-50"
+        onClick={handleBack}
+        onMouseEnter={() => playSoundEffect('hover')}
+      >
+        <ArrowLeft size={20} />
+        <span>Retour</span>
+      </motion.button>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -65,8 +82,8 @@ const RoleSelection = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            whileHover={{ scale: 1.03 }}
-            className="glass rounded-xl p-8 text-center cursor-pointer hover:bg-audio-surface/40 transition-all"
+            whileHover={{ scale: 1.03, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+            className="bg-audio-surface/20 backdrop-blur-sm border border-white/5 rounded-xl p-8 text-center cursor-pointer hover:bg-audio-surface/30 transition-all"
             onClick={() => handleRoleSelect('consumer')}
           >
             <div className="w-20 h-20 mx-auto bg-gradient-audio rounded-full flex items-center justify-center mb-6 shadow-neon">
@@ -85,8 +102,8 @@ const RoleSelection = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
-            whileHover={{ scale: 1.03 }}
-            className="glass rounded-xl p-8 text-center cursor-pointer hover:bg-audio-surface/40 transition-all"
+            whileHover={{ scale: 1.03, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+            className="bg-audio-surface/20 backdrop-blur-sm border border-white/5 rounded-xl p-8 text-center cursor-pointer hover:bg-audio-surface/30 transition-all"
             onClick={() => handleRoleSelect('creator')}
           >
             <div className="w-20 h-20 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-6 shadow-neon">
@@ -101,21 +118,6 @@ const RoleSelection = () => {
             </div>
           </motion.div>
         </div>
-        
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="text-center mt-8"
-        >
-          <a 
-            href="/" 
-            className="text-audio-light/60 hover:text-audio-light transition-colors"
-            onClick={() => playSoundEffect('hover')}
-          >
-            Retour à l'accueil
-          </a>
-        </motion.div>
       </motion.div>
     </div>
   );
