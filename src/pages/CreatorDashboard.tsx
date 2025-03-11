@@ -177,29 +177,33 @@ const CreatorDashboard = () => {
             >
               <div className="flex flex-wrap gap-3">
                 <Button 
-                  className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
+                  variant="accent"
+                  size="pill"
+                  className="gap-2"
                   onClick={() => {
                     setShowUploadForm(true);
                     playSoundEffect('click');
                   }}
                 >
-                  <Upload size={16} />
+                  <Upload size={14} />
                   Télécharger un titre
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white rounded-full gap-2 text-sm py-2 h-auto text-audio-light/70"
+                  size="pill"
+                  className="gap-2 text-audio-light/70"
                   onClick={() => playSoundEffect('click')}
                 >
-                  <BarChart size={16} />
+                  <BarChart size={14} />
                   Statistiques
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white rounded-full gap-2 text-sm py-2 h-auto text-audio-light/70"
+                  size="pill"
+                  className="gap-2 text-audio-light/70"
                   onClick={() => playSoundEffect('click')}
                 >
-                  <Users size={16} />
+                  <Users size={14} />
                   Communauté
                 </Button>
               </div>
@@ -228,7 +232,7 @@ const CreatorDashboard = () => {
                   <motion.div
                     key={index}
                     variants={item}
-                    className="bg-audio-surface/20 backdrop-blur-sm border border-white/5 rounded-lg overflow-hidden hover:shadow-lg hover:shadow-audio-accent/5 transition-shadow duration-300"
+                    className="backdrop-blur-sm border border-white/5 rounded-lg overflow-hidden hover:shadow-lg hover:shadow-audio-accent/5 transition-shadow duration-300"
                     whileHover={{ y: -4, transition: { duration: 0.2 } }}
                   >
                     <div className="relative aspect-square">
@@ -239,10 +243,10 @@ const CreatorDashboard = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <button 
-                          className="w-12 h-12 rounded-full bg-audio-accent/90 flex items-center justify-center hover:bg-audio-accent transition-colors"
+                          className="w-10 h-10 rounded-full bg-audio-accent/90 flex items-center justify-center hover:bg-audio-accent transition-colors"
                           onClick={() => playSoundEffect('click')}
                         >
-                          <Play size={22} fill="white" className="text-white ml-1" />
+                          <Play size={18} fill="white" className="text-white ml-0.5" />
                         </button>
                       </div>
                     </div>
@@ -264,7 +268,7 @@ const CreatorDashboard = () => {
               </div>
             </motion.section>
             
-            {/* Top tracks */}
+            {/* Top tracks - Fixed to remove gray background */}
             <section>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-xl font-medium">Titres populaires</h2>
@@ -277,13 +281,13 @@ const CreatorDashboard = () => {
                 </a>
               </div>
               
-              <Card className="bg-audio-surface/20 border-white/5 backdrop-blur-sm">
+              <Card className="backdrop-blur-sm border-white/5 bg-transparent">
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     {topTracks.map((track) => (
                       <div 
                         key={track.id}
-                        className="flex items-center justify-between hover:bg-audio-surface/30 p-2 rounded-lg transition-colors cursor-pointer"
+                        className="flex items-center justify-between hover:bg-white/5 p-2 rounded-lg transition-colors cursor-pointer"
                         onMouseEnter={() => handleTrackHover(track.id)}
                         onMouseLeave={() => handleTrackHover(null)}
                       >
@@ -322,12 +326,14 @@ const CreatorDashboard = () => {
             </section>
           </TabsContent>
 
-          {/* Upload tab content - Empty state with upload functionality */}
+          {/* Upload tab content - Improved with transparent styling */}
           <TabsContent value="uploads" className="mt-6 px-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-medium">Vos titres</h2>
               <Button 
-                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-1.5 h-auto px-3"
+                variant="accent"
+                size="pill"
+                className="gap-2"
                 onClick={() => {
                   setShowUploadForm(true);
                   playSoundEffect('click');
@@ -339,37 +345,40 @@ const CreatorDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
-              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+              <Card className="flex flex-col items-center justify-center p-6 h-48 backdrop-blur-sm bg-transparent border-dashed border-white/10">
                 <Music size={32} className="text-audio-light/30 mb-2" />
                 <h3 className="text-base font-medium text-audio-light/70 mb-1">Musique</h3>
                 <p className="text-xs text-audio-light/50 text-center mb-4">Tous vos titres musicaux</p>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                  size="pill"
+                  className="text-xs"
                 >
                   Gérer
                 </Button>
               </Card>
               
-              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+              <Card className="flex flex-col items-center justify-center p-6 h-48 backdrop-blur-sm bg-transparent border-dashed border-white/10">
                 <Album size={32} className="text-audio-light/30 mb-2" />
                 <h3 className="text-base font-medium text-audio-light/70 mb-1">Albums</h3>
                 <p className="text-xs text-audio-light/50 text-center mb-4">Vos compilations et albums</p>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                  size="pill"
+                  className="text-xs"
                 >
                   Gérer
                 </Button>
               </Card>
               
-              <Card className="flex flex-col items-center justify-center p-6 h-48 bg-audio-surface/10 border-dashed border-white/10">
+              <Card className="flex flex-col items-center justify-center p-6 h-48 backdrop-blur-sm bg-transparent border-dashed border-white/10">
                 <List size={32} className="text-audio-light/30 mb-2" />
                 <h3 className="text-base font-medium text-audio-light/70 mb-1">Playlists</h3>
                 <p className="text-xs text-audio-light/50 text-center mb-4">Vos playlists personnalisées</p>
                 <Button 
                   variant="outline" 
-                  className="border-white/10 bg-transparent hover:bg-white/10 rounded-full text-xs h-8 px-3"
+                  size="pill"
+                  className="text-xs"
                 >
                   Gérer
                 </Button>
@@ -383,13 +392,11 @@ const CreatorDashboard = () => {
               <h2 className="text-xl font-medium">Votre audience</h2>
             </div>
             
-            <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+            <div className="p-8 rounded-lg backdrop-blur-sm border border-white/5 bg-transparent text-center">
               <Users size={32} className="mx-auto mb-3 text-audio-light/30" />
               <p className="text-audio-light/70 mb-2 text-sm">Voyez qui vous écoute et d'où vient votre audience</p>
               <p className="text-audio-light/50 mb-4 text-xs">Les données d'audience sont mises à jour quotidiennement</p>
-              <Button 
-                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
-              >
+              <Button variant="accent" size="pill">
                 Analyser mon audience
               </Button>
             </div>
@@ -401,13 +408,11 @@ const CreatorDashboard = () => {
               <h2 className="text-xl font-medium">Activité récente</h2>
             </div>
             
-            <div className="p-8 rounded-lg bg-audio-surface/20 border border-white/5 backdrop-blur-sm text-center">
+            <div className="p-8 rounded-lg backdrop-blur-sm border border-white/5 bg-transparent text-center">
               <Heart size={32} className="mx-auto mb-3 text-audio-light/30" />
               <p className="text-audio-light/70 mb-2 text-sm">Voyez qui interagit avec votre musique</p>
               <p className="text-audio-light/50 mb-4 text-xs">Likes, partages, commentaires et plus encore</p>
-              <Button 
-                className="bg-transparent border border-audio-accent/30 text-audio-accent hover:bg-audio-accent/10 hover:text-audio-accent-light rounded-full gap-2 text-sm py-2 h-auto"
-              >
+              <Button variant="accent" size="pill">
                 Voir l'activité
               </Button>
             </div>
@@ -415,36 +420,37 @@ const CreatorDashboard = () => {
         </Tabs>
       </div>
 
-      {/* Upload Modal - Improved Apple-inspired design */}
+      {/* Improved Upload Modal - Apple-inspired design with transparent elements */}
       {showUploadForm && (
         <motion.div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div 
-            className="bg-audio-surface/30 backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-xl"
+            className="bg-transparent backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md overflow-hidden"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20 }}
           >
             <div className="flex items-center justify-between p-4 border-b border-white/10">
-              <h3 className="font-medium text-audio-light">Télécharger un nouveau titre</h3>
+              <h3 className="font-medium text-audio-light text-sm">Nouveau titre</h3>
               <button 
-                className="text-audio-light/60 hover:text-audio-light transition-colors"
+                className="text-audio-light/60 hover:text-audio-light transition-colors rounded-full w-6 h-6 flex items-center justify-center hover:bg-white/5"
                 onClick={() => setShowUploadForm(false)}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
             
             <form onSubmit={handleUpload} className="p-5">
               {isUploading ? (
-                <div className="text-center py-8">
-                  <div className="mb-6">
-                    <Progress value={uploadProgress} className="h-1 bg-audio-surface/30" />
-                    <p className="text-sm mt-2 text-audio-light/70">Téléchargement en cours... {uploadProgress}%</p>
+                <div className="text-center py-6">
+                  <div className="mb-4">
+                    <Progress value={uploadProgress} className="h-0.5 bg-audio-surface/30" />
+                    <p className="text-xs mt-2 text-audio-light/70">Téléchargement en cours... {uploadProgress}%</p>
                   </div>
                   {uploadProgress === 100 && (
                     <motion.div
@@ -452,37 +458,37 @@ const CreatorDashboard = () => {
                       animate={{ scale: 1, opacity: 1 }}
                       className="flex flex-col items-center"
                     >
-                      <CheckCircle2 className="text-green-400 mb-2" size={32} />
-                      <p className="font-medium">Téléchargement réussi!</p>
+                      <CheckCircle2 className="text-green-400 mb-2" size={28} />
+                      <p className="font-medium text-sm">Téléchargement réussi!</p>
                     </motion.div>
                   )}
                 </div>
               ) : (
                 <>
-                  <div className="space-y-4 mb-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="space-y-3 mb-5 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                       <div className="col-span-2 md:col-span-1">
-                        <label className="block text-sm text-audio-light/70 mb-1">Titre *</label>
+                        <label className="block text-xs text-audio-light/70 mb-1">Titre *</label>
                         <input
                           type="text"
                           name="title"
                           value={uploadFormData.title}
                           onChange={handleInputChange}
-                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                           required
                         />
                       </div>
                       
                       <div className="col-span-2 md:col-span-1">
-                        <label className="block text-sm text-audio-light/70 mb-1">Genre *</label>
+                        <label className="block text-xs text-audio-light/70 mb-1">Genre *</label>
                         <select
                           name="genre"
                           value={uploadFormData.genre}
                           onChange={handleInputChange}
-                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50 appearance-none"
+                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 appearance-none"
                           required
                         >
-                          <option value="">Sélectionner un genre</option>
+                          <option value="">Sélectionner</option>
                           <option value="rap">Rap</option>
                           <option value="pop">Pop</option>
                           <option value="rock">Rock</option>
@@ -495,51 +501,51 @@ const CreatorDashboard = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm text-audio-light/70 mb-1">Description</label>
+                      <label className="block text-xs text-audio-light/70 mb-1">Description</label>
                       <textarea
                         name="description"
                         value={uploadFormData.description}
                         onChange={handleInputChange}
-                        className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50 min-h-[80px]"
+                        className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 min-h-[60px] resize-none"
                       />
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-sm text-audio-light/70 mb-1">Date de sortie *</label>
+                        <label className="block text-xs text-audio-light/70 mb-1">Date de sortie *</label>
                         <input
                           type="date"
                           name="releaseDate"
                           value={uploadFormData.releaseDate}
                           onChange={handleInputChange}
-                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                           required
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm text-audio-light/70 mb-1">Durée *</label>
+                        <label className="block text-xs text-audio-light/70 mb-1">Durée *</label>
                         <input
                           type="text"
                           name="duration"
                           value={uploadFormData.duration}
                           onChange={handleInputChange}
                           placeholder="Ex: 3:45"
-                          className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                           required
                         />
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm text-audio-light/70 mb-1">Tags (séparés par des virgules)</label>
+                      <label className="block text-xs text-audio-light/70 mb-1">Tags (séparés par des virgules)</label>
                       <input
                         type="text"
                         name="tags"
                         value={uploadFormData.tags}
                         onChange={handleInputChange}
                         placeholder="Ex: hip-hop, rap français, summer"
-                        className="w-full bg-audio-surface/30 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
+                        className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50"
                       />
                     </div>
                     
@@ -550,34 +556,32 @@ const CreatorDashboard = () => {
                         name="explicit"
                         checked={uploadFormData.explicit}
                         onChange={(e) => handleInputChange(e as any)}
-                        className="mr-2 h-4 w-4"
+                        className="mr-2 h-3.5 w-3.5"
                       />
-                      <label htmlFor="explicit" className="text-sm text-audio-light/70">Contenu explicite</label>
+                      <label htmlFor="explicit" className="text-xs text-audio-light/70">Contenu explicite</label>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                      <div className="space-y-2">
-                        <label className="block text-sm text-audio-light/70 mb-1">Fichier audio *</label>
-                        <div className="border border-dashed border-white/10 rounded-lg p-6 text-center">
-                          <MusicIcon size={24} className="mx-auto mb-2 text-audio-light/40" />
-                          <p className="text-audio-light/60 text-xs mb-2">Glissez votre fichier audio ici ou</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                      <div className="space-y-1">
+                        <label className="block text-xs text-audio-light/70 mb-1">Fichier audio *</label>
+                        <div className="border border-dashed border-white/10 rounded-md p-4 text-center">
+                          <MusicIcon size={20} className="mx-auto mb-2 text-audio-light/40" />
                           <button 
                             type="button"
-                            className="px-3 py-1.5 border border-audio-accent/30 bg-transparent text-audio-accent rounded-lg text-xs hover:bg-audio-accent/10 transition-colors"
+                            className="px-3 py-1 border border-audio-accent/30 bg-transparent text-audio-accent rounded-full text-xs hover:bg-audio-accent/10 transition-colors"
                           >
                             Parcourir
                           </button>
                         </div>
                       </div>
                       
-                      <div className="space-y-2">
-                        <label className="block text-sm text-audio-light/70 mb-1">Image de couverture *</label>
-                        <div className="border border-dashed border-white/10 rounded-lg p-6 text-center">
-                          <Image size={24} className="mx-auto mb-2 text-audio-light/40" />
-                          <p className="text-audio-light/60 text-xs mb-2">Glissez votre image ici ou</p>
+                      <div className="space-y-1">
+                        <label className="block text-xs text-audio-light/70 mb-1">Image de couverture *</label>
+                        <div className="border border-dashed border-white/10 rounded-md p-4 text-center">
+                          <Image size={20} className="mx-auto mb-2 text-audio-light/40" />
                           <button 
                             type="button"
-                            className="px-3 py-1.5 border border-audio-accent/30 bg-transparent text-audio-accent rounded-lg text-xs hover:bg-audio-accent/10 transition-colors"
+                            className="px-3 py-1 border border-audio-accent/30 bg-transparent text-audio-accent rounded-full text-xs hover:bg-audio-accent/10 transition-colors"
                           >
                             Parcourir
                           </button>
@@ -586,18 +590,21 @@ const CreatorDashboard = () => {
                     </div>
                   </div>
                   
-                  <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
+                  <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
                     <Button
                       type="button"
                       variant="outline"
-                      className="border-white/10 bg-transparent hover:bg-white/10 hover:text-white text-sm py-1.5 h-auto px-3 rounded-lg"
+                      size="sm"
+                      className="text-xs rounded-full"
                       onClick={() => setShowUploadForm(false)}
                     >
                       Annuler
                     </Button>
                     <Button
                       type="submit"
-                      className="bg-audio-accent hover:bg-audio-accent-light text-sm py-1.5 h-auto px-4 rounded-lg"
+                      variant="accent" 
+                      size="sm"
+                      className="text-xs rounded-full"
                     >
                       Télécharger
                     </Button>
@@ -608,6 +615,14 @@ const CreatorDashboard = () => {
           </motion.div>
         </motion.div>
       )}
+      
+      {/* Synthwave neon light effect - Enhanced */}
+      <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-40">
+        <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[300px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
+        <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
+        <div className="absolute bottom-3 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent animate-pulse-soft"></div>
+        <div className="absolute bottom-6 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/20 to-transparent animate-pulse-soft" style={{ animationDelay: '0.5s' }}></div>
+      </div>
     </div>
   );
 };
