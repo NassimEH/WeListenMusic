@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, BarChart, Users, TrendingUp, Play, ArrowUpRight, Music, Calendar, Disc, X, Image, MusicIcon, CheckCircle2, Heart, Headphones, Album, List } from 'lucide-react';
@@ -485,17 +484,18 @@ const CreatorDashboard = () => {
                           name="genre"
                           value={uploadFormData.genre}
                           onChange={handleInputChange}
-                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 appearance-none"
+                          className="w-full bg-audio-surface/20 border border-white/10 rounded-md px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-audio-accent/50 text-audio-light appearance-none"
                           required
+                          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 0.5rem center", backgroundSize: "1rem" }}
                         >
-                          <option value="">Sélectionner</option>
-                          <option value="rap">Rap</option>
-                          <option value="pop">Pop</option>
-                          <option value="rock">Rock</option>
-                          <option value="electronic">Électronique</option>
-                          <option value="jazz">Jazz</option>
-                          <option value="classical">Classique</option>
-                          <option value="other">Autre</option>
+                          <option value="" className="bg-audio-dark text-audio-light">Sélectionner</option>
+                          <option value="rap" className="bg-audio-dark text-audio-light">Rap</option>
+                          <option value="pop" className="bg-audio-dark text-audio-light">Pop</option>
+                          <option value="rock" className="bg-audio-dark text-audio-light">Rock</option>
+                          <option value="electronic" className="bg-audio-dark text-audio-light">Électronique</option>
+                          <option value="jazz" className="bg-audio-dark text-audio-light">Jazz</option>
+                          <option value="classical" className="bg-audio-dark text-audio-light">Classique</option>
+                          <option value="other" className="bg-audio-dark text-audio-light">Autre</option>
                         </select>
                       </div>
                     </div>

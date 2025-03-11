@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -81,7 +82,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               onClick={switchRole}
               className="text-xs border border-audio-accent/30 text-audio-accent hover:text-audio-accent-light transition-colors rounded-full px-3 py-1.5 backdrop-blur-sm bg-transparent hover:bg-audio-accent/10"
             >
-              {userRole === 'consumer' ? 'Passer en mode Créateur' : 'Passer en mode Auditeur'}
+              {userRole === 'creator' ? 'Passer en mode Auditeur' : 'Passer en mode Créateur'}
             </button>
           </motion.div>
           
@@ -158,7 +159,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         )}
       </AnimatePresence>
       
-      {/* Synthwave neon light effect */}
+      {/* Synthwave neon light effect - Enhanced */}
       <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-40">
         <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[300px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
         <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Calendar, Music, Clock, PlayCircle, Heart, Share2, PencilLine } from 'lucide-react';
+import { Users, Calendar, Music, Clock, PlayCircle, Heart, Share2, PencilLine, X, Image, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +21,8 @@ interface ArtistBannerProps {
 const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) => {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [editedBio, setEditedBio] = useState(bio);
+  const [showProfilePhotoModal, setShowProfilePhotoModal] = useState(false);
+  const [showCoverPhotoModal, setShowCoverPhotoModal] = useState(false);
   const { toast } = useToast();
 
   const handleBioSave = () => {
@@ -47,7 +49,10 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-audio-dark via-audio-dark/80 to-transparent"></div>
-          <button className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-audio-light/70 hover:text-audio-light bg-black/20 backdrop-blur-sm hover:bg-black/30 rounded-full p-2">
+          <button 
+            className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-audio-light/70 hover:text-audio-light bg-black/20 backdrop-blur-sm hover:bg-black/30 rounded-full p-2"
+            onClick={() => setShowCoverPhotoModal(true)}
+          >
             <PencilLine size={16} />
           </button>
         </div>
@@ -62,7 +67,10 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
                 alt={name} 
                 className="w-full h-full object-cover"
               />
-              <button className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <button 
+                className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                onClick={() => setShowProfilePhotoModal(true)}
+              >
                 <PencilLine size={16} className="text-white" />
               </button>
             </div>
@@ -121,7 +129,8 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
                 <textarea
                   value={editedBio}
                   onChange={(e) => setEditedBio(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-sm text-audio-light/60 focus:outline-none focus:ring-1 focus:ring-audio-accent/30 min-h-[100px] resize-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-sm text-audio-light/60 focus:outline-none focus:ring-1 focus:ring-audio-accent/30 min-h-[120px] resize-none"
+                  style={{ width: '100%', minWidth: '300px', maxWidth: '500px' }}
                 />
                 <div className="flex gap-2 mt-2">
                   <Button
@@ -164,6 +173,154 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
           </Button>
         </div>
       </div>
+
+      {/* Profile Photo Upload Modal */}
+      {showProfilePhotoModal && (
+        <motion.div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="bg-transparent backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md overflow-hidden"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20 }}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <h3 className="font-medium text-audio-light text-sm">Modifier la photo de profil</h3>
+              <button 
+                className="text-audio-light/60 hover:text-audio-light transition-colors rounded-full w-6 h-6 flex items-center justify-center hover:bg-white/5"
+                onClick={() => setShowProfilePhotoModal(false)}
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <div className="p-5">
+              <div className="flex justify-center mb-5">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-white/10">
+                  <img src={image} alt="Profile" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              
+              <div className="border border-dashed border-white/10 rounded-md p-6 text-center mb-5">
+                <Image size={24} className="mx-auto mb-2 text-audio-light/40" />
+                <p className="text-xs text-audio-light/70 mb-3">Sélectionnez une image JPG, PNG ou GIF (taille max: 2MB)</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 text-xs rounded-full"
+                >
+                  <Upload size={14} />
+                  Télécharger une image
+                </Button>
+              </div>
+              
+              <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs rounded-full"
+                  onClick={() => setShowProfilePhotoModal(false)}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant="accent" 
+                  size="sm"
+                  className="text-xs rounded-full"
+                  onClick={() => {
+                    setShowProfilePhotoModal(false);
+                    toast({
+                      title: "Photo de profil mise à jour",
+                      description: "Votre photo de profil a été modifiée avec succès.",
+                    });
+                  }}
+                >
+                  Sauvegarder
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Cover Photo Upload Modal */}
+      {showCoverPhotoModal && (
+        <motion.div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="bg-transparent backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md overflow-hidden"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20 }}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <h3 className="font-medium text-audio-light text-sm">Modifier la photo de couverture</h3>
+              <button 
+                className="text-audio-light/60 hover:text-audio-light transition-colors rounded-full w-6 h-6 flex items-center justify-center hover:bg-white/5"
+                onClick={() => setShowCoverPhotoModal(false)}
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <div className="p-5">
+              <div className="flex justify-center mb-5">
+                <div className="w-full h-40 rounded-lg overflow-hidden border border-white/10">
+                  <img src={image} alt="Cover" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              
+              <div className="border border-dashed border-white/10 rounded-md p-6 text-center mb-5">
+                <Image size={24} className="mx-auto mb-2 text-audio-light/40" />
+                <p className="text-xs text-audio-light/70 mb-3">Pour un meilleur rendu, utilisez une image d'au moins 1400 x 400px</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 text-xs rounded-full"
+                >
+                  <Upload size={14} />
+                  Télécharger une image
+                </Button>
+              </div>
+              
+              <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs rounded-full"
+                  onClick={() => setShowCoverPhotoModal(false)}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant="accent" 
+                  size="sm"
+                  className="text-xs rounded-full"
+                  onClick={() => {
+                    setShowCoverPhotoModal(false);
+                    toast({
+                      title: "Photo de couverture mise à jour",
+                      description: "Votre photo de couverture a été modifiée avec succès.",
+                    });
+                  }}
+                >
+                  Sauvegarder
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

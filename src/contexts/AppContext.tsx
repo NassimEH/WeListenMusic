@@ -11,6 +11,8 @@ interface AppContextType {
   likedSongs: Song[];
   toggleLikeSong: (song: Song) => void;
   isSongLiked: (id: string) => boolean;
+  userProfile: UserProfile;
+  updateUserProfile: (profile: Partial<UserProfile>) => void;
 }
 
 interface Song {
@@ -29,6 +31,13 @@ interface Playlist {
   description: string;
   cover: string;
   songs: Song[];
+}
+
+interface UserProfile {
+  name: string;
+  bio: string;
+  profileImage: string;
+  coverImage: string;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -57,6 +66,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : [];
   });
   
+  const [userProfile, setUserProfile] = useState<UserProfile>(() => {
+    const saved = localStorage.getItem('userProfile');
+    return saved ? JSON.parse(saved) : {
+      name: "User Name",
+      bio: "Partagez votre expérience musicale et décrivez votre profil d'auditeur.",
+      profileImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2064&auto=format&fit=crop",
+      coverImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop"
+    };
+  });
+  
   useEffect(() => {
     localStorage.setItem('userRole', userRole || '');
   }, [userRole]);
@@ -68,6 +87,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
   }, [likedSongs]);
+  
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+  }, [userProfile]);
   
   const addPlaylist = (playlist: Playlist) => {
     setPlaylists([...playlists, playlist]);
@@ -85,6 +108,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return likedSongs.some(song => song.id === id);
   };
   
+  const updateUserProfile = (profile: Partial<UserProfile>) => {
+    setUserProfile(prev => ({ ...prev, ...profile }));
+  };
+  
   return (
     <AppContext.Provider value={{ 
       userRole, 
@@ -93,7 +120,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addPlaylist, 
       likedSongs, 
       toggleLikeSong,
-      isSongLiked
+      isSongLiked,
+      userProfile,
+      updateUserProfile
     }}>
       {children}
     </AppContext.Provider>
