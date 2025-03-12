@@ -16,7 +16,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    // Make canvas responsive
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -25,7 +24,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
-    // Star class
     class Star {
       x: number;
       y: number;
@@ -44,7 +42,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
       update() {
         this.y += this.speedY;
         
-        // Reset if off screen
         if (this.y > canvas.height) {
           this.y = 0;
           this.x = Math.random() * canvas.width;
@@ -59,7 +56,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
       }
     }
     
-    // Create stars
     const stars: Star[] = [];
     const starCount = 100 * intensity;
     
@@ -67,7 +63,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
       stars.push(new Star());
     }
     
-    // Animation loop
     let animationId: number;
     
     const animate = () => {
@@ -83,7 +78,6 @@ const StarBackground = ({ intensity = 1, speed = 1 }: StarBackgroundProps) => {
     
     animate();
     
-    // Cleanup
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationId);

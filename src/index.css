@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -119,7 +120,6 @@
     text-wrap: balance;
   }
   
-  /* Apple-inspired button styles */
   .btn-apple {
     @apply bg-transparent backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white transition-all duration-300;
     @apply hover:bg-white/10 active:scale-95;
@@ -130,24 +130,20 @@
     @apply hover:bg-audio-accent/10 hover:text-audio-accent-light active:scale-95;
   }
   
-  /* Card styles */
   .card-apple {
     @apply bg-transparent backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-sm;
     @apply transition-all duration-300 hover:border-white/20 hover:shadow-md;
   }
   
-  /* Sidebar styles */
   .sidebar-item {
     @apply flex items-center gap-2 text-sm text-audio-light/70 hover:text-audio-light py-2 px-3 rounded-lg hover:bg-white/5 transition-colors;
   }
   
-  /* Form styles */
   .form-input-apple {
     @apply bg-audio-surface/20 border border-white/10 rounded-md text-xs px-3 py-1.5;
     @apply focus:outline-none focus:ring-1 focus:ring-audio-accent/30 focus:border-audio-accent/30;
   }
 
-  /* Shadow glow effect for Apple-inspired UI */
   .shadow-glow {
     box-shadow: 0 0 10px rgba(33, 150, 243, 0.1), 
                 0 0 20px rgba(33, 150, 243, 0.05);
@@ -159,7 +155,6 @@
                 0 0 30px rgba(33, 150, 243, 0.1);
   }
 
-  /* Custom select dropdown styling - enhanced for Apple design */
   select.form-select-apple {
     @apply bg-audio-surface/20 border border-white/10 rounded-md text-xs px-3 py-1.5 appearance-none;
     @apply focus:outline-none focus:ring-1 focus:ring-audio-accent/30 focus:border-audio-accent/30;
@@ -169,7 +164,6 @@
     background-size: 1.5em 1.5em;
   }
   
-  /* Improved dropdown styling for dark backgrounds */
   select option {
     background-color: #111119;
     color: white;
@@ -182,7 +176,6 @@
   }
 }
 
-/* Animations for Synthwave effects */
 @keyframes pulse-soft {
   0%, 100% {
     opacity: 0.4;
@@ -209,7 +202,6 @@
   animation: neon-glow 2s ease-in-out infinite;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -228,19 +220,15 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Prevent blue highlight on mobile tap */
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Select dropdown styling */
 select option {
   background-color: #111119;
   color: white;
 }
-

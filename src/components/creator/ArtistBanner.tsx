@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Calendar, Music, Clock, PlayCircle, Heart, Share2, PencilLine, X, Image, Upload } from 'lucide-react';
+import { Users, Music, Clock, PlayCircle, Heart, Share2, PencilLine, X, Image, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -40,7 +40,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
       transition={{ duration: 0.5 }}
       className="relative mb-8 overflow-hidden rounded-xl"
     >
-      {/* Background Image with Gradient Overlay */}
+      {/* ARRIÈRE-PLAN: Image avec superposition de dégradé */}
       <div className="relative h-64 md:h-80">
         <div className="absolute inset-0 group">
           <img 
@@ -57,10 +57,10 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
           </button>
         </div>
         
-        {/* Content */}
+        {/* CONTENU: Informations principales */}
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <div className="flex flex-col md:flex-row gap-6 items-start md:items-end">
-            {/* Artist Image */}
+            {/* IMAGE: Photo de l'artiste */}
             <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-white/10 shadow-lg relative group">
               <img 
                 src={image} 
@@ -75,7 +75,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
               </button>
             </div>
             
-            {/* Artist Info */}
+            {/* INFO: Détails de l'artiste */}
             <div className="flex-1">
               <div className="flex items-center gap-2 text-xs text-audio-light/60 mb-1">
                 <span className="uppercase tracking-wider">Artiste vérifié</span>
@@ -97,7 +97,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
               </div>
             </div>
             
-            {/* Action Buttons */}
+            {/* ACTIONS: Boutons d'action */}
             <div className="flex gap-3 mt-4 md:mt-0">
               <Button 
                 variant="outline" 
@@ -119,7 +119,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
         </div>
       </div>
       
-      {/* Artist Bio */}
+      {/* BIO: Biographie de l'artiste */}
       <div className="p-6 bg-transparent backdrop-blur-sm rounded-b-xl border-t border-white/5">
         <div className="flex justify-between items-start">
           <div className="max-w-2xl relative">
@@ -174,7 +174,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
         </div>
       </div>
 
-      {/* Profile Photo Upload Modal */}
+      {/* MODAL: Modal d'upload de photo de profil */}
       {showProfilePhotoModal && (
         <motion.div 
           className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
@@ -248,7 +248,7 @@ const ArtistBanner: React.FC<ArtistBannerProps> = ({ name, image, bio, stats }) 
         </motion.div>
       )}
 
-      {/* Cover Photo Upload Modal */}
+      {/* MODAL: Modal d'upload de photo de couverture */}
       {showCoverPhotoModal && (
         <motion.div 
           className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"

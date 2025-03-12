@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Menu, X, Home, BarChart3, Music, User, Heart, PlayCircle, Settings, LogOut } from 'lucide-react';
+import { ArrowLeft, Menu, X, Home, Music, User, Heart, PlayCircle, Settings, LogOut } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -55,7 +55,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       
       <main className="flex-grow pt-16">
         <div className="container mx-auto px-6 relative">
-          {/* Top navigation bar */}
+          {/* NAVIGATION: Barre de navigation supérieure */}
           <motion.div 
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
@@ -91,7 +91,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         </div>
       </main>
       
-      {/* Synthetic neon light effect */}
+      {/* EFFET: Effet lumineux synthétique */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[500px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
         <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
@@ -99,7 +99,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         <div className="absolute bottom-6 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/20 to-transparent animate-pulse-soft"></div>
       </div>
       
-      {/* Elegant sidebar with Apple-inspired design */}
+      {/* SIDEBAR: Barre latérale inspirée d'Apple */}
       <AnimatePresence>
         {sidebarOpen && (
           <>
@@ -160,7 +160,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         )}
       </AnimatePresence>
       
-      {/* Synthwave neon light effect - Enhanced */}
+      {/* EFFET: Effet lumineux synthwave amélioré */}
       <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-40">
         <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[300px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
         <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
