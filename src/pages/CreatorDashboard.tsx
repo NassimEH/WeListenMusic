@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Play, ArrowUpRight, Music, Calendar, X, Image, MusicIcon, CheckCircle2, Album, List, ChevronDown } from 'lucide-react';
@@ -165,18 +164,6 @@ const CreatorDashboard = () => {
       
       {/* Content */}
       <div className="max-w-6xl mx-auto relative pt-6">
-        {/* Switch to consumer role button */}
-        <div className="absolute top-0 right-6 z-10">
-          <Button
-            variant="outline"
-            size="pill"
-            className="border-audio-accent/40 text-audio-accent hover:bg-audio-accent/10"
-            onClick={handleRoleSwitch}
-          >
-            Passer côté auditeur
-          </Button>
-        </div>
-      
         {/* Artist Banner */}
         <ArtistBanner 
           name={artistInfo.name}
@@ -185,13 +172,19 @@ const CreatorDashboard = () => {
           stats={artistInfo.stats}
         />
 
-        {/* Tabs navigation */}
+        {/* Tabs navigation - Updated styling to match Apple design */}
         <Tabs defaultValue="overview" className="mb-8">
-          <TabsList className="bg-audio-surface/20 border border-white/5 backdrop-blur-sm p-1">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
+          <TabsList className="bg-transparent backdrop-blur-sm p-1 border border-white/10 rounded-full overflow-hidden">
+            <TabsTrigger 
+              value="overview" 
+              className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-audio-accent/10 data-[state=active]:text-audio-accent data-[state=active]:backdrop-blur-md data-[state=active]:shadow-glow"
+            >
               Vue d'ensemble
             </TabsTrigger>
-            <TabsTrigger value="uploads" className="data-[state=active]:bg-audio-accent/20 data-[state=active]:text-audio-accent">
+            <TabsTrigger 
+              value="uploads" 
+              className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-audio-accent/10 data-[state=active]:text-audio-accent data-[state=active]:backdrop-blur-md data-[state=active]:shadow-glow"
+            >
               Vos titres
             </TabsTrigger>
           </TabsList>

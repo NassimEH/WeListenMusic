@@ -15,7 +15,7 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
-  const { userRole } = useApp();
+  const { userRole, setUserRole } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const goBack = () => {
@@ -24,8 +24,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   
   const switchRole = () => {
     if (userRole === 'consumer') {
+      setUserRole('creator');
       navigate('/app/creator');
     } else if (userRole === 'creator') {
+      setUserRole('consumer');
       navigate('/app/consumer');
     } else {
       navigate('/app');
@@ -36,7 +38,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     ? [
         { icon: Home, label: 'Accueil', path: '/app/creator' },
         { icon: Music, label: 'Vos titres', path: '#' },
-        { icon: BarChart3, label: 'Statistiques', path: '#' },
         { icon: User, label: 'Profil', path: '#' },
         { icon: Settings, label: 'Paramètres', path: '#' }
       ]
