@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Play, ArrowUpRight, Music, Calendar, X, Image, MusicIcon, CheckCircle2, Album, List, ChevronDown } from 'lucide-react';
@@ -611,5 +612,10 @@ const CreatorDashboard = () => {
         </motion.div>
       )}
       
-      {
+      {showSongManagement && <SongManagement onClose={() => setShowSongManagement(false)} />}
+      {showAlbumManagement && <AlbumManagement onClose={() => setShowAlbumManagement(false)} />}
+    </div>
+  );
+};
 
+export default CreatorDashboard;
