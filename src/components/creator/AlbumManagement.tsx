@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, ArrowRight, CheckSquare, Square, Album as AlbumIcon, Music } from 'lucide-react';
+import { X, ArrowRight, CheckSquare, Square, Album as AlbumIcon, Music, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useApp, Song } from '@/contexts/AppContext';
