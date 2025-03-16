@@ -45,8 +45,10 @@ const AlbumManagement: React.FC<AlbumManagementProps> = ({ onClose }) => {
   };
 
   const handleCloseAlbumForm = () => {
-    setShowAlbumForm(false);
+    // Fermer complètement le flux de création d'album, y compris la sélection des morceaux
+    onClose();
     setSelectedSongs([]);
+    setShowAlbumForm(false);
   };
 
   if (showAlbumForm) {

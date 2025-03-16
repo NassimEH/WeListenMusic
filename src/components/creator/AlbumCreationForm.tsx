@@ -8,6 +8,7 @@ import { useApp, Song, Album } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { playSoundEffect } from '@/utils/soundEffects';
+import { useNavigate } from 'react-router-dom';
 
 interface AlbumCreationFormProps {
   selectedSongs: Song[];
@@ -19,6 +20,7 @@ const AlbumCreationForm: React.FC<AlbumCreationFormProps> = ({ selectedSongs, on
   const [albumCover, setAlbumCover] = useState('');
   const { addAlbum } = useApp();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleCreateAlbum = () => {
     if (!albumTitle.trim()) {
@@ -45,7 +47,8 @@ const AlbumCreationForm: React.FC<AlbumCreationFormProps> = ({ selectedSongs, on
       description: `Votre album "${albumTitle}" a bien été créé.`
     });
     
-    onClose();
+    // Rediriger vers la page de l'artiste après la création de l'album
+    navigate('/app/creator');
   };
 
   return (
