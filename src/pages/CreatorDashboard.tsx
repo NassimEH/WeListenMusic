@@ -11,7 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
 import ArtistBanner from '@/components/creator/ArtistBanner';
 import { useApp } from '@/contexts/AppContext';
-import { useNavigate } from 'react-router-dom';
+import SongManagement from '@/components/creator/SongManagement';
+import AlbumManagement from '@/components/creator/AlbumManagement';
 
 const CreatorDashboard = () => {
   const [hoveredTrack, setHoveredTrack] = useState<string | null>(null);
@@ -27,14 +28,11 @@ const CreatorDashboard = () => {
   });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { toast } = useToast();
-  const { userRole, setUserRole } = useApp();
-  const navigate = useNavigate();
+  const [showSongManagement, setShowSongManagement] = useState(false);
+  const [showAlbumManagement, setShowAlbumManagement] = useState(false);
   
-  const handleRoleSwitch = () => {
-    setUserRole('consumer');
-    navigate('/app/consumer');
-  };
+  const { toast } = useToast();
+  const { songs, albums } = useApp();
   
   const container = {
     hidden: { opacity: 0 },
@@ -79,7 +77,6 @@ const CreatorDashboard = () => {
     e.preventDefault();
     setIsUploading(true);
     
-    // Simuler le téléchargement
     let progress = 0;
     const interval = setInterval(() => {
       progress += 5;
@@ -109,7 +106,6 @@ const CreatorDashboard = () => {
     }, 100);
   };
   
-  // Informations de l'artiste
   const artistInfo = {
     name: "Your Artist Name",
     image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop",
@@ -122,15 +118,8 @@ const CreatorDashboard = () => {
     }
   };
   
-  // Mock data for top tracks
-  const topTracks = [
-    { id: '1', title: 'DKR', streams: '850K', duration: '3:15', cover: 'https://i1.sndcdn.com/artworks-000224127351-494034-t500x500.jpg' },
-    { id: '2', title: 'GIMS', streams: '720K', duration: '4:05', cover: 'https://i1.sndcdn.com/artworks-sLK6Oe4dvKWLvVLB-U8S6mg-t500x500.jpg' },
-    { id: '3', title: 'Longueur d\'avance', streams: '540K', duration: '2:55', cover: 'https://cdn.alza.cz/Foto/ImgGalery/Image/booba-ultra-cover.jpg' },
-    { id: '4', title: 'Pitbull', streams: '480K', duration: '3:45', cover: 'https://pbs.twimg.com/media/D9XTKcYWwAEAA0W.jpg' },
-  ];
+  const topTracks = songs.slice(0, 4);
 
-  // Mock data for recent uploads
   const recentUploads = [
     { title: 'Freestyle #12', date: '15 juin 2023', streams: '45K', cover: 'https://i.scdn.co/image/ab67616d00001e02b0fe40a6e1692822115acfce' },
     { title: 'En direct du tier', date: '2 mai 2023', streams: '120K', cover: 'https://i.scdn.co/image/ab67616d00001e02a8142ce89cebb0da0505a2a5' },
@@ -139,32 +128,25 @@ const CreatorDashboard = () => {
   
   return (
     <div className="min-h-screen overflow-x-hidden pb-20">
-      {/* Background elements with enhanced synthwave effect */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-audio-dark via-audio-dark/95 to-audio-dark"></div>
         <StarBackground intensity={0.3} speed={0.2} />
         
-        {/* Enhanced Synthwave Background */}
         <div className="absolute bottom-0 left-0 right-0 h-full pointer-events-none overflow-hidden">
-          {/* Horizontal neon lines */}
           <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
           <div className="absolute bottom-4 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent animate-pulse-soft" style={{animationDelay: '0.3s'}}></div>
           <div className="absolute bottom-8 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/30 to-transparent animate-pulse-soft" style={{animationDelay: '0.6s'}}></div>
           
-          {/* Vertical neon lines */}
           <div className="absolute top-0 bottom-0 left-1/4 w-[1px] bg-gradient-to-b from-transparent via-purple-500/20 to-transparent animate-pulse-soft" style={{animationDelay: '0.9s'}}></div>
           <div className="absolute top-0 bottom-0 right-1/4 w-[1px] bg-gradient-to-b from-transparent via-audio-accent/20 to-transparent animate-pulse-soft" style={{animationDelay: '1.2s'}}></div>
           
-          {/* Glowing orbs */}
           <div className="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full bg-purple-500/5 blur-3xl animate-pulse-soft"></div>
           <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-audio-accent/5 blur-3xl animate-pulse-soft" style={{animationDelay: '0.8s'}}></div>
           <div className="absolute top-1/2 left-1/3 w-32 h-32 rounded-full bg-indigo-500/5 blur-3xl animate-pulse-soft" style={{animationDelay: '1.5s'}}></div>
         </div>
       </div>
       
-      {/* Content */}
       <div className="max-w-6xl mx-auto relative pt-6">
-        {/* Artist Banner */}
         <ArtistBanner 
           name={artistInfo.name}
           image={artistInfo.image}
@@ -172,9 +154,8 @@ const CreatorDashboard = () => {
           stats={artistInfo.stats}
         />
 
-        {/* Tabs navigation - Updated styling to match Apple design */}
         <Tabs defaultValue="overview" className="mb-8">
-          <TabsList className="bg-transparent backdrop-blur-sm p-1 border border-white/10 rounded-full overflow-hidden">
+          <TabsList className="mx-auto w-fit bg-black/10 backdrop-blur-sm p-1 border border-white/10 rounded-full overflow-hidden">
             <TabsTrigger 
               value="overview" 
               className="rounded-full px-4 text-xs font-medium data-[state=active]:bg-audio-accent/10 data-[state=active]:text-audio-accent data-[state=active]:backdrop-blur-md data-[state=active]:shadow-glow"
@@ -189,9 +170,7 @@ const CreatorDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Tab Content: Overview */}
           <TabsContent value="overview" className="mt-6 px-6">
-            {/* Quick actions */}
             <motion.section 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -214,7 +193,61 @@ const CreatorDashboard = () => {
               </div>
             </motion.section>
             
-            {/* Recent uploads section */}
+            {albums.length > 0 && (
+              <motion.section
+                variants={container}
+                initial="hidden"
+                animate="show" 
+                className="mb-8"
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-xl font-medium">Vos albums</h2>
+                  <button 
+                    className="text-audio-accent hover:text-audio-accent-light flex items-center gap-1 text-sm"
+                    onClick={() => setShowAlbumManagement(true)}
+                  >
+                    Gérer <ArrowUpRight size={14} />
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {albums.map((album, index) => (
+                    <motion.div
+                      key={album.id}
+                      variants={item}
+                      className="backdrop-blur-sm border border-white/5 rounded-lg overflow-hidden hover:shadow-lg hover:shadow-audio-accent/5 transition-shadow duration-300"
+                      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                    >
+                      <div className="relative aspect-square">
+                        <img 
+                          src={album.cover} 
+                          alt={album.title} 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <button 
+                            className="w-10 h-10 rounded-full bg-audio-accent/90 flex items-center justify-center hover:bg-audio-accent transition-colors"
+                            onClick={() => playSoundEffect('click')}
+                          >
+                            <Play size={18} fill="white" className="text-white ml-0.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h3 className="font-medium text-base">{album.title}</h3>
+                        <div className="flex justify-between items-center mt-2 text-audio-light/60 text-xs">
+                          <div className="flex items-center gap-1">
+                            <Music size={12} />
+                            <span>{album.songs.length} titre{album.songs.length !== 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+            
             <motion.section
               variants={container}
               initial="hidden"
@@ -273,7 +306,6 @@ const CreatorDashboard = () => {
               </div>
             </motion.section>
             
-            {/* Top tracks - Fixed transparent background */}
             <section>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-xl font-medium">Titres populaires</h2>
@@ -314,7 +346,7 @@ const CreatorDashboard = () => {
                           </div>
                           <div>
                             <h3 className="font-medium text-sm">{track.title}</h3>
-                            <p className="text-xs text-audio-light/60">{track.streams} streams</p>
+                            <p className="text-xs text-audio-light/60">streams</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-6">
@@ -331,7 +363,6 @@ const CreatorDashboard = () => {
             </section>
           </TabsContent>
 
-          {/* Upload tab content - Improved with transparent styling */}
           <TabsContent value="uploads" className="mt-6 px-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-xl font-medium">Vos titres</h2>
@@ -349,15 +380,16 @@ const CreatorDashboard = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
               <Card className="flex flex-col items-center justify-center p-6 h-48 backdrop-blur-sm bg-transparent border-dashed border-white/10">
                 <Music size={32} className="text-audio-light/30 mb-2" />
                 <h3 className="text-base font-medium text-audio-light/70 mb-1">Musique</h3>
                 <p className="text-xs text-audio-light/50 text-center mb-4">Tous vos titres musicaux</p>
                 <Button 
-                  variant="outline" 
+                  variant="accent" 
                   size="pill"
-                  className="text-xs"
+                  className="text-xs shadow-glow"
+                  onClick={() => setShowSongManagement(true)}
                 >
                   Gérer
                 </Button>
@@ -368,22 +400,10 @@ const CreatorDashboard = () => {
                 <h3 className="text-base font-medium text-audio-light/70 mb-1">Albums</h3>
                 <p className="text-xs text-audio-light/50 text-center mb-4">Vos compilations et albums</p>
                 <Button 
-                  variant="outline" 
+                  variant="accent" 
                   size="pill"
-                  className="text-xs"
-                >
-                  Gérer
-                </Button>
-              </Card>
-              
-              <Card className="flex flex-col items-center justify-center p-6 h-48 backdrop-blur-sm bg-transparent border-dashed border-white/10">
-                <List size={32} className="text-audio-light/30 mb-2" />
-                <h3 className="text-base font-medium text-audio-light/70 mb-1">Playlists</h3>
-                <p className="text-xs text-audio-light/50 text-center mb-4">Vos playlists personnalisées</p>
-                <Button 
-                  variant="outline" 
-                  size="pill"
-                  className="text-xs"
+                  className="text-xs shadow-glow"
+                  onClick={() => setShowAlbumManagement(true)}
                 >
                   Gérer
                 </Button>
@@ -393,7 +413,6 @@ const CreatorDashboard = () => {
         </Tabs>
       </div>
 
-      {/* Improved Upload Modal - Apple-inspired design with transparent elements */}
       {showUploadForm && (
         <motion.div 
           className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
@@ -592,15 +611,5 @@ const CreatorDashboard = () => {
         </motion.div>
       )}
       
-      {/* Enhanced Synthwave neon light effect */}
-      <div className="fixed bottom-0 left-0 right-0 h-[70px] pointer-events-none overflow-hidden opacity-60">
-        <div className="absolute bottom-0 left-[-10%] right-[-10%] h-[300px] bg-gradient-to-t from-purple-500/10 via-audio-accent/5 to-transparent rounded-[100%_100%_0_0] animate-pulse-soft"></div>
-        <div className="absolute bottom-0 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/50 to-transparent animate-pulse-soft"></div>
-        <div className="absolute bottom-3 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent animate-pulse-soft"></div>
-        <div className="absolute bottom-6 w-full h-[1px] bg-gradient-to-r from-transparent via-audio-accent/20 to-transparent animate-pulse-soft" style={{ animationDelay: '0.5s' }}></div>
-      </div>
-    </div>
-  );
-};
+      {
 
-export default CreatorDashboard;
