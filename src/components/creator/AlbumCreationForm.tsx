@@ -47,8 +47,13 @@ const AlbumCreationForm: React.FC<AlbumCreationFormProps> = ({ selectedSongs, on
       description: `Votre album "${albumTitle}" a bien été créé.`
     });
     
-    // Rediriger vers la page de l'artiste après la création de l'album
-    navigate('/app/creator');
+    // Fermer d'abord l'interface modale
+    onClose();
+    
+    // Ensuite rediriger vers la page de l'artiste
+    setTimeout(() => {
+      navigate('/app/creator');
+    }, 100);
   };
 
   return (
