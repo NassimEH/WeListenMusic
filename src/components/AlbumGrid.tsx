@@ -3,149 +3,34 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Play, Heart, Music, Clock } from 'lucide-react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp, Song } from '@/contexts/AppContext';
 import { useAudio } from '@/contexts/AudioContext';
 import { SocialActions } from './SocialActions';
 import { AudioTrack } from '@/hooks/useAudioPlayer';
-
-interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  album?: string;
-  duration: number;
-  url: string;
-  coverUrl?: string;
-  genre?: string;
-  releaseDate?: string;
-  features?: string[];
-  playCount?: number;
-  likes?: number;
-  isLiked?: boolean;
-  description?: string;
-}
 
 interface AlbumGridProps {
   onSongSelect?: (song: Song) => void;
 }
 
-const mockSongs: Song[] = [
-  {
-    id: '1',
-    title: 'Midnight Echoes',
-    artist: 'Luna Silva',
-    album: 'Nocturnal Dreams',
-    duration: 245,
-    url: '/sounds/pop.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Electronic',
-    releaseDate: '2024',
-    features: ['Dreamy', 'Atmospheric'],
-    playCount: 12500,
-    likes: 892,
-    isLiked: false,
-    description: 'A mesmerizing journey through electronic soundscapes'
-  },
-  {
-    id: '2',
-    title: 'Urban Pulse',
-    artist: 'Marcus Beat',
-    album: 'City Nights',
-    duration: 198,
-    url: '/sounds/swoosh.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Hip-Hop',
-    releaseDate: '2024',
-    features: ['Energetic', 'Modern'],
-    playCount: 8900,
-    likes: 645,
-    isLiked: true,
-    description: 'Raw energy meets urban sophistication'
-  },
-  {
-    id: '3',
-    title: 'Ocean Breeze',
-    artist: 'Coral Waves',
-    album: 'Tidal Flow',
-    duration: 312,
-    url: '/sounds/click.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Ambient',
-    releaseDate: '2024',
-    features: ['Relaxing', 'Nature'],
-    playCount: 15600,
-    likes: 1200,
-    isLiked: false,
-    description: 'Immerse yourself in calming ocean sounds'
-  },
-  {
-    id: '4',
-    title: 'Neon Lights',
-    artist: 'Cyber Phoenix',
-    album: 'Digital Dreams',
-    duration: 278,
-    url: '/sounds/hover.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Synthwave',
-    releaseDate: '2024',
-    features: ['Retro', 'Futuristic'],
-    playCount: 9800,
-    likes: 756,
-    isLiked: true,
-    description: 'A nostalgic trip to the digital future'
-  },
-  {
-    id: '5',
-    title: 'Golden Hour',
-    artist: 'Sunrise Collective',
-    album: 'Dawn Chorus',
-    duration: 267,
-    url: '/sounds/pop.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Indie Folk',
-    releaseDate: '2024',
-    features: ['Warm', 'Uplifting'],
-    playCount: 11200,
-    likes: 934,
-    isLiked: false,
-    description: 'Capture the magic of sunrise moments'
-  },
-  {
-    id: '6',
-    title: 'Stellar Journey',
-    artist: 'Cosmic Drift',
-    album: 'Infinite Space',
-    duration: 342,
-    url: '/sounds/swoosh.mp3',
-    coverUrl: '/placeholder.svg',
-    genre: 'Space Ambient',
-    releaseDate: '2024',
-    features: ['Epic', 'Cosmic'],
-    playCount: 7800,
-    likes: 567,
-    isLiked: false,
-    description: 'An odyssey through the cosmos'
+const formatDuration = (duration: string | number): string => {
+  if (typeof duration === 'string') {
+    return duration; // Already formatted like "3:15"
   }
-];
-
-const formatDuration = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
+  const minutes = Math.floor(duration / 60);
+  const remainingSeconds = duration % 60;
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
 const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
-  const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
-  const { userRole } = useApp();
+  const { songs } = useApp();
   const { playTrack, currentTrack, addToQueue } = useAudio();
 
   useEffect(() => {
-    // Simulate API call
+    // Simulate loading time for better UX
     const timer = setTimeout(() => {
-      setSongs(mockSongs);
       setLoading(false);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
@@ -155,18 +40,18 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
       id: song.id,
       title: song.title,
       artist: song.artist,
-      audioUrl: song.url,
-      duration: song.duration,
-      coverUrl: song.coverUrl || '/placeholder.svg'
+      audioUrl: song.audioUrl || '/sounds/pop.mp3',
+      duration: parseInt(song.duration.replace(':', '')) || 180, // Convert "3:15" to seconds approximation
+      coverUrl: song.cover || '/placeholder.svg'
     };
     
     const audioTracks = songs.map(s => ({
       id: s.id,
       title: s.title,
       artist: s.artist,
-      audioUrl: s.url,
-      duration: s.duration,
-      coverUrl: s.coverUrl || '/placeholder.svg'
+      audioUrl: s.audioUrl || '/sounds/pop.mp3',
+      duration: parseInt(s.duration.replace(':', '')) || 180,
+      coverUrl: s.cover || '/placeholder.svg'
     }));
     
     // Add all songs to queue and play selected song
@@ -197,15 +82,6 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {songs.map((song) => {
-        const audioTrack: AudioTrack = {
-          id: song.id,
-          title: song.title,
-          artist: song.artist,
-          audioUrl: song.url,
-          duration: song.duration,
-          coverUrl: song.coverUrl || '/placeholder.svg'
-        };
-
         const isCurrentlyPlaying = currentTrack?.id === song.id;
 
         return (
@@ -216,7 +92,7 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
             <CardContent className="p-0">
               <div className="relative">
                 <img
-                  src={song.coverUrl || '/placeholder.svg'}
+                  src={song.cover || '/placeholder.svg'}
                   alt={`${song.title} cover`}
                   className="w-full aspect-square object-cover rounded-t-lg"
                 />
@@ -232,6 +108,11 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
                 {song.genre && (
                   <Badge className="absolute top-2 left-2 bg-black/70 text-white border-none">
                     {song.genre}
+                  </Badge>
+                )}
+                {song.allowRemixes && (
+                  <Badge className="absolute top-2 right-2 bg-purple-500/80 text-white border-none text-xs">
+                    Remixable
                   </Badge>
                 )}
               </div>

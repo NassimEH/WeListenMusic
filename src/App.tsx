@@ -10,6 +10,7 @@ import RoleSelection from "./pages/RoleSelection";
 import ConsumerDashboard from "./pages/ConsumerDashboard";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import ArtistDashboard from "./pages/ArtistDashboard";
+import RemixPage from "./pages/RemixPage";
 import { AppProvider } from "./contexts/AppContext";
 import { AudioProvider } from "./contexts/AudioContext";
 import { SocialProvider } from "./contexts/SocialContext";
@@ -32,6 +33,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/song/:songId" element={<PageTransition><SongDetail /></PageTransition>} />
+                <Route path="/remix" element={<PageTransition><RemixPage /></PageTransition>} />
                 <Route path="/artist" element={<PageTransition><ArtistDashboard /></PageTransition>} />
                 <Route path="/app" element={<PageTransition><RoleSelection /></PageTransition>} />
                 <Route path="/app/consumer" element={<PageTransition><AppLayout><ConsumerDashboard /></AppLayout></PageTransition>} />

@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, Pause, Share2, Download, MoreHorizontal } from 'lucide-react';
+import { ArrowLeft, Play, Pause, Share2, Download, MoreHorizontal, Music2, Users, GitBranch } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { AudioVisualizer } from '../components/AudioVisualizer';
 import { SocialActions } from '../components/SocialActions';
 import { CommentsSystem } from '../components/CommentsSystem';
+import RemixStudio from '../components/creator/RemixStudio';
+import RemixGallery from '../components/creator/RemixGallery';
+import CollaborationStudio from '../components/creator/CollaborationStudio';
 import { useAudio } from '../contexts/AudioContext';
 import { useSocial } from '../contexts/SocialContext';
+import { useApp, Song } from '../contexts/AppContext';
 import { AudioTrack } from '../hooks/useAudioPlayer';
 import { toast } from '../hooks/use-toast';
 
@@ -44,8 +49,13 @@ export const SongDetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   
+  // Phase 3: Remix & Collaboration states
+  const [showRemixStudio, setShowRemixStudio] = useState(false);
+  const [showCollabStudio, setShowCollabStudio] = useState(false);
+  
   const { currentTrack, state, playTrack } = useAudio();
   const { getSongStats, recordPlay } = useSocial();
+  const { songs, getSongRemixes } = useApp();
 
   const isCurrentSong = currentTrack?.id === songId;
   const isPlaying = isCurrentSong && state.isPlaying;
@@ -346,7 +356,7 @@ Our midnight dreams carry on`,
             />
 
             {/* Additional Actions */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button
                 variant="outline"
                 onClick={handleShare}
@@ -363,6 +373,25 @@ Our midnight dreams carry on`,
                 <Download className="w-4 h-4 mr-2" />
                 Télécharger
               </Button>
+              
+              {/* Phase 3: Remix & Collaboration Actions */}
+              <Button
+                variant="outline"
+                onClick={() => setShowRemixStudio(true)}
+                className="border-purple-400/40 hover:bg-purple-500/20 text-purple-300 hover:text-purple-200"
+              >
+                <Music2 className="w-4 h-4 mr-2" />
+                Remix
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowCollabStudio(true)}
+                className="border-blue-400/40 hover:bg-blue-500/20 text-blue-300 hover:text-blue-200"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Collaborer
+              </Button>
+              
               <Button
                 variant="outline"
                 className="border-white/20 hover:bg-white/10 text-white"
@@ -397,6 +426,11 @@ Our midnight dreams carry on`,
             </TabsTrigger>
             <TabsTrigger value="comments" className="text-white data-[state=active]:bg-pink-500">
               Commentaires ({stats.likes + stats.dislikes})
+            </TabsTrigger>
+            {/* Phase 3: New Tabs */}
+            <TabsTrigger value="remixes" className="text-white data-[state=active]:bg-purple-500 gap-2">
+              <GitBranch className="w-4 h-4" />
+              Remixes ({getSongRemixes(song.id).length})
             </TabsTrigger>
           </TabsList>
 
@@ -459,7 +493,34 @@ Our midnight dreams carry on`,
           <TabsContent value="comments">
             <CommentsSystem songId={song.id} />
           </TabsContent>
+
+          {/* Phase 3: Remix Tab Content */}
+          <TabsContent value="remixes">
+            <RemixGallery 
+              song={songs.find(s => s.id === songId) || songs[0]} 
+              onRemixStudio={() => setShowRemixStudio(true)} 
+            />
+          </TabsContent>
         </Tabs>
+
+        {/* Phase 3: Dialog Modals */}
+        <Dialog open={showRemixStudio} onOpenChange={setShowRemixStudio}>
+          <DialogContent className="max-w-7xl h-[90vh] p-0">
+            <RemixStudio 
+              song={songs.find(s => s.id === songId) || songs[0]} 
+              onClose={() => setShowRemixStudio(false)} 
+            />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={showCollabStudio} onOpenChange={setShowCollabStudio}>
+          <DialogContent className="max-w-7xl h-[90vh] p-0">
+            <CollaborationStudio 
+              song={songs.find(s => s.id === songId) || songs[0]} 
+              onClose={() => setShowCollabStudio(false)} 
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

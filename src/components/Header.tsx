@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, User, Menu, X, LogOut, Settings, Music, Heart, PlayCircle, UserRound } from 'lucide-react';
+import { Search, User, Menu, X, LogOut, Settings, Music, Heart, PlayCircle, UserRound, GitBranch } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserProfile } from '@/components/AuthDialog';
 import { useSession, signOut } from '@/lib/auth-client';
@@ -120,6 +120,12 @@ const Header = () => {
                 Nos Artistes
               </a>
               <a 
+                href="/remix"
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Remix Studio
+              </a>
+              <a 
                 href="#trending" 
                 onClick={(e) => {
                   e.preventDefault();
@@ -149,6 +155,15 @@ const Header = () => {
           )}
 
           <div className="flex items-center space-x-4">
+            {/* Remix Studio Button - Always visible */}
+            <a
+              href="/remix"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full transition-all duration-300 hover:scale-105 font-medium text-sm"
+            >
+              <GitBranch className="w-4 h-4" />
+              Remix Studio
+            </a>
+            
             <div className="relative">
               <button 
                 className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale"
