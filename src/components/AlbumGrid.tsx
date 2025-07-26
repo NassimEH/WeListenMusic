@@ -3,6 +3,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Play, Heart, Music } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
+import { useAudio } from '@/contexts/AudioContext';
+import { AudioTrack } from '@/hooks/useAudioPlayer';
 
 interface Song {
   id: string;
@@ -27,6 +29,7 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const { userRole } = useApp();
+  const { playTrack } = useAudio();
 
   useEffect(() => {
     fetchSongs();
@@ -49,6 +52,30 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
   };
 
   const handlePlaySong = (song: Song) => {
+    // Convert to AudioTrack format
+    const audioTrack: AudioTrack = {
+      id: song.id,
+      title: song.title,
+      artist: song.artist.stageName,
+      audioUrl: song.audioUrl,
+      coverUrl: song.coverUrl,
+      duration: song.duration,
+    };
+
+    // Convert all songs to playlist
+    const playlist: AudioTrack[] = songs.map(s => ({
+      id: s.id,
+      title: s.title,
+      artist: s.artist.stageName,
+      audioUrl: s.audioUrl,
+      coverUrl: s.coverUrl,
+      duration: s.duration,
+    }));
+
+    // Play track with playlist
+    playTrack(audioTrack, playlist);
+
+    // Keep existing callback for compatibility
     if (onSongSelect) {
       onSongSelect(song);
     }

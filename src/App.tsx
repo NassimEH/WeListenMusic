@@ -11,18 +11,21 @@ import ConsumerDashboard from "./pages/ConsumerDashboard";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import { AppProvider } from "./contexts/AppContext";
+import { AudioProvider } from "./contexts/AudioContext";
 import PageTransition from "./components/PageTransition";
 import AppLayout from "./components/app/AppLayout";
+import { GlobalAudioPlayer } from "./components/GlobalAudioPlayer";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AppProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+      <AudioProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/artist" element={<PageTransition><ArtistDashboard /></PageTransition>} />
@@ -31,8 +34,10 @@ const App = () => (
             <Route path="/app/creator" element={<PageTransition><AppLayout><CreatorDashboard /></AppLayout></PageTransition>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <GlobalAudioPlayer />
         </BrowserRouter>
       </TooltipProvider>
+      </AudioProvider>
     </AppProvider>
   </QueryClientProvider>
 );
