@@ -22,7 +22,7 @@ const artists: ArtistData[] = [
     backgroundColor: "#9d4edd",
     topTracks: [
       { title: "Je vais me moucher", duration: "3:24" },
-      { title: "J'apprends à conduire", duration: "4:05" },
+      { title: "J'apprends à conduire !", duration: "4:05" },
       { title: "Hey", duration: "2:58" },
       { title: "Tête d'oeuf", duration: "2:58" },
       { title: "Nassim trop beau", duration: "2:58" },
