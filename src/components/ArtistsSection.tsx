@@ -255,12 +255,10 @@ const ArtistCard = ({ artist }: { artist: ArtistData }) => {
             {Array.from({ length: 15 }).map((_, i) => (
               <div 
                 key={i}
-                className="absolute w-1 h-1 rounded-full bg-white/60"
+                className="absolute w-1 h-1 rounded-full bg-white/60 opacity-60"
                 style={{
                   top: `${Math.random() * 100}%`,
                   left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                  animation: 'float 3s ease-in-out infinite'
                 }}
               />
             ))}

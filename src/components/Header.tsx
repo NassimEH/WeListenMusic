@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, User, Menu, X, LogOut, Settings, Music, Heart, PlayCircle, UserRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { UserProfile } from '@/components/AuthDialog';
+import { useSession, signOut } from '@/lib/auth-client';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
@@ -11,6 +13,7 @@ const Header = () => {
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { data: session } = useSession();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -127,6 +130,12 @@ const Header = () => {
                 Tendances
               </a>
               <a 
+                href="/artist"
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Espace Artiste
+              </a>
+              <a 
                 href="#testimonials" 
                 onClick={(e) => {
                   e.preventDefault();
@@ -135,16 +144,6 @@ const Header = () => {
                 className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
               >
                 Témoignages
-              </a>
-              <a 
-                href="#newsletter" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('newsletter');
-                }}
-                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-              >
-                Newsletter
               </a>
             </nav>
           )}
@@ -185,62 +184,13 @@ const Header = () => {
               </div>
             </div>
             
-            <div className="relative">
-              <button 
-                ref={profileButtonRef}
-                className="p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass hover-scale"
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-              >
-                <User size={20} />
-              </button>
-              
-              <div 
-                ref={profileMenuRef}
-                className={cn(
-                  "absolute right-0 top-full mt-2 glass border border-white/10 rounded-lg shadow-lg overflow-hidden transition-all duration-300 w-60 z-50",
-                  isProfileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2"
-                )}
-              >
-                <div className="p-4 border-b border-white/10">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-audio-accent/20 flex items-center justify-center mr-3">
-                      <UserRound size={20} className="text-audio-accent" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Utilisateur</h4>
-                      <p className="text-sm text-audio-light/70">utilisateur@example.com</p>
-                    </div>
-                  </div>
-                </div>
-                <nav className="py-2">
-                  <a href="#profile" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
-                    <UserRound size={18} />
-                    <span>Profil</span>
-                  </a>
-                  <a href="#favorites" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
-                    <Heart size={18} />
-                    <span>Favoris</span>
-                  </a>
-                  <a href="#playlists" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
-                    <PlayCircle size={18} />
-                    <span>Mes playlists</span>
-                  </a>
-                  <a href="#settings" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors">
-                    <Settings size={18} />
-                    <span>Paramètres</span>
-                  </a>
-                  <div className="border-t border-white/10 mt-2 pt-2">
-                    <a href="#logout" className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 transition-colors text-red-400">
-                      <LogOut size={18} />
-                      <span>Déconnexion</span>
-                    </a>
-                  </div>
-                </nav>
-              </div>
-            </div>
+            {/* User Profile / Auth */}
+            <UserProfile />
+            
             <button 
               className="md:hidden p-2 text-audio-light/80 hover:text-audio-light rounded-full transition-colors glass"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              title="Menu"
             >
               {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

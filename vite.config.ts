@@ -8,6 +8,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     react(),
@@ -19,4 +25,14 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    global: 'globalThis',
+    'process.env': {}
+  },
+  optimizeDeps: {
+    exclude: ['cloudinary']
+  },
+  ssr: {
+    noExternal: ['cloudinary']
+  }
 }));
