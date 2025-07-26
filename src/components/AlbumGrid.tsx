@@ -1,101 +1,192 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Play, Heart, Music } from 'lucide-react';
+import { Play, Heart, Music, Clock } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { useAudio } from '@/contexts/AudioContext';
+import { SocialActions } from './SocialActions';
 import { AudioTrack } from '@/hooks/useAudioPlayer';
 
 interface Song {
   id: string;
   title: string;
+  artist: string;
+  album?: string;
   duration: number;
-  audioUrl: string;
+  url: string;
   coverUrl?: string;
-  genre: string;
-  lyrics?: string;
-  artist: {
-    id: string;
-    stageName: string;
-    verified: boolean;
-  };
+  genre?: string;
+  releaseDate?: string;
+  features?: string[];
+  playCount?: number;
+  likes?: number;
+  isLiked?: boolean;
+  description?: string;
 }
 
 interface AlbumGridProps {
   onSongSelect?: (song: Song) => void;
 }
 
+const mockSongs: Song[] = [
+  {
+    id: '1',
+    title: 'Midnight Echoes',
+    artist: 'Luna Silva',
+    album: 'Nocturnal Dreams',
+    duration: 245,
+    url: '/sounds/pop.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Electronic',
+    releaseDate: '2024',
+    features: ['Dreamy', 'Atmospheric'],
+    playCount: 12500,
+    likes: 892,
+    isLiked: false,
+    description: 'A mesmerizing journey through electronic soundscapes'
+  },
+  {
+    id: '2',
+    title: 'Urban Pulse',
+    artist: 'Marcus Beat',
+    album: 'City Nights',
+    duration: 198,
+    url: '/sounds/swoosh.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Hip-Hop',
+    releaseDate: '2024',
+    features: ['Energetic', 'Modern'],
+    playCount: 8900,
+    likes: 645,
+    isLiked: true,
+    description: 'Raw energy meets urban sophistication'
+  },
+  {
+    id: '3',
+    title: 'Ocean Breeze',
+    artist: 'Coral Waves',
+    album: 'Tidal Flow',
+    duration: 312,
+    url: '/sounds/click.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Ambient',
+    releaseDate: '2024',
+    features: ['Relaxing', 'Nature'],
+    playCount: 15600,
+    likes: 1200,
+    isLiked: false,
+    description: 'Immerse yourself in calming ocean sounds'
+  },
+  {
+    id: '4',
+    title: 'Neon Lights',
+    artist: 'Cyber Phoenix',
+    album: 'Digital Dreams',
+    duration: 278,
+    url: '/sounds/hover.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Synthwave',
+    releaseDate: '2024',
+    features: ['Retro', 'Futuristic'],
+    playCount: 9800,
+    likes: 756,
+    isLiked: true,
+    description: 'A nostalgic trip to the digital future'
+  },
+  {
+    id: '5',
+    title: 'Golden Hour',
+    artist: 'Sunrise Collective',
+    album: 'Dawn Chorus',
+    duration: 267,
+    url: '/sounds/pop.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Indie Folk',
+    releaseDate: '2024',
+    features: ['Warm', 'Uplifting'],
+    playCount: 11200,
+    likes: 934,
+    isLiked: false,
+    description: 'Capture the magic of sunrise moments'
+  },
+  {
+    id: '6',
+    title: 'Stellar Journey',
+    artist: 'Cosmic Drift',
+    album: 'Infinite Space',
+    duration: 342,
+    url: '/sounds/swoosh.mp3',
+    coverUrl: '/placeholder.svg',
+    genre: 'Space Ambient',
+    releaseDate: '2024',
+    features: ['Epic', 'Cosmic'],
+    playCount: 7800,
+    likes: 567,
+    isLiked: false,
+    description: 'An odyssey through the cosmos'
+  }
+];
+
+const formatDuration = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
 const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const { userRole } = useApp();
-  const { playTrack } = useAudio();
+  const { playTrack, currentTrack, addToQueue } = useAudio();
 
   useEffect(() => {
-    fetchSongs();
+    // Simulate API call
+    const timer = setTimeout(() => {
+      setSongs(mockSongs);
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const fetchSongs = async () => {
-    try {
-      const response = await fetch('/api/songs');
-      if (response.ok) {
-        const data = await response.json();
-        setSongs(data);
-      } else {
-        console.error('Erreur lors du chargement des morceaux');
-      }
-    } catch (error) {
-      console.error('Erreur réseau:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handlePlaySong = (song: Song) => {
-    // Convert to AudioTrack format
     const audioTrack: AudioTrack = {
       id: song.id,
       title: song.title,
-      artist: song.artist.stageName,
-      audioUrl: song.audioUrl,
-      coverUrl: song.coverUrl,
+      artist: song.artist,
+      audioUrl: song.url,
       duration: song.duration,
+      coverUrl: song.coverUrl || '/placeholder.svg'
     };
-
-    // Convert all songs to playlist
-    const playlist: AudioTrack[] = songs.map(s => ({
+    
+    const audioTracks = songs.map(s => ({
       id: s.id,
       title: s.title,
-      artist: s.artist.stageName,
-      audioUrl: s.audioUrl,
-      coverUrl: s.coverUrl,
+      artist: s.artist,
+      audioUrl: s.url,
       duration: s.duration,
+      coverUrl: s.coverUrl || '/placeholder.svg'
     }));
-
-    // Play track with playlist
-    playTrack(audioTrack, playlist);
-
-    // Keep existing callback for compatibility
+    
+    // Add all songs to queue and play selected song
+    addToQueue(audioTracks);
+    playTrack(audioTrack);
+    
     if (onSongSelect) {
       onSongSelect(song);
     }
-  };
-
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <Card key={i} className="bg-gray-800/50 border-gray-700 animate-pulse">
+          <Card key={i} className="animate-pulse">
             <CardContent className="p-4">
-              <div className="aspect-square bg-gray-700 rounded-lg mb-4"></div>
-              <div className="h-4 bg-gray-700 rounded mb-2"></div>
-              <div className="h-3 bg-gray-700 rounded w-2/3"></div>
+              <div className="w-full aspect-square bg-gray-200 rounded-lg mb-4" />
+              <div className="h-4 bg-gray-200 rounded mb-2" />
+              <div className="h-3 bg-gray-200 rounded w-2/3" />
             </CardContent>
           </Card>
         ))}
@@ -103,69 +194,95 @@ const AlbumGrid: React.FC<AlbumGridProps> = ({ onSongSelect }) => {
     );
   }
 
-  if (songs.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <Music className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 className="text-lg font-medium text-gray-300 mb-2">Aucun morceau disponible</h3>
-        <p className="text-gray-500">Les morceaux apparaîtront ici une fois ajoutés par les artistes.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {songs.map((song) => (
-        <Card
-          key={song.id}
-          className="bg-gray-800/50 border-gray-700 hover:bg-gray-800/70 transition-all duration-300 group cursor-pointer"
-          onClick={() => handlePlaySong(song)}
-        >
-          <CardContent className="p-4">
-            <div className="relative aspect-square rounded-lg overflow-hidden mb-4">
-              <img
-                src={song.coverUrl || '/placeholder.svg'}
-                alt={song.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                  <Play className="h-6 w-6 text-white" fill="white" />
-                </div>
-              </div>
-              <Badge variant="secondary" className="absolute top-2 right-2 text-xs">
-                {song.genre}
-              </Badge>
-            </div>
-            
-            <div className="space-y-2">
-              <h3 className="font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
-                {song.title}
-              </h3>
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span className="truncate flex-1 mr-2">
-                  {song.artist.stageName}
-                  {song.artist.verified && (
-                    <span className="ml-1 text-blue-400">✓</span>
-                  )}
-                </span>
-                <span className="flex-shrink-0">
-                  {formatDuration(song.duration)}
-                </span>
-              </div>
-              
-              {userRole && (
-                <div className="flex items-center justify-between pt-2">
-                  <button className="flex items-center gap-1 text-gray-400 hover:text-red-400 transition-colors">
-                    <Heart className="h-4 w-4" />
-                    <span className="text-xs">Aimer</span>
+      {songs.map((song) => {
+        const audioTrack: AudioTrack = {
+          id: song.id,
+          title: song.title,
+          artist: song.artist,
+          audioUrl: song.url,
+          duration: song.duration,
+          coverUrl: song.coverUrl || '/placeholder.svg'
+        };
+
+        const isCurrentlyPlaying = currentTrack?.id === song.id;
+
+        return (
+          <Card 
+            key={song.id} 
+            className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+          >
+            <CardContent className="p-0">
+              <div className="relative">
+                <img
+                  src={song.coverUrl || '/placeholder.svg'}
+                  alt={`${song.title} cover`}
+                  className="w-full aspect-square object-cover rounded-t-lg"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-lg flex items-center justify-center">
+                  <button
+                    onClick={() => handlePlaySong(song)}
+                    className="bg-white/90 hover:bg-white rounded-full p-3 transform scale-0 group-hover:scale-100 transition-transform duration-300"
+                    aria-label={`Play ${song.title} by ${song.artist}`}
+                  >
+                    <Play className={`w-6 h-6 text-black ${isCurrentlyPlaying ? 'fill-current' : ''}`} />
                   </button>
                 </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+                {song.genre && (
+                  <Badge className="absolute top-2 left-2 bg-black/70 text-white border-none">
+                    {song.genre}
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="p-4 space-y-3">
+                <div>
+                  <Link 
+                    to={`/song/${song.id}`}
+                    className="block hover:text-primary transition-colors"
+                  >
+                    <h3 className="font-semibold text-lg leading-tight line-clamp-1">
+                      {song.title}
+                    </h3>
+                  </Link>
+                  <p className="text-muted-foreground text-sm line-clamp-1">
+                    by {song.artist}
+                  </p>
+                  {song.album && (
+                    <p className="text-muted-foreground text-xs line-clamp-1">
+                      from {song.album}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span>{formatDuration(song.duration)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Music className="w-3 h-3" />
+                      <span>{song.playCount?.toLocaleString() || '0'}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Heart className="w-3 h-3" />
+                      <span>{song.likes?.toLocaleString() || '0'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <SocialActions 
+                  songId={song.id}
+                  variant="compact"
+                  className="pt-2 border-t"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };

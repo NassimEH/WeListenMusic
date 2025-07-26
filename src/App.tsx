@@ -12,32 +12,37 @@ import CreatorDashboard from "./pages/CreatorDashboard";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import { AppProvider } from "./contexts/AppContext";
 import { AudioProvider } from "./contexts/AudioContext";
+import { SocialProvider } from "./contexts/SocialContext";
 import PageTransition from "./components/PageTransition";
 import AppLayout from "./components/app/AppLayout";
 import { GlobalAudioPlayer } from "./components/GlobalAudioPlayer";
+import { SongDetail } from "./pages/SongDetail";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AppProvider>
-      <AudioProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/artist" element={<PageTransition><ArtistDashboard /></PageTransition>} />
-            <Route path="/app" element={<PageTransition><RoleSelection /></PageTransition>} />
-            <Route path="/app/consumer" element={<PageTransition><AppLayout><ConsumerDashboard /></AppLayout></PageTransition>} />
-            <Route path="/app/creator" element={<PageTransition><AppLayout><CreatorDashboard /></AppLayout></PageTransition>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <GlobalAudioPlayer />
-        </BrowserRouter>
-      </TooltipProvider>
-      </AudioProvider>
+      <SocialProvider>
+        <AudioProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/song/:songId" element={<PageTransition><SongDetail /></PageTransition>} />
+                <Route path="/artist" element={<PageTransition><ArtistDashboard /></PageTransition>} />
+                <Route path="/app" element={<PageTransition><RoleSelection /></PageTransition>} />
+                <Route path="/app/consumer" element={<PageTransition><AppLayout><ConsumerDashboard /></AppLayout></PageTransition>} />
+                <Route path="/app/creator" element={<PageTransition><AppLayout><CreatorDashboard /></AppLayout></PageTransition>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <GlobalAudioPlayer />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AudioProvider>
+      </SocialProvider>
     </AppProvider>
   </QueryClientProvider>
 );
