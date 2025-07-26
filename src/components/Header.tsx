@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, User, Menu, X, LogOut, Settings, Music, Heart, PlayCircle, UserRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,6 +11,8 @@ const Header = () => {
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +62,10 @@ const Header = () => {
     }
   };
 
+  const goToHome = () => {
+    navigate('/');
+  };
+
   return (
     <header 
       className={cn(
@@ -74,7 +80,7 @@ const Header = () => {
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                goToHome();
               }} 
               className="text-audio-light font-bold text-xl flex items-center gap-2"
             >
@@ -88,59 +94,60 @@ const Header = () => {
             </a>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a 
-              href="#discover" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('discover');
-              }}
-              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Découvrir
-            </a>
-            <a 
-              href="#artists" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('artists');
-              }}
-              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Nos Artistes
-            </a>
-            <a 
-              href="#trending" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('trending');
-              }}
-              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Tendances
-            </a>
-            <a 
-              href="#testimonials" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('testimonials');
-              }}
-              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Témoignages
-            </a>
-            <a 
-              href="#newsletter" 
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('newsletter');
-              }}
-              className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Newsletter
-            </a>
-          </nav>
+          {location.pathname === '/' && (
+            <nav className="hidden md:flex items-center space-x-8">
+              <a 
+                href="#discover" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('discover');
+                }}
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Découvrir
+              </a>
+              <a 
+                href="#artists" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('artists');
+                }}
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Nos Artistes
+              </a>
+              <a 
+                href="#trending" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('trending');
+                }}
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Tendances
+              </a>
+              <a 
+                href="#testimonials" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('testimonials');
+                }}
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Témoignages
+              </a>
+              <a 
+                href="#newsletter" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection('newsletter');
+                }}
+                className="text-audio-light/80 hover:text-audio-light transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-audio-accent after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Newsletter
+              </a>
+            </nav>
+          )}
 
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -152,7 +159,6 @@ const Header = () => {
                 {isSearchOpen ? <X size={20} /> : <Search size={20} />}
               </button>
               
-              {/* Animated Search Bar */}
               <div 
                 className={cn(
                   "absolute right-0 top-full mt-2 overflow-hidden transition-all duration-500 ease-spring",
@@ -172,7 +178,6 @@ const Header = () => {
                     <Search size={16} />
                   </div>
                   
-                  {/* Animated background effect */}
                   <div className="absolute inset-0 -z-10">
                     <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/10 via-transparent to-purple-500/10 animate-spin-slow"></div>
                   </div>
@@ -189,7 +194,6 @@ const Header = () => {
                 <User size={20} />
               </button>
               
-              {/* Profile Dropdown Menu */}
               <div 
                 ref={profileMenuRef}
                 className={cn(
@@ -244,7 +248,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div 
         className={cn(
           "absolute top-full left-0 right-0 glass md:hidden overflow-hidden transition-all duration-300 ease-spring",

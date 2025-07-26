@@ -18,25 +18,25 @@ const PageTransition: React.FC<PageTransitionProps> = ({
   const [showLoader, setShowLoader] = useState(true);
   
   useEffect(() => {
-    // Simulate loading time
+    // Réduire le temps de chargement pour une expérience plus fluide
     const timer = setTimeout(() => {
       setShowLoader(false);
-    }, 1200);
+    }, 800);
     
     return () => clearTimeout(timer);
   }, []);
   
   useEffect(() => {
-    // Reset scroll position when route changes
+    // Réinitialiser la position de défilement lors des changements de route
     window.scrollTo(0, 0);
   }, [location.pathname]);
   
-  // Play sound on page load
+  // Jouer un son lors du chargement de la page
   useEffect(() => {
     if (!showLoader) {
       try {
         const audio = new Audio('/sounds/swoosh.mp3');
-        audio.volume = 0.3;
+        audio.volume = 0.2;
         audio.play();
       } catch (error) {
         console.error('Could not play sound:', error);
@@ -47,47 +47,47 @@ const PageTransition: React.FC<PageTransitionProps> = ({
   const pageVariants = {
     hidden: {
       opacity: 0,
-      y: 20,
+      y: 15,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1], // Spring-like easing
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1], // Courbe d'accélération style Apple
         when: 'beforeChildren',
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
       }
     },
     exit: {
       opacity: 0,
-      y: -20,
+      y: -15,
       transition: {
-        duration: 0.5,
-        ease: [0.16, 1, 0.3, 1],
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
         when: 'afterChildren',
-        staggerChildren: 0.1,
+        staggerChildren: 0.08,
         staggerDirection: -1,
       }
     }
   };
   
   const loaderVariants = {
-    hidden: { scale: 1.2, opacity: 0 },
+    hidden: { scale: 1.05, opacity: 0 },
     visible: { 
       scale: 1, 
       opacity: 1,
       transition: {
-        duration: 0.5,
-        ease: [0.16, 1, 0.3, 1],
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
       }
     },
     exit: { 
-      scale: 0.8, 
+      scale: 0.95, 
       opacity: 0,
       transition: {
-        duration: 0.5,
-        ease: [0.16, 1, 0.3, 1],
+        duration: 0.3,
+        ease: [0.22, 1, 0.36, 1],
       }
     }
   };
@@ -97,8 +97,8 @@ const PageTransition: React.FC<PageTransitionProps> = ({
     visible: { 
       width: '100%',
       transition: {
-        duration: 1,
-        ease: [0.16, 1, 0.3, 1],
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1],
       }
     }
   };
@@ -115,14 +115,14 @@ const PageTransition: React.FC<PageTransitionProps> = ({
             exit="exit"
             variants={loaderVariants}
           >
-            <div className="relative w-16 h-16 mb-8">
+            <div className="relative w-12 h-12 mb-6">
               <div className="absolute inset-0 bg-gradient-audio rounded-full animate-pulse-soft"></div>
               <div className="absolute inset-2 bg-audio-dark rounded-full flex items-center justify-center">
-                <div className="w-2 h-2 bg-audio-light rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-audio-light rounded-full"></div>
               </div>
             </div>
-            <h2 className="text-2xl font-bold mb-6">WeListen</h2>
-            <div className="w-48 h-1 bg-audio-surface/30 rounded-full overflow-hidden">
+            <h2 className="text-xl font-medium mb-5">WeListen</h2>
+            <div className="w-40 h-0.5 bg-audio-surface/30 rounded-full overflow-hidden">
               <motion.div 
                 className="h-full bg-gradient-audio rounded-full"
                 variants={progressVariants}
@@ -148,19 +148,19 @@ const PageTransition: React.FC<PageTransitionProps> = ({
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-8px); }
         }
         
         @keyframes pulse-soft {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.8; }
+          50% { opacity: 0.85; }
         }
         
         .glass {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          background: rgba(255, 255, 255, 0.04);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
         }
       `}</style>
     </>

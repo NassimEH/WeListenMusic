@@ -240,7 +240,7 @@ const AuthorSection = () => {
           />
           
           <Author 
-            name="Chadi"
+            name="Chadiii"
             role="Développeur Backend & Architecte"
             image="https://benkei-studio.com/cdn/shop/articles/gto-onizuka-moto.jpg?v=1729586029"
             description="Chadi Manglon."
