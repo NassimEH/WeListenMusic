@@ -120,102 +120,109 @@ const RemixPage: React.FC = () => {
     const isPlaying = currentTrack?.id === remix.id;
     
     return (
-      <div className="card-apple group hover:border-audio-accent/20 transition-all duration-300">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className="relative">
-              <img 
-                src={originalSong?.cover || '/placeholder.svg'} 
-                alt={remix.title}
-                className="w-16 h-16 rounded-lg object-cover"
-              />
-              <Button
-                size="sm"
-                variant="ghost"
-                className="absolute inset-0 w-full h-full bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg text-white hover:text-white hover:bg-black/70"
-                onClick={() => handlePlayRemix(remix)}
-              >
-                <Play className={`w-4 h-4 ${isPlaying ? 'fill-current' : ''}`} />
-              </Button>
-            </div>
-            
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between">
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-lg line-clamp-1 text-audio-light">{remix.title}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Avatar className="w-5 h-5">
-                      <AvatarFallback className="text-xs bg-audio-surface text-audio-light">
-                        {remix.remixerName.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm text-audio-light/70">
-                      by {remix.remixerName}
-                    </span>
-                  </div>
-                  <p className="text-xs text-audio-light/50 mt-1">
-                    Remix of "{originalSong?.title}" by {originalSong?.artist}
-                  </p>
-                </div>
-                
-                <Badge 
-                  variant={
-                    remix.status === 'approved' ? 'default' : 
-                    remix.status === 'pending' ? 'secondary' : 
-                    'destructive'
-                  }
-                  className="ml-2"
+      <div className="group relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/10 via-purple-500/10 to-pink-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+        <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl transition-all duration-300 hover:border-white/20 hover:shadow-lg hover:shadow-white/5">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="relative group/image">
+                <img 
+                  src={originalSong?.cover || '/placeholder.svg'} 
+                  alt={remix.title}
+                  className="w-16 h-16 rounded-xl object-cover ring-1 ring-white/10 transition-all duration-300 group-hover/image:ring-audio-accent/50"
+                />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="absolute inset-0 w-full h-full bg-black/60 opacity-0 group-hover/image:opacity-100 transition-all duration-300 rounded-xl text-white hover:text-white hover:bg-black/70 backdrop-blur-sm"
+                  onClick={() => handlePlayRemix(remix)}
                 >
-                  {remix.status}
-                </Badge>
+                  <Play className={`w-4 h-4 ${isPlaying ? 'fill-current' : ''}`} />
+                </Button>
               </div>
               
-              <div className="flex items-center justify-between mt-3">
-                <div className="flex items-center gap-3 text-xs text-audio-light/50">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>{new Date(remix.createdAt).toLocaleDateString()}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-lg line-clamp-1 text-audio-light mb-1">{remix.title}</h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Avatar className="w-5 h-5 ring-1 ring-white/10">
+                        <AvatarFallback className="text-xs bg-gradient-to-r from-audio-accent/20 to-purple-500/20 text-audio-light border border-white/10">
+                          {remix.remixerName.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm text-audio-light/70 font-medium">
+                        by {remix.remixerName}
+                      </span>
+                    </div>
+                    <p className="text-xs text-audio-light/50 mb-3">
+                      Remix of "{originalSong?.title}" by {originalSong?.artist}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <ThumbsUp className="w-3 h-3" />
-                    <span>{remix.votes}</span>
-                  </div>
+                  
+                  <Badge 
+                    variant={
+                      remix.status === 'approved' ? 'default' : 
+                      remix.status === 'pending' ? 'secondary' : 
+                      'destructive'
+                    }
+                    className={`ml-2 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
+                      remix.status === 'approved' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                      remix.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                      'bg-red-500/20 text-red-400 border border-red-500/30'
+                    }`}
+                  >
+                    {remix.status}
+                  </Badge>
                 </div>
                 
-                <div className="flex items-center gap-2">
-                  {showActions && remix.status === 'pending' && (
-                    <>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 gap-1 border-green-500/20 text-green-400 hover:bg-green-500/10"
-                        onClick={() => approveRemix(remix.id)}
-                      >
-                        <CheckCircle className="w-3 h-3" />
-                        Approve
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 gap-1 border-red-500/20 text-red-400 hover:bg-red-500/10"
-                        onClick={() => rejectRemix(remix.id)}
-                      >
-                        <XCircle className="w-3 h-3" />
-                        Reject
-                      </Button>
-                    </>
-                  )}
-                  <Button size="sm" variant="ghost" className="h-8 gap-1 text-audio-light/70 hover:text-audio-accent">
-                    <Heart className="w-3 h-3" />
-                  </Button>
-                  <Button size="sm" variant="ghost" className="h-8 gap-1 text-audio-light/70 hover:text-audio-accent">
-                    <Share2 className="w-3 h-3" />
-                  </Button>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-xs text-audio-light/50">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{new Date(remix.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                      <span>{remix.votes}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    {showActions && remix.status === 'pending' && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1.5 px-3 bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20 hover:border-green-500/50 rounded-lg backdrop-blur-sm transition-all duration-300"
+                          onClick={() => approveRemix(remix.id)}
+                        >
+                          <CheckCircle className="w-3 h-3" />
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 gap-1.5 px-3 bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500/50 rounded-lg backdrop-blur-sm transition-all duration-300"
+                          onClick={() => rejectRemix(remix.id)}
+                        >
+                          <XCircle className="w-3 h-3" />
+                          Reject
+                        </Button>
+                      </>
+                    )}
+                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-audio-light/60 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-300">
+                      <Heart className="w-3.5 h-3.5" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-audio-light/60 hover:text-audio-accent hover:bg-audio-accent/10 rounded-lg transition-all duration-300">
+                      <Share2 className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        </div>
       </div>
     );
   };
@@ -225,73 +232,79 @@ const RemixPage: React.FC = () => {
     const songRemixes = getSongRemixes(song.id);
     
     return (
-      <div className="card-apple group hover:border-audio-accent/20 transition-all duration-300">
-        <CardContent className="p-0">
-          <div className="relative">
-            <img
-              src={song.cover || '/placeholder.svg'}
-              alt={song.title}
-              className="w-full aspect-square object-cover rounded-t-xl"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl flex items-center justify-center gap-2">
-              <Button
-                onClick={() => handlePlaySong(song)}
-                className="bg-white/90 hover:bg-white rounded-full p-3"
-              >
-                <Play className={`w-5 h-5 text-black ${isPlaying ? 'fill-current' : ''}`} />
-              </Button>
-              <Button
-                onClick={() => openRemixStudio(song)}
-                className="bg-audio-accent/90 hover:bg-audio-accent rounded-full p-3 text-white"
-              >
-                <Zap className="w-5 h-5" />
-              </Button>
-            </div>
-            <div className="absolute top-2 left-2 flex gap-2">
-              {song.genre && (
-                <Badge className="bg-black/70 text-white border-none text-xs">
-                  {song.genre}
+      <div className="group relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/10 via-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+        <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 hover:shadow-lg hover:shadow-white/5">
+          <CardContent className="p-0">
+            <div className="relative">
+              <img
+                src={song.cover || '/placeholder.svg'}
+                alt={song.title}
+                className="w-full aspect-square object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
+                <Button
+                  onClick={() => handlePlaySong(song)}
+                  className="bg-white/20 hover:bg-white/30 backdrop-blur-xl rounded-full p-4 border border-white/20 transition-all duration-300 hover:scale-110"
+                >
+                  <Play className={`w-6 h-6 text-white ${isPlaying ? 'fill-current' : ''}`} />
+                </Button>
+                <Button
+                  onClick={() => openRemixStudio(song)}
+                  className="bg-audio-accent/20 hover:bg-audio-accent/30 backdrop-blur-xl rounded-full p-4 border border-audio-accent/30 text-white transition-all duration-300 hover:scale-110"
+                >
+                  <Zap className="w-6 h-6" />
+                </Button>
+              </div>
+              
+              {/* Top badges */}
+              <div className="absolute top-3 left-3 flex gap-2">
+                {song.genre && (
+                  <Badge className="bg-black/60 backdrop-blur-xl text-white border border-white/20 text-xs px-2 py-1 rounded-lg">
+                    {song.genre}
+                  </Badge>
+                )}
+                <Badge className="bg-audio-accent/60 backdrop-blur-xl text-white border border-audio-accent/30 text-xs px-2 py-1 rounded-lg">
+                  ✨ Remixable
+                </Badge>
+              </div>
+              
+              {songRemixes.length > 0 && (
+                <Badge className="absolute top-3 right-3 bg-green-500/60 backdrop-blur-xl text-white border border-green-500/30 text-xs px-2 py-1 rounded-lg">
+                  {songRemixes.length} remixes
                 </Badge>
               )}
-              <Badge className="bg-audio-accent/80 text-white border-none text-xs">
-                Remixable
-              </Badge>
-            </div>
-            {songRemixes.length > 0 && (
-              <Badge className="absolute top-2 right-2 bg-green-500/80 text-white border-none text-xs">
-                {songRemixes.length} remixes
-              </Badge>
-            )}
-          </div>
-          
-          <div className="p-4">
-            <h3 className="font-semibold text-lg leading-tight line-clamp-1 mb-1 text-audio-light">
-              {song.title}
-            </h3>
-            <p className="text-audio-light/70 text-sm line-clamp-1 mb-2">
-              by {song.artist}
-            </p>
-            
-            <div className="flex items-center justify-between text-xs text-audio-light/50">
-              <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                <span>{song.duration}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Heart className="w-3 h-3" />
-                <span>{song.likes?.toLocaleString() || '0'}</span>
-              </div>
             </div>
             
-            <Button 
-              onClick={() => openRemixStudio(song)}
-              className="w-full mt-3 bg-gradient-to-r from-audio-accent to-blue-500 hover:from-audio-accent-light hover:to-blue-400 text-white"
-            >
-              <Music2 className="w-4 h-4 mr-2" />
-              Start Remixing
-            </Button>
-          </div>
-        </CardContent>
+            <div className="p-5">
+              <h3 className="font-semibold text-lg leading-tight line-clamp-1 mb-2 text-audio-light">
+                {song.title}
+              </h3>
+              <p className="text-audio-light/70 text-sm line-clamp-1 mb-4">
+                by {song.artist}
+              </p>
+              
+              <div className="flex items-center justify-between text-xs text-audio-light/50 mb-4">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{song.duration}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Heart className="w-3.5 h-3.5" />
+                  <span>{song.likes?.toLocaleString() || '0'}</span>
+                </div>
+              </div>
+              
+              <Button 
+                onClick={() => openRemixStudio(song)}
+                className="w-full bg-gradient-to-r from-audio-accent/80 to-blue-500/80 hover:from-audio-accent hover:to-blue-500 text-white border border-white/10 backdrop-blur-sm rounded-xl py-3 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-audio-accent/20"
+              >
+                <Music2 className="w-4 h-4 mr-2" />
+                Start Remixing
+              </Button>
+            </div>
+          </CardContent>
+        </div>
       </div>
     );
   };
@@ -332,103 +345,154 @@ const RemixPage: React.FC = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="card-apple">
-            <CardContent className="p-6 text-center">
-              <Music2 className="w-8 h-8 mx-auto mb-2 text-audio-accent" />
-              <div className="text-2xl font-bold text-audio-light">{remixableSongs.length}</div>
-              <div className="text-sm text-audio-light/70">Morceaux Remixables</div>
-            </CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="group relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/20 to-blue-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+            <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:border-audio-accent/30 hover:shadow-lg hover:shadow-audio-accent/5">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-audio-accent/20 to-blue-500/20 rounded-2xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                <Music2 className="w-8 h-8 text-audio-accent" />
+              </div>
+              <div className="text-3xl font-bold text-audio-light mb-1">{remixableSongs.length}</div>
+              <div className="text-sm text-audio-light/60 font-medium">Morceaux Remixables</div>
+            </div>
           </div>
-          <div className="card-apple">
-            <CardContent className="p-6 text-center">
-              <GitBranch className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-              <div className="text-2xl font-bold text-audio-light">{allRemixes.filter(r => r.status === 'approved').length}</div>
-              <div className="text-sm text-audio-light/70">Remixes Publiés</div>
-            </CardContent>
+          
+          <div className="group relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+            <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:border-blue-400/30 hover:shadow-lg hover:shadow-blue-400/5">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                <GitBranch className="w-8 h-8 text-blue-400" />
+              </div>
+              <div className="text-3xl font-bold text-audio-light mb-1">{allRemixes.filter(r => r.status === 'approved').length}</div>
+              <div className="text-sm text-audio-light/60 font-medium">Remixes Publiés</div>
+            </div>
           </div>
-          <div className="card-apple">
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="w-8 h-8 mx-auto mb-2 text-green-400" />
-              <div className="text-2xl font-bold text-audio-light">{allRemixes.reduce((sum, r) => sum + r.votes, 0)}</div>
-              <div className="text-sm text-audio-light/70">Votes Totaux</div>
-            </CardContent>
+          
+          <div className="group relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+            <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:border-green-400/30 hover:shadow-lg hover:shadow-green-400/5">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                <TrendingUp className="w-8 h-8 text-green-400" />
+              </div>
+              <div className="text-3xl font-bold text-audio-light mb-1">{allRemixes.reduce((sum, r) => sum + r.votes, 0)}</div>
+              <div className="text-sm text-audio-light/60 font-medium">Votes Totaux</div>
+            </div>
           </div>
-          <div className="card-apple">
-            <CardContent className="p-6 text-center">
-              <Flame className="w-8 h-8 mx-auto mb-2 text-orange-400" />
-              <div className="text-2xl font-bold text-audio-light">{pendingRemixes.length}</div>
-              <div className="text-sm text-audio-light/70">En Attente</div>
-            </CardContent>
+          
+          <div className="group relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+            <div className="relative bg-black/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:border-orange-400/30 hover:shadow-lg hover:shadow-orange-400/5">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                <Flame className="w-8 h-8 text-orange-400" />
+              </div>
+              <div className="text-3xl font-bold text-audio-light mb-1">{pendingRemixes.length}</div>
+              <div className="text-sm text-audio-light/60 font-medium">En Attente</div>
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-audio-surface/20 border border-white/10">
-            <TabsTrigger value="discover" className="gap-2 data-[state=active]:bg-audio-accent data-[state=active]:text-white">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-4 bg-black/30 backdrop-blur-xl border border-white/5 rounded-2xl p-1.5 shadow-2xl">
+            <TabsTrigger 
+              value="discover" 
+              className="gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-audio-accent/90 data-[state=active]:to-blue-500/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-audio-light/70 data-[state=inactive]:hover:text-audio-light data-[state=inactive]:hover:bg-white/5"
+            >
               <Search className="w-4 h-4" />
               Découvrir
             </TabsTrigger>
-            <TabsTrigger value="trending" className="gap-2 data-[state=active]:bg-audio-accent data-[state=active]:text-white">
+            <TabsTrigger 
+              value="trending" 
+              className="gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500/90 data-[state=active]:to-red-500/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-audio-light/70 data-[state=inactive]:hover:text-audio-light data-[state=inactive]:hover:bg-white/5"
+            >
               <TrendingUp className="w-4 h-4" />
               Tendances
             </TabsTrigger>
-            <TabsTrigger value="my-remixes" className="gap-2 data-[state=active]:bg-audio-accent data-[state=active]:text-white">
+            <TabsTrigger 
+              value="my-remixes" 
+              className="gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/90 data-[state=active]:to-pink-500/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-audio-light/70 data-[state=inactive]:hover:text-audio-light data-[state=inactive]:hover:bg-white/5"
+            >
               <User className="w-4 h-4" />
               Mes Remixes
             </TabsTrigger>
-            <TabsTrigger value="pending" className="gap-2 data-[state=active]:bg-audio-accent data-[state=active]:text-white">
+            <TabsTrigger 
+              value="pending" 
+              className="gap-2 rounded-xl transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500/90 data-[state=active]:to-emerald-500/90 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-audio-light/70 data-[state=inactive]:hover:text-audio-light data-[state=inactive]:hover:bg-white/5"
+            >
               <Clock className="w-4 h-4" />
               En Attente ({pendingRemixes.length})
             </TabsTrigger>
           </TabsList>
 
           {/* Discover Tab */}
-          <TabsContent value="discover" className="space-y-6">
+          <TabsContent value="discover" className="space-y-8">
             {/* Search and Filters */}
             <div className="flex gap-4 items-center">
-              <div className="flex-1 relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-audio-light/50" />
-                <Input
-                  placeholder="Rechercher des morceaux à remixer..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-audio-surface/20 border-white/10 text-audio-light placeholder:text-audio-light/50 focus:border-audio-accent/50"
-                />
+              <div className="flex-1 relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-audio-accent/20 via-blue-500/20 to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl"></div>
+                <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/20 focus-within:border-audio-accent/50 focus-within:shadow-lg focus-within:shadow-audio-accent/10">
+                  <Search className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-audio-light/50 transition-colors duration-300 group-focus-within:text-audio-accent" />
+                  <Input
+                    placeholder="Rechercher des morceaux à remixer..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 pr-4 py-4 bg-transparent border-none text-audio-light placeholder:text-audio-light/50 focus:outline-none focus:ring-0 text-lg"
+                  />
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <kbd className="px-2 py-1 text-xs text-audio-light/40 bg-white/5 rounded-md border border-white/10">
+                      ⌘K
+                    </kbd>
+                  </div>
+                </div>
               </div>
-              <select
-                title="Filtrer par genre"
-                value={selectedGenre}
-                onChange={(e) => setSelectedGenre(e.target.value)}
-                className="form-select-apple text-audio-light"
-              >
-                {genres.map(genre => (
-                  <option key={genre} value={genre}>
-                    {genre === 'all' ? 'Tous les genres' : genre}
-                  </option>
-                ))}
-              </select>
+              
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-lg"></div>
+                <select
+                  title="Filtrer par genre"
+                  value={selectedGenre}
+                  onChange={(e) => setSelectedGenre(e.target.value)}
+                  className="relative px-6 py-4 bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl text-audio-light text-sm font-medium appearance-none cursor-pointer transition-all duration-300 hover:border-white/20 focus:border-audio-accent/50 focus:outline-none focus:ring-0 min-w-[180px] bg-[url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%23ffffff60%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1.2em_1.2em]"
+                >
+                  {genres.map(genre => (
+                    <option key={genre} value={genre} className="bg-audio-dark text-audio-light py-2">
+                      {genre === 'all' ? '🎵 Tous les genres' : `🎼 ${genre}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Featured Songs */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-audio-light">
-                <Star className="w-6 h-6 text-yellow-500" />
-                Morceaux Populaires à Remixer
-              </h2>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold flex items-center gap-3 text-audio-light">
+                  <div className="w-10 h-10 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-xl backdrop-blur-sm border border-yellow-500/30 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  Morceaux Populaires à Remixer
+                </h2>
+                <div className="text-sm text-audio-light/50 bg-black/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/10">
+                  {featuredSongs.length} morceaux
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {featuredSongs.map(song => (
+                {featuredSongs.map((song) => (
                   <SongCard key={song.id} song={song} />
                 ))}
               </div>
             </div>
 
             {/* All Remixable Songs */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6 text-audio-light">Tous les Morceaux Remixables</h2>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-audio-light">Tous les Morceaux Remixables</h2>
+                <div className="text-sm text-audio-light/50 bg-black/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/10">
+                  {filteredSongs.length} résultats
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredSongs.map(song => (
+                {filteredSongs.map((song) => (
                   <SongCard key={song.id} song={song} />
                 ))}
               </div>
