@@ -33,7 +33,7 @@ const artists: ArtistData[] = [
     id: 2,
     name: "JustADog",
     description: "Véritable phénomène de la scène rap underground, JustADog se démarque par ses paroles incisives et ses productions avant-gardistes qui mêlent trap et sons organiques.",
-    image: "https://media.licdn.com/dms/image/v2/D4E03AQHX7O8uuI6hRg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1718264793884?e=1746662400&v=beta&t=JmqCG040UQ8ve_uj9bGyhS8lZOw0HeldtUf40iOa0KE",
+    image: "https://play-lh.googleusercontent.com/E6gJ8wL50PJUz3ZBZexhzRzmOeyKKisW5gwDzYqNmaMzc8_0EQdIhf0bBX5wJJlDMa8",
     backgroundColor: "#4361ee",
     topTracks: [
       { title: "Woof Woof", duration: "2:47" },
